@@ -24,6 +24,10 @@ const fireSun = new THREE.DirectionalLight(0xc0e9ff, 1.8); fireSun.position.set(
 // Rounded tabletop rack with true cut-through holes and shaped supports.
 const blue = new THREE.MeshStandardMaterial({ color: 0x32859a, roughness: 0.25, metalness: 0.05 });
 function roundedShape(w,h,r,cy=0){const x=w/2,y=h/2,q=new THREE.Shape();q.moveTo(-x+r,-y);q.lineTo(x-r,-y);q.quadraticCurveTo(x,-y,x,-y+r);q.lineTo(x,y-r);q.quadraticCurveTo(x,y,x-r,y);q.lineTo(-x+r,y);q.quadraticCurveTo(-x,y,-x,y-r);q.lineTo(-x,-y+r);q.quadraticCurveTo(-x,-y,-x+r,-y);if(cy){for(const curve of q.curves){for(const key of ['v0','v1','v2','v3'])if(curve[key])curve[key].y+=cy;}}return q;}
+// A woven felt runner cushions the ceramic rack and catches its contact shadows.
+const feltCanvas=document.createElement('canvas');feltCanvas.width=feltCanvas.height=128;const fg=feltCanvas.getContext('2d');fg.fillStyle='#858585';fg.fillRect(0,0,128,128);let feltSeed=27;for(let i=0;i<4500;i++){feltSeed=(feltSeed*1664525+1013904223)>>>0;const x=feltSeed%128;feltSeed=(feltSeed*1664525+1013904223)>>>0;fg.fillStyle=i%2?'#929292':'#747474';fg.fillRect(x,feltSeed%128,2,1);}const feltMap=new THREE.CanvasTexture(feltCanvas);feltMap.wrapS=feltMap.wrapT=THREE.RepeatWrapping;feltMap.repeat.set(6,2);
+const runnerGeo=new THREE.ExtrudeGeometry(roundedShape(9.05,3.2,.38),{depth:.035,bevelEnabled:true,bevelSize:.022,bevelThickness:.012,bevelSegments:3,steps:1,curveSegments:20});runnerGeo.rotateX(-Math.PI/2);const runner=new THREE.Mesh(runnerGeo,new THREE.MeshStandardMaterial({color:0x173b46,roughness:.98,bumpMap:feltMap,bumpScale:.018}));runner.position.set(0,-1.175,.30);runner.castShadow=runner.receiveShadow=true;scene.add(runner);
+const thread=new THREE.MeshStandardMaterial({color:0x799da0,roughness:.9}),stitchGeo=new THREE.CapsuleGeometry(.009,.07,3,6);stitchGeo.rotateZ(Math.PI/2);const stitches=new THREE.InstancedMesh(stitchGeo,thread,140),stitchPose=new THREE.Object3D();let stitch=0;for(const side of [-1,1]){for(let i=0;i<52;i++){stitchPose.position.set(-4.14+i*8.28/51,-1.124,.30+side*1.42);stitchPose.rotation.y=0;stitchPose.updateMatrix();stitches.setMatrixAt(stitch++,stitchPose.matrix);}for(let i=0;i<18;i++){stitchPose.position.set(side*4.35,-1.124,-.90+i*2.4/17);stitchPose.rotation.y=Math.PI/2;stitchPose.updateMatrix();stitches.setMatrixAt(stitch++,stitchPose.matrix);}}scene.add(stitches);
 const plate=roundedShape(7.3,6.2,.24,2.5);
 for(let c=0;c<7;c++)for(let r=0;r<6;r++){const h=new THREE.Path();h.absarc(c-3,r,.40,0,Math.PI*2,true);plate.holes.push(h);}
 const back=new THREE.Mesh(new THREE.ExtrudeGeometry(plate,{depth:.22,bevelEnabled:true,bevelThickness:.035,bevelSize:.035,bevelSegments:2,steps:1,curveSegments:28}),blue);back.position.z=-.20;back.castShadow=true;back.receiveShadow=true;scene.add(back);
@@ -66,7 +70,7 @@ function fit() {
   const w = view.clientWidth || 600, h = view.clientHeight || 600; renderer.setSize(w, h, false);
   renderer.domElement.style.width = '100%'; renderer.domElement.style.height = '100%';
   camera.aspect = w / h; camera.updateProjectionMatrix();
-  const pts = [[-3.9, -1.2, 0.8], [3.9, -1.2, 0.8], [-3.9, 5.8, 0.8], [3.9, 5.8, 0.8]].map(a => new THREE.Vector3(...a));
+  const pts = [[-4.65, -1.2, 1.95], [4.65, -1.2, 1.95], [-3.9, 5.8, 0.8], [3.9, 5.8, 0.8]].map(a => new THREE.Vector3(...a));
   for (let d = 8; d < 60; d += 0.25) { camera.position.set(.6, 3.8, d); camera.lookAt(0, 2.4, 0); camera.updateMatrixWorld();
     if (pts.every(v => { const q = v.clone().project(camera); return Math.abs(q.x) < 0.95 && Math.abs(q.y) < 0.95; })) break; }
 }

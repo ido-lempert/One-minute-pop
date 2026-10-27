@@ -163,3 +163,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 Chess and checkers tiles now use a deterministic ceramic roughness/bump map with broad glaze variation and fine pores. The satin finish breaks up the previously uniform plastic reflections while preserving tile colors, bevels and clear legal-move markers. One small generated texture is shared across both tile materials.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode and checkers move/reset-cancellation exit0, zero page errors/no390px overflow. Matched desktop before/after, final phone chess/checkers and desktop chess pixels inspected. Physical-device FPS remains unverified.
+
+## 27. Stitched felt runner beneath Connect Four
+
+A rounded woven felt runner now cushions the rack and catches its contact shadows. Fine instanced stitches follow its border, bringing the same tabletop material language as chess/checkers to Connect Four. Camera fitting includes the runner so its edge stays visible on narrow screens.
+
+Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero errors/no390px overflow. Final phone/desktop pixels inspected against the previous bare tabletop. Physical-device FPS remains unverified.
