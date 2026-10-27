@@ -59,3 +59,9 @@ Checks:32 rules/controller regressions and real Chrome win/AI/reset; matched pop
 Replaced the king's cylinder/sphere/box assembly with a turned royal mantle, shallow dome, twin metal bands, eight fluted accents and a softly bevelled heraldic cross with inset ceramic stones. The silhouette stays distinct from the open queen crown.
 
 Checks:32 rules/controller regressions; real Chrome chess capture/reset/AI/undo/mode tests, zero errors/no390px overflow; matched phone/desktop pixels inspected.
+
+## 10. Sculpted knight mane and bridle
+
+A swept bevelled mane follows the horse neck instead of a rectangular block. Paired cheeks, nostrils, curved bridle straps, small buckles and a rounded nose band give the knight a readable face. These are real lit mesh details, not a texture or interface layer.
+
+Checks:32 rules/controller regressions; actual Chrome chess capture/reset/AI/undo/mode, zero errors/no390px overflow; matched phone/desktop before/after pixels inspected.

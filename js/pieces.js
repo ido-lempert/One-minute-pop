@@ -55,7 +55,20 @@ export function chessMesh(type,color){
   const s=new THREE.Shape();s.moveTo(-.26,.73);s.lineTo(-.23,1.04);s.quadraticCurveTo(-.27,1.23,-.13,1.4);s.lineTo(-.1,1.56);s.lineTo(.02,1.43);s.lineTo(.15,1.4);s.lineTo(.35,1.2);s.quadraticCurveTo(.43,1.1,.29,1.04);s.lineTo(.1,1.1);s.quadraticCurveTo(.04,.86,.2,.73);s.closePath();
   const h=mesh(g,new THREE.ExtrudeGeometry(s,{depth:.22,bevelEnabled:true,bevelSize:.045,bevelThickness:.04,bevelSegments:3,steps:1}),m,0,0,-.11);
   for(const z of [-.165,.165])mesh(g,new THREE.SphereGeometry(.035,12,8),dark,.06,1.30,z);
-  const mane=mesh(g,new THREE.BoxGeometry(.07,.42,.21),t,-.20,1.12);mane.rotation.z=-.12;
+  // Swept mane follows the neck instead of a floating rectangular block.
+  if(!geo.knightMane){const s=new THREE.Shape();s.moveTo(-.24,.78);s.quadraticCurveTo(-.31,.99,-.28,1.20);s.quadraticCurveTo(-.23,1.36,-.13,1.42);s.lineTo(-.08,1.36);s.quadraticCurveTo(-.20,1.22,-.19,1.06);s.quadraticCurveTo(-.19,.91,-.16,.79);s.closePath();geo.knightMane=new THREE.ExtrudeGeometry(s,{depth:.235,bevelEnabled:true,bevelSize:.018,bevelThickness:.015,bevelSegments:3,curveSegments:16,steps:1});}
+  mesh(g,geo.knightMane,t,0,0,-.1175);
+  // Paired nostrils, rounded cheeks and bridle straps give the horse a real face.
+  for(const z of [-.163,.163]){
+   const cheek=mesh(g,new THREE.SphereGeometry(.075,24,16),m,-.005,1.205,z);cheek.scale.set(.9,1.2,.35);
+   const nostril=mesh(g,new THREE.SphereGeometry(.023,16,10),dark,.29,1.14,z);nostril.scale.set(1,.65,.45);
+   const strap=new THREE.CatmullRomCurve3([new THREE.Vector3(-.06,1.38,z),new THREE.Vector3(-.04,1.23,z+.008*Math.sign(z)),new THREE.Vector3(.08,1.12,z)]);
+   mesh(g,new THREE.TubeGeometry(strap,20,.012,8,false),t);
+   const buckle=mesh(g,new THREE.TorusGeometry(.034,.009,8,20),t,-.025,1.225,z+.018*Math.sign(z));buckle.scale.y=1.15;
+  }
+  // Rounded nose band wraps the bevelled muzzle on both sides.
+  const nose=new THREE.CatmullRomCurve3([new THREE.Vector3(.24,1.235,-.16),new THREE.Vector3(.30,1.20,-.17),new THREE.Vector3(.35,1.14,0),new THREE.Vector3(.30,1.20,.17),new THREE.Vector3(.24,1.235,.16)]);
+  mesh(g,new THREE.TubeGeometry(nose,32,.012,8,false),t);
   g.rotation.y=color==='w'?.25:Math.PI-.25;
  }
  g.userData.side=color==='w'?'ice':'fire';g.scale.setScalar(.98);return g;
