@@ -42,7 +42,14 @@ export function createBoard(container, { onSquare, lightColor = 0xe8d9b5, darkCo
     renderer.setSize(w, h, false);
     renderer.domElement.style.width = '100%'; renderer.domElement.style.height = '100%';
     camera.aspect = w / h;
-    dist = w / h < 1 ? 13 / Math.max(0.55, w / h) * 0.95 : 13;
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    // grow the distance until the whole board frame is inside the view
+    const corners = [[-4.6,0,-4.6],[4.6,0,-4.6],[-4.6,0,4.6],[4.6,0,4.6],[-4.6,0.9,-4.6],[4.6,0.9,-4.6],[-4.6,0.9,4.6],[4.6,0.9,4.6]].map(a => new THREE.Vector3(...a));
+    for (dist = 8; dist < 60; dist += 0.25) {
+      placeCamera(); camera.updateMatrixWorld(); let ok = true;
+      for (const v of corners) { const q = v.clone().project(camera); if (Math.abs(q.x) > 0.96 || Math.abs(q.y) > 0.96) { ok = false; break; } }
+      if (ok) break;
+    }
     camera.updateProjectionMatrix(); placeCamera();
   }
   new ResizeObserver(resize).observe(container); resize();
