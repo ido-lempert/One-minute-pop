@@ -65,3 +65,9 @@ Checks:32 rules/controller regressions; real Chrome chess capture/reset/AI/undo/
 A swept bevelled mane follows the horse neck instead of a rectangular block. Paired cheeks, nostrils, curved bridle straps, small buckles and a rounded nose band give the knight a readable face. These are real lit mesh details, not a texture or interface layer.
 
 Checks:32 rules/controller regressions; actual Chrome chess capture/reset/AI/undo/mode, zero errors/no390px overflow; matched phone/desktop before/after pixels inspected.
+
+## 11. Inlaid board frame and sculpted corner shoes
+
+Chess/checkers boards gain continuous thin brass perimeter inlays and recessed lower metal rails. Sculpted bevelled corner shoes with slotted screw heads replace the floating gold beads. The frame reads as a built object while retaining clear coordinate labels.
+
+Checks:32 regressions; real Chrome chess capture/reset/AI/undo/mode and checkers move/reset pass, zero errors/no390px overflow. Matched phone/desktop pixels inspected.

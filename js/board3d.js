@@ -34,7 +34,22 @@ export function createBoard(container, { onSquare }) {
   // Layered collectible-tabletop arena, not noisy texture maps.
   block(9.5,.26,9.5,0x173b55,0,-.44,0);block(9.3,.18,9.3,0x51b8bb,0,-.65,0);block(8.8,.25,8.8,0x245574,0,-.85,0);
   block(8.9,.14,8.9,0xd2b77d,0,-.24,0);
-  for(const x of [-4.5,4.5])for(const z of [-4.5,4.5]){const jewel=new THREE.Mesh(new THREE.SphereGeometry(.14,20,12),new THREE.MeshStandardMaterial({color:0xffcb69,metalness:.65,roughness:.25}));jewel.position.set(x,-.16,z);scene.add(jewel);}
+  // Inlaid brass perimeter and sculpted corner shoes replace floating corner beads.
+  const brass=new THREE.MeshStandardMaterial({color:0xd9ae59,metalness:.72,roughness:.29});
+  function detail(geo,mat,x,y,z){const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m;}
+  for(const side of [-1,1]){
+    detail(roundedSlab(8.66,.035,.045,.02,.008),brass,0,-.155,side*4.39);
+    detail(roundedSlab(.045,.035,8.66,.02,.008),brass,side*4.39,-.155,0);
+    // A dark inset between the gold deck and lower lacquered plinth.
+    detail(roundedSlab(9.18,.045,.055,.02,.01),brass,0,-.535,side*4.64);
+    detail(roundedSlab(.055,.045,9.18,.02,.01),brass,side*4.64,-.535,0);
+  }
+  const slotMat=new THREE.MeshStandardMaterial({color:0x39505a,metalness:.4,roughness:.5});
+  for(const x of [-4.45,4.45])for(const z of [-4.45,4.45]){
+    detail(roundedSlab(.44,.105,.44,.14,.025),brass,x,-.20,z);
+    const screw=detail(new THREE.CylinderGeometry(.065,.065,.026,24),brass,x,-.13,z);
+    const slot=detail(roundedSlab(.078,.008,.014,.006,.002),slotMat,x,-.114,z);slot.rotation.y=Math.PI/4;
+  }
   const tileMat=[new THREE.MeshPhysicalMaterial({color:0x8ea9a3,roughness:.36,clearcoat:.65,clearcoatRoughness:.24}),new THREE.MeshPhysicalMaterial({color:0x234a60,roughness:.32,clearcoat:.65,clearcoatRoughness:.24})];
   const tileEdge=[new THREE.MeshStandardMaterial({color:0x5e807f,roughness:.42}),new THREE.MeshStandardMaterial({color:0x153546,roughness:.4})];
   const squares=[],sqGeo=roundedSlab(.96,.18,.96,.07,.04);
