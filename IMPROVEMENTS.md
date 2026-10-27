@@ -97,3 +97,9 @@ Connect Four tokens now fall from the top with gravity-like acceleration, a smal
 Checks:32 rules/controller tests genuinely pass (npm test exit0); actual Chrome win/AI/reset and phone/desktop fall/settle/reset sampling passed. Actual falling and settled rendered frames inspected. Software rendering samples establish motion/settling, not physical-phone smoothness.
 
 Test reporting correction for12-14: the25 rules/chess/checker tests passed but7 C4 controller harness tests failed because token() was outside its sliced controller source. Real-browser C4 tests passed. The harness now provides its rendering/time stubs and all32 pass; this harness repair is not counted as a separate graphical improvement.
+
+## 16. Woven felt tabletop mat for chess and checkers
+
+A rounded, physical felt mat now supports the board: deterministic woven bump texture, rough cloth material, a fine instanced stitched border and received shadows. Updated framing includes the mat so the lower seam is not cut off. Shared by chess and checkers.
+
+Checks:32 rules/controller tests passed exit0. Chrome chess capture/reset/AI/undo/mode and checkers move/reset-cancellation passed exit0, zero page errors/no390px overflow. Before/after phone and desktop inspected; final phone chess/checkers framing inspected.

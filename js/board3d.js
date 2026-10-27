@@ -31,6 +31,15 @@ export function createBoard(container, { onSquare }) {
   }
   function block(w,h,d,color,x,y,z,rough=.4){const m=new THREE.Mesh(roundedSlab(w,h,d,.14,Math.min(.045,h/4)),new THREE.MeshStandardMaterial({color,roughness:rough}));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m;}
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.MeshStandardMaterial({color:0x243f52,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-1.0;floor.receiveShadow=true;scene.add(floor);
+  // A woven felt play mat separates the collectible board from the studio floor.
+  const feltCanvas=document.createElement('canvas');feltCanvas.width=feltCanvas.height=256;const fg=feltCanvas.getContext('2d');fg.fillStyle='#858585';fg.fillRect(0,0,256,256);
+  let seed=19;for(let i=0;i<18000;i++){seed=(seed*1664525+1013904223)>>>0;const x=seed%256;seed=(seed*1664525+1013904223)>>>0;const y=seed%256;fg.fillStyle=i%2?'#929292':'#747474';fg.fillRect(x,y,2,1);}
+  const feltTexture=new THREE.CanvasTexture(feltCanvas);feltTexture.wrapS=feltTexture.wrapT=THREE.RepeatWrapping;feltTexture.repeat.set(5,5);
+  const mat=new THREE.Mesh(roundedSlab(10.65,.055,10.65,.50,.012),new THREE.MeshStandardMaterial({color:0x173b46,roughness:.98,bumpMap:feltTexture,bumpScale:.018}));mat.position.y=-.963;mat.receiveShadow=true;mat.castShadow=true;scene.add(mat);
+  // Fine physical stitched border, kept outside the board coordinates.
+  const thread=new THREE.MeshStandardMaterial({color:0x799da0,roughness:.9});const stitchGeo=new THREE.CapsuleGeometry(.009,.055,3,6);stitchGeo.rotateZ(Math.PI/2);
+  const stitchInstances=new THREE.InstancedMesh(stitchGeo,thread,192);const transform=new THREE.Object3D();let stitch=0;
+  for(let side=0;side<4;side++)for(let i=0;i<48;i++){const along=-4.85+i*9.7/47;transform.position.set(side<2?along:(side===2?-5.13:5.13),-.928,side<2?(side===0?-5.13:5.13):along);transform.rotation.y=side<2?0:Math.PI/2;transform.updateMatrix();stitchInstances.setMatrixAt(stitch++,transform.matrix);}scene.add(stitchInstances);
   // Layered collectible-tabletop arena, not noisy texture maps.
   block(9.5,.26,9.5,0x173b55,0,-.44,0);block(9.3,.18,9.3,0x51b8bb,0,-.65,0);block(8.8,.25,8.8,0x245574,0,-.85,0);
   block(8.9,.14,8.9,0xd2b77d,0,-.24,0);
@@ -66,7 +75,7 @@ export function createBoard(container, { onSquare }) {
     const w = container.clientWidth || 600, h = container.clientHeight || 600;
     renderer.setSize(w, h, false); renderer.domElement.style.width = '100%'; renderer.domElement.style.height = '100%';
     camera.aspect = w / h; camera.updateProjectionMatrix();
-    const corners = [[-4.8, 0, -4.8], [4.8, 0, -4.8], [-4.8, 0, 4.8], [4.8, 0, 4.8], [-4.8, 1.2, -4.8], [4.8, 1.2, -4.8]].map(a => new THREE.Vector3(...a));
+    const corners = [[-5.35, -.95, -5.35], [5.35, -.95, -5.35], [-5.35, -.95, 5.35], [5.35, -.95, 5.35], [-4.8, 1.2, -4.8], [4.8, 1.2, -4.8]].map(a => new THREE.Vector3(...a));
     for (dist = 8; dist < 60; dist += 0.25) {
       placeCamera(); camera.updateMatrixWorld();
       if (corners.every(v => { const q = v.clone().project(camera); return Math.abs(q.x) < 0.96 && Math.abs(q.y) < 0.96; })) break;
