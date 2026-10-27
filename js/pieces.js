@@ -3,7 +3,9 @@ import * as THREE from '../lib/three.module.js';
 const mats={w:new THREE.MeshPhysicalMaterial({color:0xe2f2df,roughness:.22,metalness:.05,clearcoat:1}),b:new THREE.MeshPhysicalMaterial({color:0xc95038,roughness:.25,metalness:.05,clearcoat:1})};
 const trim={w:new THREE.MeshStandardMaterial({color:0x19adc2,metalness:.45,roughness:.25}),b:new THREE.MeshStandardMaterial({color:0xffd16e,metalness:.55,roughness:.25})};
 const dark=new THREE.MeshStandardMaterial({color:0x193b52,roughness:.3});
-const geo={};const lathe=(key,points)=>geo[key]||(geo[key]=new THREE.LatheGeometry(points.map(([x,y])=>new THREE.Vector2(x,y)),48));
+const geo={};const lathe=(key,points)=>{if(geo[key])return geo[key];const shape=new THREE.LatheGeometry(points.map(([x,y])=>new THREE.Vector2(x,y)),key==='body'?64:48);
+ // Broad ceramic flutes are sculpted into the shared chess stem, tapering out before collars.
+ if(key==='body'){const p=shape.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i),r=Math.hypot(x,z);if(y>.24&&y<.70&&r>0){const envelope=Math.sin((y-.24)/.46*Math.PI),delta=.018*envelope*Math.cos(8*Math.atan2(z,x));p.setXYZ(i,x*(r+delta)/r,y,z*(r+delta)/r);}}shape.computeVertexNormals();const n=shape.attributes.normal;for(let j=0;j<points.length;j++){const a=j,b=64*points.length+j,v=new THREE.Vector3(n.getX(a)+n.getX(b),n.getY(a)+n.getY(b),n.getZ(a)+n.getZ(b)).normalize();n.setXYZ(a,v.x,v.y,v.z);n.setXYZ(b,v.x,v.y,v.z);}}return geo[key]=shape;};
 function mesh(g,geometry,material,x=0,y=0,z=0){const m=new THREE.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;g.add(m);return m;}
 const body=[[0,0],[.30,0],[.34,.018],[.365,.045],[.37,.075],[.365,.105],[.35,.125],[.34,.145],[.30,.165],[.29,.19],[.27,.21],[.245,.25],[.22,.30],[.195,.36],[.173,.43],[.153,.51],[.145,.58],[.145,.63],[.157,.67],[.18,.70],[.21,.72],[.25,.73],[.266,.75],[.27,.78],[.25,.81],[.22,.83],[0,.84]];
 export function chessMesh(type,color){

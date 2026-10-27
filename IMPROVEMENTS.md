@@ -241,3 +241,9 @@ Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellati
 Ordinary checker faces now carry eight raised teardrop petals with real cut-through centers and a low central boss, replacing the solid star stamp. Shared bevelled geometry catches light around the open petals; body, grip and royal crown silhouettes remain unchanged.
 
 Checks:32 rules/controller tests exit0. Chrome checkers move/reset-cancellation exit0, zero page errors/no390px overflow. Matched four-disc studio before/after and phone/desktop board pixels inspected. Studio is a model test, not a live board. Physical-device FPS remains unverified.
+
+## 40. Fluted ceramic chess stems
+
+Eight broad radial flutes are now sculpted directly into the shared chess stem, fading into the neck and foot collars. Normal-smoothed shared geometry replaces the plain turned surface on pawns, knights, bishops, queens and kings, without adding separate floating ribs. Rook and checker meshes are unchanged.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-piece studio before/after and final phone/desktop board pixels inspected. Studio is a model test, not a live board. Physical-device FPS remains unverified.
