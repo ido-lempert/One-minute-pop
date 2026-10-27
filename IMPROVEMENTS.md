@@ -121,3 +121,9 @@ Checks:32 rules/controller tests exit0; actual Chrome Connect Four win/reset/AI 
 Rebuilt the shared pedestal profile with more closely spaced turning transitions, a rounder foot and neck and two fine metal rails instead of one thick generic ring. Applies across the chess set without changing piece silhouettes. A bead-relief experiment was removed before release to keep the ceramic clean.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched phone/desktop board pixels and dedicated before/after four-piece model views inspected. The model close-up is a test studio, not a live board screenshot.
+
+## 20. Reeded ceramic checker edges
+
+Added 32 rounded ceramic grip reeds around the stepped edges of each checker, with fine metal boundary rails. Kings retain their sculpted crown and stacked silhouette. One instanced mesh per piece keeps the new detail economical.
+
+Checks:32 rules/controller tests exit0; Chrome checkers move/reset-cancellation exit0, zero errors/no390px overflow. Dedicated before/after normal/king model studio and phone/desktop board pixels inspected. Physical-device FPS remains unverified.

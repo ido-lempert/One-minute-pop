@@ -84,6 +84,10 @@ export function chessMesh(type,color){
 export function checkerMesh(color,king){
  const g=new THREE.Group(),m=mats[color],t=trim[color];
  mesh(g,lathe('checkerSculpt',[[0,0],[.32,0],[.39,.025],[.415,.065],[.415,.10],[.388,.125],[.415,.15],[.415,.18],[.39,.21],[.35,.25],[.31,.265],[.28,.245],[0,.245]]),m);
+ // Rounded vertical reeds form a tactile grip around the disc's stepped edge.
+ if(!geo.checkerGrip){const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(.394,.040,0),new THREE.Vector3(.419,.073,0),new THREE.Vector3(.405,.123,0),new THREE.Vector3(.419,.168,0),new THREE.Vector3(.388,.213,0)]);geo.checkerGrip=new THREE.TubeGeometry(curve,12,.012,8,false);}
+ const reeds=new THREE.InstancedMesh(geo.checkerGrip,m,32),pose=new THREE.Object3D();for(let i=0;i<32;i++){pose.rotation.y=i*Math.PI/16;pose.updateMatrix();reeds.setMatrixAt(i,pose.matrix);}reeds.castShadow=true;reeds.receiveShadow=true;g.add(reeds);
+ for(const y of [.035,.20]){const belt=mesh(g,new THREE.TorusGeometry(y===.035?.397:.398,.009,10,64),t,0,y);belt.rotation.x=Math.PI/2;}
  const rim=mesh(g,new THREE.TorusGeometry(.315,.024,12,48),t,0,.258);rim.rotation.x=Math.PI/2;
  // An inset ceramic face, a raised geometric rosette and eight metal inlays.
  mesh(g,new THREE.CylinderGeometry(.276,.276,.018,48),m,0,.249);
