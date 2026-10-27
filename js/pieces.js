@@ -31,9 +31,14 @@ export function chessMesh(type,color){
   g.rotation.y=color==='w'?.20:Math.PI+.20;
  }
  if(type==='q'){
-  mesh(g,new THREE.CylinderGeometry(.3,.2,.3,32),m,0,.97);
-  for(let i=0;i<7;i++){const a=i*Math.PI*2/7;mesh(g,new THREE.SphereGeometry(.07,16,12),t,Math.cos(a)*.27,1.18,Math.sin(a)*.27);}
-  mesh(g,new THREE.SphereGeometry(.13,24,16),m,0,1.18);mesh(g,new THREE.SphereGeometry(.065,16,12),t,0,1.34);
+  // Open royal crown: a scalloped band, rising gold prongs and inset stones.
+  mesh(g,lathe('queenMantle',[[0,0],[.19,0],[.21,.08],[.19,.16],[.24,.24],[.26,.29],[.21,.32],[0,.32]]),m,0,.76);
+  if(!geo.queenCrown){const n=64,points=[];for(let i=0;i<=n;i++){const a=i/n*Math.PI*2,r=.258;points.push(new THREE.Vector3(Math.cos(a)*r,1.105+.035*Math.cos(8*a),Math.sin(a)*r));}geo.queenCrown=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),96,.023,8,true);}
+  mesh(g,geo.queenCrown,t);
+  mesh(g,new THREE.CylinderGeometry(.205,.19,.035,40),dark,0,1.075);
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;const s=new THREE.Shape();s.moveTo(-.042,1.04);s.quadraticCurveTo(-.05,1.17,-.02,1.29);s.quadraticCurveTo(0,1.36,.02,1.29);s.quadraticCurveTo(.05,1.17,.042,1.04);s.closePath();if(!geo.queenProng)geo.queenProng=new THREE.ExtrudeGeometry(s,{depth:.026,bevelEnabled:true,bevelSize:.012,bevelThickness:.012,bevelSegments:3,steps:1});const prong=mesh(g,geo.queenProng,t,Math.cos(a)*.245,0,Math.sin(a)*.245);prong.rotation.y=Math.PI/2-a;mesh(g,new THREE.SphereGeometry(.048,20,12),m,Math.cos(a)*.255,1.30,Math.sin(a)*.255);}
+  const band=mesh(g,new THREE.TorusGeometry(.245,.022,10,48),t,0,1.025);band.rotation.x=Math.PI/2;
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;const gem=mesh(g,new THREE.OctahedronGeometry(.037),t,Math.cos(a)*.252,1.065,Math.sin(a)*.252);gem.scale.y=1.3;}
  }
  if(type==='k'){
   mesh(g,new THREE.CylinderGeometry(.25,.19,.33,32),m,0,1.0);
