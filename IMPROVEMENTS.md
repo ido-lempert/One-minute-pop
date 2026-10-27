@@ -253,3 +253,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 Connect Four's inflated donut surrounds are replaced by turned ceramic rims with a broad shoulder, recessed inner wall and narrow lip. The opening reads wider and reveals more of the token face; the rack retains its42 real cut-through holes. Rejected shadow-filter and hidden-sleeve experiments were not published or counted.
 
 Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero page errors/no390px overflow. Matched played desktop before/after and phone pixels inspected. Physical-device FPS remains unverified.
+
+## 42. Curved rook battlements
+
+Rook crown blocks now follow the circular tower wall as curved annular ceramic merlons, rather than rectangular blocks projecting outside it. Bevelled edges catch light around the continuous outside curve while six gaps and the hollow courtyard remain open. The change is clearest in the model studio and modest at phone board scale. Rejected contact-shadow experiments were reverted and not counted.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode lifecycle exit0, zero page errors/no390px overflow. Matched local studio before/after and actual390px/desktop board pixels inspected. Physical-device FPS remains unverified.

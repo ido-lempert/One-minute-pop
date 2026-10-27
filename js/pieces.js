@@ -29,8 +29,9 @@ export function chessMesh(type,color){
   if(!geo.rookCrown){const outer=new THREE.Shape();outer.absarc(0,0,.31,0,Math.PI*2,false);const hole=new THREE.Path();hole.absarc(0,0,.21,0,Math.PI*2,true);outer.holes.push(hole);geo.rookCrown=new THREE.ExtrudeGeometry(outer,{depth:.22,bevelEnabled:true,bevelSize:.025,bevelThickness:.025,bevelSegments:3,curveSegments:32,steps:1});geo.rookCrown.rotateX(-Math.PI/2);}
   mesh(g,geo.rookCrown,m,0,.84);
   mesh(g,new THREE.CylinderGeometry(.205,.205,.02,40),dark,0,.865);
-  if(!geo.rookTooth){const q=new THREE.Shape();q.moveTo(-.065,-.06);q.lineTo(.065,-.06);q.lineTo(.065,.06);q.lineTo(-.065,.06);q.closePath();geo.rookTooth=new THREE.ExtrudeGeometry(q,{depth:.15,bevelEnabled:true,bevelSize:.022,bevelThickness:.022,bevelSegments:3,steps:1});geo.rookTooth.rotateX(-Math.PI/2);}
-  for(let i=0;i<6;i++){const a=i*Math.PI/3;const tooth=mesh(g,geo.rookTooth,m,Math.cos(a)*.265,1.055,Math.sin(a)*.265);tooth.rotation.y=-a;}
+  // Curved annular merlons follow the tower wall, with bevelled sloping shoulders.
+  if(!geo.rookTooth){const q=new THREE.Shape(),outer=.325,inner=.205,half=.24;q.moveTo(Math.cos(-half)*outer,Math.sin(-half)*outer);q.absarc(0,0,outer,-half,half,false);q.lineTo(Math.cos(half)*inner,Math.sin(half)*inner);q.absarc(0,0,inner,half,-half,true);q.closePath();geo.rookTooth=new THREE.ExtrudeGeometry(q,{depth:.17,bevelEnabled:true,bevelSize:.018,bevelThickness:.018,bevelSegments:4,curveSegments:16,steps:1});geo.rookTooth.rotateX(-Math.PI/2);}
+  for(let i=0;i<6;i++){const tooth=mesh(g,geo.rookTooth,m,0,1.055,0);tooth.rotation.y=i*Math.PI/3;}
   for(const y of [.32,.77]){const collar=mesh(g,new THREE.TorusGeometry(y===.32?.249:.258,.017,10,48),t,0,y);collar.rotation.x=Math.PI/2;}
   // Four swept ceramic buttresses give the rook a supported castle-tower silhouette.
   if(!geo.rookButtress){const s=new THREE.Shape();s.moveTo(.22,.25);s.lineTo(.30,.25);s.quadraticCurveTo(.31,.34,.285,.43);s.quadraticCurveTo(.265,.60,.285,.79);s.lineTo(.235,.80);s.closePath();geo.rookButtress=new THREE.ExtrudeGeometry(s,{depth:.075,bevelEnabled:true,bevelSize:.014,bevelThickness:.014,bevelSegments:4,curveSegments:16,steps:1});geo.rookButtress.translate(0,0,-.0375);}
