@@ -129,14 +129,15 @@ export function createBoard(container, { onSquare }) {
   }
   function setMarks({ selected, targets = [], last = [] }) {
     markGroup.clear(); selKey = selected ? selected[0] + ',' + selected[1] : null;
-    const add = (c, r, color, big, op) => {
-      const m = new THREE.Mesh(new THREE.CylinderGeometry(big ? 0.47 : 0.2, big ? 0.47 : 0.2, 0.03, 32), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: op }));
-      m.position.set(c - 3.5, 0.1, 3.5 - r); markGroup.add(m);
-      if (big) { const ring = new THREE.Mesh(new THREE.TorusGeometry(0.47, 0.035, 8, 40), new THREE.MeshBasicMaterial({ color })); ring.rotation.x = Math.PI / 2; ring.position.set(c - 3.5, 0.12, 3.5 - r); markGroup.add(ring); }
-    };
-    for (const [c, r] of last) add(c, r, 0xffe27a, true, 0.28);
-    for (const [c, r] of targets) add(c, r, 0x7dff6a, false, 0.95);
-    if (selected) add(selected[0], selected[1], 0xffd23d, true, 0.45);
+    // Inlaid markers use real lit rings and a shallow translucent footprint.
+    const mint=new THREE.MeshStandardMaterial({color:0x9be5ce,metalness:.30,roughness:.28,emissive:0x164b44,emissiveIntensity:.28});
+    const amber=new THREE.MeshStandardMaterial({color:0xf4d07c,metalness:.5,roughness:.26,emissive:0x5c3c0d,emissiveIntensity:.16});
+    const coral=new THREE.MeshStandardMaterial({color:0xffa17c,metalness:.25,roughness:.3,emissive:0x7a2e16,emissiveIntensity:.18});
+    const ring=(c,r,radius,tube,material)=>{const m=new THREE.Mesh(new THREE.TorusGeometry(radius,tube,12,48),material);m.rotation.x=Math.PI/2;m.position.set(c-3.5,.115,3.5-r);m.castShadow=true;markGroup.add(m);};
+    const footprint=(c,r,color,opacity)=>{const m=new THREE.Mesh(new THREE.CircleGeometry(.44,48),new THREE.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(c-3.5,.082,3.5-r);markGroup.add(m);};
+    for(const [c,r] of last){footprint(c,r,0xe3c174,.17);ring(c,r,.425,.009,amber);}
+    for(const [c,r] of targets){const occupied=meshAt.has(c+','+r);if(occupied){ring(c,r,.436,.027,coral);footprint(c,r,0xff936c,.14);}else{ring(c,r,.155,.024,mint);const pearl=new THREE.Mesh(new THREE.SphereGeometry(.055,20,12),mint);pearl.scale.y=.35;pearl.position.set(c-3.5,.108,3.5-r);markGroup.add(pearl);}}
+    if(selected){const [c,r]=selected;footprint(c,r,0xf4d07c,.22);ring(c,r,.444,.026,amber);}
   }
   function resetView() { yaw=.22;pitch=.95;resize(); }
   function setSide() { resetView(); }

@@ -223,3 +223,9 @@ Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellati
 A continuous six-lobed ceramic calyx now cradles each pawn orb above the turned collar. The smooth radial relief replaces the plain supporting neck without changing the pawn footprint or metal equator. A cached normal-smoothed mesh is shared across pawns. An initial separate-petal experiment was rejected during visual review before publication.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-pawn studio before/after and final phone/desktop board pixels inspected. Studio views are model tests, not live boards. Physical-device FPS remains unverified.
+
+## 37. Lit inlaid move markers
+
+Chess/checkers flat neon move dots are replaced by physically lit mint rings with center pearls. Amber inlays mark selection and the last move; coral rings distinguish occupied capture targets. Shallow translucent footprints keep the ceramic tile visible. Checkers' legend now calls these mint rings.
+
+Checks:32 rules/controller tests exit0. Separate Chrome chess capture/reset/AI/undo/mode and checkers move/reset-cancellation checks exit0, zero page errors/no390px overflow. Matched phone selection before/after, played chess capture position, chess desktop and checkers phone pixels inspected. Physical-device FPS remains unverified.
