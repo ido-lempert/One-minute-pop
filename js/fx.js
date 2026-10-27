@@ -1,4 +1,5 @@
 import * as THREE from '../lib/three.module.js';
+import { prefs } from './prefs.js';
 // Particle effects: fire (rising embers) and ice (frost shards spraying out and falling). Additive, no full-screen flashes.
 function spriteTex() {
   const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
@@ -12,6 +13,7 @@ export function createFx(scene, { max = 600, size = 0.26 } = {}) {
   pts.frustumCulled = false; scene.add(pts);
   const lights = [];
   function burst(x, y, z, type, n = 70) {
+    if (prefs.lite) n = Math.ceil(n * 0.4);
     for (let i = 0; i < n && parts.length < max; i++) {
       const a = Math.random() * 6.283;
       if (type === 'fire') parts.push({ p: [x + Math.cos(a) * 0.25 * Math.random(), y, z + Math.sin(a) * 0.25 * Math.random()], v: [Math.cos(a) * 0.5 * Math.random(), 1.6 + Math.random() * 2.2, Math.sin(a) * 0.5 * Math.random()], life: 0.7 + Math.random() * 0.7, age: 0, type });
@@ -39,7 +41,7 @@ export function createFx(scene, { max = 600, size = 0.26 } = {}) {
   }
   let acc = 0, ambient = true;
   function ambientUpdate(dt) {
-    if (!ambient) return; acc += dt * (innerWidth < 700 ? 6 : 12);
+    if (!ambient || prefs.lite) return; acc += dt * (innerWidth < 700 ? 6 : 12);
     while (acc >= 1 && parts.length < max - 140) { acc -= 1;
       const ice = Math.random() < 0.5, x = (Math.random() - 0.5) * 12, z = ice ? 2 + Math.random() * 4 : -2 - Math.random() * 4;
       if (ice) parts.push({ p: [x, 4 + Math.random() * 2, z], v: [(Math.random() - 0.5) * 0.3, -0.5 - Math.random() * 0.4, (Math.random() - 0.5) * 0.3], life: 5, age: 0, type: 'snow' });

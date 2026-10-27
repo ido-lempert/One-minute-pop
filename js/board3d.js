@@ -1,6 +1,7 @@
 import * as THREE from '../lib/three.module.js';
 import { RoomEnvironment } from '../lib/RoomEnvironment.js';
 import { createFx } from './fx.js';
+import { prefs } from './prefs.js';
 import { iceTexture, lavaTextures, frameTexture, skyTexture, glowTexture } from './theme.js';
 
 // Shared 3D 8x8 board in a fire-vs-ice fantasy setting. Square (c, r): c = file 0..7, r = rank 0..7.
@@ -8,7 +9,7 @@ import { iceTexture, lavaTextures, frameTexture, skyTexture, glowTexture } from 
 export function createBoard(container, { onSquare }) {
   const small = innerWidth < 700;
   const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, small ? 1.75 : 2));
+  const pr = () => prefs.lite ? 1 : Math.min(devicePixelRatio, small ? 1.75 : 2); renderer.setPixelRatio(pr()); prefs.onChange(() => { renderer.setPixelRatio(pr()); resize(); });
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
   container.appendChild(renderer.domElement);
@@ -94,6 +95,12 @@ export function createBoard(container, { onSquare }) {
     const m = meshAt.get(tc + ',' + tr); if (!m) return;
     tweens.push({ m, x0: fc - 3.5, z0: 3.5 - fr, x1: tc - 3.5, z1: 3.5 - tr, t: 0, dur }); m.position.set(fc - 3.5, 0.03, 3.5 - fr);
   }
+  const ghosts = [];
+  // call BEFORE the redraw: the captured piece shrinks, spins and rises away instead of vanishing
+  function captureAt(c, r) {
+    const m = meshAt.get(c + ',' + r); if (!m) return;
+    const g = m.clone(); g.position.copy(m.position); scene.add(g); ghosts.push({ g, t: 0, dur: prefs.lite ? 0.25 : 0.5, y0: g.position.y });
+  }
   function setMarks({ selected, targets = [], last = [] }) {
     markGroup.clear(); selKey = selected ? selected[0] + ',' + selected[1] : null;
     const add = (c, r, color, big, op) => {
@@ -115,9 +122,11 @@ export function createBoard(container, { onSquare }) {
     fireLight.intensity = 13 + Math.sin(t * 7) * 1.5; for (const d of debris) { d.rotation.y += d.userData.spin * dt; d.rotation.x += d.userData.spin * 0.5 * dt; d.position.y = d.userData.y0 + Math.sin(t * 0.8 + d.userData.ph) * 0.2; }
     for (let i = tweens.length - 1; i >= 0; i--) { const w = tweens[i]; w.t += dt; const k = Math.min(1, w.t / w.dur), e = k * k * (3 - 2 * k);
       w.m.position.set(w.x0 + (w.x1 - w.x0) * e, 0.03 + Math.sin(k * Math.PI) * 0.55, w.z0 + (w.z1 - w.z0) * e); if (k >= 1) { w.m.position.y = 0.03; tweens.splice(i, 1); } }
+    for (let i = ghosts.length - 1; i >= 0; i--) { const w = ghosts[i]; w.t += dt; const k = Math.min(1, w.t / w.dur);
+      w.g.scale.setScalar(Math.max(0.001, 1 - k * k)); w.g.rotation.y += dt * 9; w.g.position.y = w.y0 + k * 0.9; if (k >= 1) { scene.remove(w.g); ghosts.splice(i, 1); } }
     const sm = selKey && meshAt.get(selKey); if (sm && !tweens.some(w => w.m === sm)) sm.position.y = 0.03 + 0.1 + Math.sin(t * 4) * 0.05;
     renderer.render(scene, camera);
   }
   renderer.setAnimationLoop(loop);
-  return { THREE, fx, project, setPieces, setMarks, setSide, animateMove, canvas: el, renderer };
+  return { THREE, fx, project, setPieces, setMarks, setSide, animateMove, captureAt, canvas: el, renderer };
 }

@@ -2,7 +2,9 @@ import { Chess } from '../lib/chess.js';
 import { createBoard } from '../js/board3d.js';
 import { chessMesh } from '../js/pieces.js';
 import { sound, addMuteButton } from '../js/sound.js';
+import { addLiteButton } from '../js/prefs.js';
 addMuteButton();
+addLiteButton();
 const game = new Chess();
 let selected = null, last = [];
 const sq = (c, r) => 'abcdefgh'[c] + (r + 1);
@@ -37,7 +39,7 @@ function aiMove() {
   play(pick);
 }
 function play(m) {
-  const r = game.move(m); last = [unsq(r.from), unsq(r.to)]; selected = null; draw();
+  const r = game.move(m); if (r.captured) { const [qc, qr] = unsq(r.to); board.captureAt(qc, r.flags.includes('e') ? unsq(r.from)[1] : qr); } last = [unsq(r.from), unsq(r.to)]; selected = null; draw();
   const [tc, tr] = unsq(r.to), wx = tc - 3.5, wz = 3.5 - tr; const [fc, fr] = unsq(r.from); board.animateMove(fc, fr, tc, tr);
   if (r.captured) { const t = r.color === 'w' ? 'fire' : 'ice'; board.fx.burst(wx, 0.3, wz, t); t === 'fire' ? sound.fire() : sound.ice(); } else sound.knock();
   if (game.isCheckmate()) { sound.win(); board.fx.burst(wx, 0.3, wz, 'fire', 90); board.fx.burst(wx, 0.3, wz, 'ice', 90); } else if (game.inCheck()) sound.check();
