@@ -199,3 +199,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 Twelve rounded ceramic lobes now shape the checker king's raised disc into a scalloped royal tier. The upper level is distinct from the normal reeded disc and retains its metal belt and open crown. Shared lathed geometry adds physical relief without changing normal pieces.
 
 Checks:32 rules/controller tests exit0. Chrome checkers move/reset-cancellation exit0, zero page errors/no390px overflow. Matched normal/king studio before/after and phone/desktop board pixels inspected using an explicit all-kings test fixture, not the normal opening. Physical-device FPS remains unverified.
+
+## 33. Satin ash veneer board perimeter
+
+The chess/checkers perimeter deck now uses fine deterministic ash grain, satin clearcoat and shallow wood bump beneath the brass inlay. The warm natural material replaces the flat yellow surface while preserving coordinate labels and sculpted corner hardware. The generated texture is shared by the frame.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode and checkers move/reset-cancellation exit0, zero page errors/no390px overflow. Matched desktop before/after and final phone board pixels inspected. Physical-device FPS remains unverified.

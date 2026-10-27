@@ -1,6 +1,7 @@
 import * as THREE from '../lib/three.module.js';
 import { RoomEnvironment } from '../lib/RoomEnvironment.js';
 import { createFx } from './fx.js';
+import { woodMaterial } from './wood.js';
 import { prefs } from './prefs.js';
 import { glowTexture } from './theme.js';
 
@@ -29,7 +30,7 @@ export function createBoard(container, { onSquare }) {
     const g=new THREE.ExtrudeGeometry(shape,{depth:Math.max(.01,h-2*bevel),bevelEnabled:true,bevelSegments:3,steps:1,bevelSize:bevel,bevelThickness:bevel,curveSegments:8});
     g.rotateX(-Math.PI/2);g.translate(0,-h/2+bevel,0);return g;
   }
-  function block(w,h,d,color,x,y,z,rough=.4){const m=new THREE.Mesh(roundedSlab(w,h,d,.14,Math.min(.045,h/4)),new THREE.MeshStandardMaterial({color,roughness:rough}));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m;}
+  function block(w,h,d,color,x,y,z,rough=.4){const m=new THREE.Mesh(roundedSlab(w,h,d,.14,Math.min(.045,h/4)),(color?.isMaterial?color:new THREE.MeshStandardMaterial({color,roughness:rough})));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m;}
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.MeshStandardMaterial({color:0x243f52,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-1.0;floor.receiveShadow=true;scene.add(floor);
   // A woven felt play mat separates the collectible board from the studio floor.
   const feltCanvas=document.createElement('canvas');feltCanvas.width=feltCanvas.height=256;const fg=feltCanvas.getContext('2d');fg.fillStyle='#858585';fg.fillRect(0,0,256,256);
@@ -42,7 +43,9 @@ export function createBoard(container, { onSquare }) {
   for(let side=0;side<4;side++)for(let i=0;i<48;i++){const along=-4.85+i*9.7/47;transform.position.set(side<2?along:(side===2?-5.13:5.13),-.928,side<2?(side===0?-5.13:5.13):along);transform.rotation.y=side<2?0:Math.PI/2;transform.updateMatrix();stitchInstances.setMatrixAt(stitch++,transform.matrix);}scene.add(stitchInstances);
   // Layered collectible-tabletop arena, not noisy texture maps.
   block(9.5,.26,9.5,0x173b55,0,-.44,0);block(9.3,.18,9.3,0x51b8bb,0,-.65,0);block(8.8,.25,8.8,0x245574,0,-.85,0);
-  block(8.9,.14,8.9,0xd2b77d,0,-.24,0);
+  // Satin ash veneer brings fine natural grain beneath the metal perimeter inlay.
+  const veneer=woodMaterial({base:'#d6c19a',dark:'#9e8462',seed:33,size:512,rings:14},{repeat:[.115,.115],rough:.48,clearcoat:.24});veneer.bumpScale=.008;veneer.clearcoatRoughness=.4;
+  block(8.9,.14,8.9,veneer,0,-.24,0);
   // Inlaid brass perimeter and sculpted corner shoes replace floating corner beads.
   const brass=new THREE.MeshStandardMaterial({color:0xd9ae59,metalness:.72,roughness:.29});
   function detail(geo,mat,x,y,z){const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m;}
