@@ -47,6 +47,9 @@ export function chessMesh(type,color){
  if(type==='q'){
   // Open royal crown: a scalloped band, rising gold prongs and inset stones.
   mesh(g,lathe('queenMantle',[[0,0],[.19,0],[.21,.08],[.19,.16],[.24,.24],[.26,.29],[.21,.32],[0,.32]]),m,0,.76);
+  // Eight softly overlapping ceramic petals support the queen's open crown.
+  if(!geo.queenPetal){const s=new THREE.Shape();s.moveTo(-.046,0);s.quadraticCurveTo(-.09,.095,-.052,.19);s.quadraticCurveTo(0,.265,.052,.19);s.quadraticCurveTo(.09,.095,.046,0);s.closePath();geo.queenPetal=new THREE.ExtrudeGeometry(s,{depth:.024,bevelEnabled:true,bevelSize:.016,bevelThickness:.014,bevelSegments:4,curveSegments:16,steps:1});}
+  for(let i=0;i<8;i++){const a=i*Math.PI/4,petal=mesh(g,geo.queenPetal,m,Math.cos(a)*.207,.82,Math.sin(a)*.207);petal.rotation.y=Math.PI/2-a;}
   if(!geo.queenCrown){const n=64,points=[];for(let i=0;i<=n;i++){const a=i/n*Math.PI*2,r=.258;points.push(new THREE.Vector3(Math.cos(a)*r,1.105+.035*Math.cos(8*a),Math.sin(a)*r));}geo.queenCrown=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),96,.023,8,true);}
   mesh(g,geo.queenCrown,t);
   mesh(g,new THREE.CylinderGeometry(.205,.19,.035,40),dark,0,1.075);
