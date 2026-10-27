@@ -1,4 +1,5 @@
 import * as THREE from '../lib/three.module.js';
+import { RoomEnvironment } from '../lib/RoomEnvironment.js';
 import * as R from '../js/connect4-rules.js';
 import { createFx } from '../js/fx.js';
 import { prefs } from '../js/prefs.js';
@@ -11,6 +12,9 @@ const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffe
 const pr = () => prefs.lite ? 1 : Math.min(devicePixelRatio, 2); renderer.setPixelRatio(pr()); prefs.onChange(() => { renderer.setPixelRatio(pr()); fit(); }); renderer.domElement.style.touchAction = 'manipulation';
 const scene = new THREE.Scene();
 scene.background=new THREE.Color(0x304d5c);scene.fog=new THREE.Fog(0x304d5c,17,45);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.toneMapping=THREE.ACESFilmicToneMapping;
+// Soft studio reflection cards give glazed ceramic and metal a real environment.
+const pmrem=new THREE.PMREMGenerator(renderer),studio=new RoomEnvironment();
+const reflection=pmrem.fromScene(studio,.06);scene.environment=reflection.texture;scene.environmentIntensity=.18;studio.dispose();pmrem.dispose();
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
 scene.add(new THREE.HemisphereLight(0xcfe5f5, 0x233543, .8));
 const iceSun = new THREE.DirectionalLight(0xfff4df, 3.5); iceSun.position.set(-6, 8, 8); iceSun.castShadow=true;iceSun.shadow.mapSize.set(1024,1024);Object.assign(iceSun.shadow.camera,{left:-8,right:8,top:8,bottom:-8,near:.5,far:30});iceSun.shadow.normalBias=.025;iceSun.shadow.bias=-.00015;iceSun.shadow.radius=3;scene.add(iceSun);

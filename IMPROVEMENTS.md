@@ -127,3 +127,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 Added 32 rounded ceramic grip reeds around the stepped edges of each checker, with fine metal boundary rails. Kings retain their sculpted crown and stacked silhouette. One instanced mesh per piece keeps the new detail economical.
 
 Checks:32 rules/controller tests exit0; Chrome checkers move/reset-cancellation exit0, zero errors/no390px overflow. Dedicated before/after normal/king model studio and phone/desktop board pixels inspected. Physical-device FPS remains unverified.
+
+## 21. Studio reflection environment for Connect Four
+
+Added a prefiltered studio environment to the Connect Four scene, bringing soft reflection cards into the glazed ceramic discs, rack and metal trim instead of leaving the reflective surfaces without an environment. Temporary environment geometry and generator are disposed after baking. Existing directional lighting/shadows remain.
+
+Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero page errors/no390px overflow. Matched before/after phone board and final phone/desktop pixels inspected; reflection strength tuned down before release. Physical-device FPS remains unverified.
