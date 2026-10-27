@@ -62,6 +62,11 @@ export function chessMesh(type,color){
   mesh(g,lathe('kingMantle',[[0,0],[.19,0],[.24,.045],[.26,.10],[.23,.17],[.21,.29],[.24,.33],[0,.33]]),m,0,.76);
   const dome=mesh(g,new THREE.SphereGeometry(.215,40,24,0,Math.PI*2,0,Math.PI/2),m,0,1.085);dome.scale.y=.7;
   for(const y of [1.02,1.10]){const band=mesh(g,new THREE.TorusGeometry(y===1.02?.235:.218,.019,12,48),t,0,y);band.rotation.x=Math.PI/2;}
+  // Four raised crown arches follow the dome from the royal band to the cross seat.
+  if(!geo.kingArch){const points=[];for(let j=0;j<=20;j++){const a=j/20*Math.PI/2;points.push(new THREE.Vector3(Math.cos(a)*.224,1.085+Math.sin(a)*.159,0));}geo.kingArch=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),28,.014,10,false);}
+  for(let i=0;i<4;i++){const arch=mesh(g,geo.kingArch,t);arch.rotation.y=Math.PI/4+i*Math.PI/2;}
+  const crossSeat=mesh(g,new THREE.TorusGeometry(.050,.013,10,32),t,0,1.241);crossSeat.rotation.x=Math.PI/2;
+
   for(let i=0;i<8;i++){const a=i*Math.PI/4;const flute=mesh(g,new THREE.SphereGeometry(.032,16,12),t,Math.cos(a)*.223,.96,Math.sin(a)*.223);flute.scale.set(.65,2.5,.65);}
   if(!geo.kingCross){const s=new THREE.Shape();const pts=[[-.045,1.20],[.045,1.20],[.045,1.37],[.15,1.37],[.15,1.45],[.045,1.45],[.045,1.57],[-.045,1.57],[-.045,1.45],[-.15,1.45],[-.15,1.37],[-.045,1.37]];pts.forEach(([x,y],i)=>i?s.lineTo(x,y):s.moveTo(x,y));s.closePath();geo.kingCross=new THREE.ExtrudeGeometry(s,{depth:.065,bevelEnabled:true,bevelSize:.018,bevelThickness:.018,bevelSegments:4,steps:1});}
   mesh(g,geo.kingCross,t,0,0,-.0325);

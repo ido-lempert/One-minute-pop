@@ -205,3 +205,9 @@ Checks:32 rules/controller tests exit0. Chrome checkers move/reset-cancellation 
 The chess/checkers perimeter deck now uses fine deterministic ash grain, satin clearcoat and shallow wood bump beneath the brass inlay. The warm natural material replaces the flat yellow surface while preserving coordinate labels and sculpted corner hardware. The generated texture is shared by the frame.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode and checkers move/reset-cancellation exit0, zero page errors/no390px overflow. Matched desktop before/after and final phone board pixels inspected. Physical-device FPS remains unverified.
+
+## 34. Arched metal king crown
+
+Four raised metal arches now follow the chess king's ceramic dome from the royal band to a small cross seat. The curved ribs replace the plain dome with a traditional closed-crown silhouette, retaining the ceramic body and heraldic cross. One cached tube geometry is shared by all kings.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-king studio before/after and final phone/desktop board pixels inspected. Studio views are model tests, not live boards. Physical-device FPS remains unverified.
