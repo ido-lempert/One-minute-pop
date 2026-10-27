@@ -79,6 +79,9 @@ export function chessMesh(type,color){
   // Swept mane follows the neck instead of a floating rectangular block.
   if(!geo.knightMane){const s=new THREE.Shape();s.moveTo(-.24,.78);s.quadraticCurveTo(-.31,.99,-.28,1.20);s.quadraticCurveTo(-.23,1.36,-.13,1.42);s.lineTo(-.08,1.36);s.quadraticCurveTo(-.20,1.22,-.19,1.06);s.quadraticCurveTo(-.19,.91,-.16,.79);s.closePath();geo.knightMane=new THREE.ExtrudeGeometry(s,{depth:.235,bevelEnabled:true,bevelSize:.018,bevelThickness:.015,bevelSegments:3,curveSegments:16,steps:1});}
   mesh(g,geo.knightMane,t,0,0,-.1175);
+  // Swept overlapping mane locks break the plain rear edge into a flowing silhouette.
+  if(!geo.knightLocks){geo.knightLocks=[];for(let i=0;i<7;i++){const u=i/6,y=.84+u*.47,x=-.265+.09*u*u,lock=new THREE.Shape();lock.moveTo(x+.025,y+.085);lock.quadraticCurveTo(x-.065,y+.055,x-.095,y-.025);lock.quadraticCurveTo(x-.025,y-.012,x+.035,y+.015);lock.closePath();const geometry=new THREE.ExtrudeGeometry(lock,{depth:.245,bevelEnabled:true,bevelSize:.012,bevelThickness:.012,bevelSegments:3,curveSegments:14,steps:1});geo.knightLocks.push(geometry);}}
+  for(const lock of geo.knightLocks)mesh(g,lock,t,0,0,-.1225);
   // Paired nostrils, rounded cheeks and bridle straps give the horse a real face.
   for(const z of [-.163,.163]){
    const cheek=mesh(g,new THREE.SphereGeometry(.075,24,16),m,-.005,1.205,z);cheek.scale.set(.9,1.2,.35);
