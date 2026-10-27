@@ -41,9 +41,14 @@ export function chessMesh(type,color){
   for(let i=0;i<8;i++){const a=i*Math.PI/4;const gem=mesh(g,new THREE.OctahedronGeometry(.037),t,Math.cos(a)*.252,1.065,Math.sin(a)*.252);gem.scale.y=1.3;}
  }
  if(type==='k'){
-  mesh(g,new THREE.CylinderGeometry(.25,.19,.33,32),m,0,1.0);
-  mesh(g,new THREE.SphereGeometry(.18,24,16),m,0,1.18);
-  mesh(g,new THREE.BoxGeometry(.09,.36,.09),t,0,1.44);mesh(g,new THREE.BoxGeometry(.29,.09,.09),t,0,1.48);
+  // Turned royal mantle, fluted dome and a softly bevelled heraldic cross.
+  mesh(g,lathe('kingMantle',[[0,0],[.19,0],[.24,.045],[.26,.10],[.23,.17],[.21,.29],[.24,.33],[0,.33]]),m,0,.76);
+  const dome=mesh(g,new THREE.SphereGeometry(.215,40,24,0,Math.PI*2,0,Math.PI/2),m,0,1.085);dome.scale.y=.7;
+  for(const y of [1.02,1.10]){const band=mesh(g,new THREE.TorusGeometry(y===1.02?.235:.218,.019,12,48),t,0,y);band.rotation.x=Math.PI/2;}
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;const flute=mesh(g,new THREE.SphereGeometry(.032,16,12),t,Math.cos(a)*.223,.96,Math.sin(a)*.223);flute.scale.set(.65,2.5,.65);}
+  if(!geo.kingCross){const s=new THREE.Shape();const pts=[[-.045,1.20],[.045,1.20],[.045,1.37],[.15,1.37],[.15,1.45],[.045,1.45],[.045,1.57],[-.045,1.57],[-.045,1.45],[-.15,1.45],[-.15,1.37],[-.045,1.37]];pts.forEach(([x,y],i)=>i?s.lineTo(x,y):s.moveTo(x,y));s.closePath();geo.kingCross=new THREE.ExtrudeGeometry(s,{depth:.065,bevelEnabled:true,bevelSize:.018,bevelThickness:.018,bevelSegments:4,steps:1});}
+  mesh(g,geo.kingCross,t,0,0,-.0325);
+  for(const z of [-.06,.06]){const gem=mesh(g,new THREE.OctahedronGeometry(.037),m,0,1.41,z);gem.scale.set(.85,1.2,.5);}
  }
  if(type==='n'){
   // Sculpted horse profile, bevelled for a soft, recognisable silhouette.
