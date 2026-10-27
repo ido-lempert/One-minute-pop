@@ -109,3 +109,9 @@ Checks:32 rules/controller tests passed exit0. Chrome chess capture/reset/AI/und
 Knights now leap high over pieces with a restrained rocking motion and exact upright landing. Other chess pieces glide close to the board instead of all using the same hop. The moving contact shadow stays on the board and softens as the knight rises. Checkers keep their existing hop.
 
 Checks:32 rules/controller tests exit0; ordinary Chrome chess/checkers lifecycle exit0, zero errors/no390px overflow. Deterministic-step rendered trajectory check: knight apex1.478 then exact .03 and zero tilt, pawn maximum .094. Actual leap/settled pixels inspected. Deterministic rendering is not evidence of physical-phone FPS. A stone-texture experiment was discarded before publication and does not count.
+
+## 18. Modelled Connect Four victory laurels
+
+The four winning discs receive lit metal laurel leaves and a fine gold ring within the rack holes, replacing large flat white outline rings. Winning discs have a restrained emissive material while other discs become muted and matte. The winner status now uses the winner's color instead of the next turn's color.
+
+Checks:32 rules/controller tests exit0; actual Chrome Connect Four win/reset/AI exit0, zero errors/no390px overflow. Phone/desktop rendered victory inspected after adjusting leaves to fit inside holes. Decorator rendering is covered by browser tests; sliced controller harness stubs the decorator and does not test its geometry.

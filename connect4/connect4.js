@@ -65,6 +65,17 @@ renderer.setAnimationLoop(() => {
  }
  renderer.render(scene,camera);
 });
+function decorateWin(w){
+    const winning=new Set(w.cells.map(([c,r])=>c+','+r));
+    for(const disc of discs.children){if(!disc.userData.cell)continue;const won=winning.has(disc.userData.cell);for(const child of disc.children){child.material=child.material.clone();if(won){child.material.emissive=new THREE.Color(w.player===1?0x166e86:0xb54a19);child.material.emissiveIntensity=.24;}else{child.material.color.multiplyScalar(.58);child.material.roughness=.7;child.material.clearcoat=0;}}}
+    // Sculpted victory laurels: warm metal leaves surround the actual winning discs.
+    for (const [c, r] of w.cells) {
+      const laurel=new THREE.Group();laurel.userData.winner=c+','+r;laurel.position.set(c-3,r,.19);
+      const gold=new THREE.MeshStandardMaterial({color:0xffd379,metalness:.75,roughness:.25,emissive:0xa54f0b,emissiveIntensity:.16});
+      for(const side of [-1,1])for(let i=0;i<6;i++){const a=(-.85+i*.34)+(side<0?Math.PI:0),leaf=new THREE.Mesh(new THREE.SphereGeometry(.055,12,8),gold);leaf.scale.set(.55,1.5,.3);leaf.position.set(Math.cos(a)*.32,Math.sin(a)*.32,0);leaf.rotation.z=-a+.6*side;laurel.add(leaf);}
+      const ring=new THREE.Mesh(new THREE.TorusGeometry(.327,.009,10,64),gold);laurel.add(ring);discs.add(laurel);
+    }
+}
 let board = R.empty(), turn = 1, over = false, busy = false, aiTimer = null; window.__c4 = () => ({ board, turn, over });window.__c4Visual=()=>({active:dropAnimations.size,tokens:discs.children.filter(m=>m.userData.cell).map(m=>({cell:m.userData.cell,y:m.position.y}))});
 function show() {
   discs.clear();
@@ -72,11 +83,13 @@ function show() {
   for (let c = 0; c < 7; c++) for (let r = 0; r < 6; r++) if (board[c][r]) { const key=c+','+r;nextKeys.add(key);if(!tokenKeys.has(key))dropAnimations.set(key,{t:0,start:performance.now(),y:r,currentY:6.1});const m = token(board[c][r]);m.userData.cell=key;m.position.set(c - 3,dropAnimations.has(key)?dropAnimations.get(key).currentY:r,0);discs.add(m); }
   tokenKeys=nextKeys;
   const w = R.winLine(board);
-  if (w) { over = true; for (const [c, r] of w.cells) { const m = new THREE.Mesh(new THREE.TorusGeometry(0.46, 0.05, 8, 24), new THREE.MeshBasicMaterial({ color: 0xffffff })); m.position.set(c - 3, r, 0.2); discs.add(m); } }
+  if (w) { over = true;
+    decorateWin(w);
+  }
   else if (R.isFull(board)) over = true;
   const name = p => p === 1 ? 'Ivory' : 'Coral';
   status.textContent = w ? name(w.player) + ' wins.' : over ? 'Draw - the board is full.' : name(turn) + ' to move';
-  document.body.dataset.turn = String(turn); document.body.dataset.over = String(over);
+  document.body.dataset.turn = String(w ? w.player : turn); document.body.dataset.over = String(over);
   columnButtons.forEach((b,c) => { b.disabled = over || busy || (mode.value === 'ai' && turn === 2) || !R.canDrop(board,c); });
 }
 function play(c) {
