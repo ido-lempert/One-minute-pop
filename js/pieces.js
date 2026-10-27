@@ -64,6 +64,15 @@ export function checkerMesh(color,king){
  if(!geo.checkerSeal){const star=new THREE.Shape();for(let i=0;i<16;i++){const a=i*Math.PI/8,r=i%2?.068:.125;const x=Math.cos(a)*r,y=Math.sin(a)*r;i?star.lineTo(x,y):star.moveTo(x,y);}star.closePath();geo.checkerSeal=new THREE.ExtrudeGeometry(star,{depth:.014,bevelEnabled:true,bevelSize:.009,bevelThickness:.009,bevelSegments:2,steps:1});geo.checkerSeal.rotateX(-Math.PI/2);}
  mesh(g,geo.checkerSeal,t,0,.267);
  for(let i=0;i<8;i++){const a=i*Math.PI/4;const stud=mesh(g,new THREE.SphereGeometry(.022,12,8),t,Math.cos(a)*.22,.271,Math.sin(a)*.22);stud.scale.y=.45;}
- if(king){for(let i=0;i<5;i++){const a=i*6.283/5;mesh(g,new THREE.SphereGeometry(.055,12,10),t,Math.cos(a)*.18,.4,Math.sin(a)*.18);}mesh(g,new THREE.CylinderGeometry(.19,.14,.12,24),m,0,.34);}
+ if(king){
+  // A second sculpted disc and an open five-point crown make promotion readable by silhouette.
+  mesh(g,lathe('kingDisc',[[0,0],[.30,0],[.35,.03],[.36,.08],[.34,.14],[.29,.18],[0,.18]]),m,0,.27);
+  const belt=mesh(g,new THREE.TorusGeometry(.335,.023,12,48),t,0,.365);belt.rotation.x=Math.PI/2;
+  mesh(g,new THREE.CylinderGeometry(.225,.225,.02,40),dark,0,.455);
+  const band=mesh(g,new THREE.TorusGeometry(.235,.025,10,48),t,0,.46);band.rotation.x=Math.PI/2;
+  if(!geo.checkerCrownPoint){const s=new THREE.Shape();s.moveTo(-.062,0);s.lineTo(.062,0);s.lineTo(.035,.16);s.quadraticCurveTo(0,.235,-.035,.16);s.closePath();geo.checkerCrownPoint=new THREE.ExtrudeGeometry(s,{depth:.027,bevelEnabled:true,bevelSize:.013,bevelThickness:.012,bevelSegments:3,steps:1});}
+  for(let i=0;i<5;i++){const a=i*Math.PI*2/5;const point=mesh(g,geo.checkerCrownPoint,t,Math.cos(a)*.225,.455,Math.sin(a)*.225);point.rotation.y=Math.PI/2-a;mesh(g,new THREE.SphereGeometry(.034,16,12),m,Math.cos(a)*.225,.66,Math.sin(a)*.225);}
+ }
+
  return g;
 }
