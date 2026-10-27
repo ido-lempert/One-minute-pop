@@ -4,8 +4,7 @@ import { createFx } from './fx.js';
 import { prefs } from './prefs.js';
 import { glowTexture } from './theme.js';
 
-// Shared 3D 8x8 board in a fire-vs-ice fantasy setting. Square (c, r): c = file 0..7, r = rank 0..7.
-// Dark side (rank 8, far) is fire; light side (rank 1, near) is ice.
+// Sculpted tabletop arena. Square (c, r): file 0..7, rank 0..7.
 export function createBoard(container, { onSquare }) {
   const small = innerWidth < 700;
   const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
@@ -21,15 +20,25 @@ export function createBoard(container, { onSquare }) {
   const sun = new THREE.DirectionalLight(0xffe2b4,3.8); sun.position.set(-3,7,3);sun.castShadow=true;sun.shadow.bias=-.0004;sun.shadow.normalBias=.025;sun.shadow.radius=4;
   sun.shadow.mapSize.set(small?1024:2048,small?1024:2048);Object.assign(sun.shadow.camera,{left:-9,right:9,top:9,bottom:-9});scene.add(sun);
   const rimLight=new THREE.DirectionalLight(0xb1e5ff,1.6);rimLight.position.set(7,6,-7);scene.add(rimLight);
-  function block(w,h,d,color,x,y,z,rough=.4){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color,roughness:rough}));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m;}
+  // Rounded silhouettes and real bevels catch the key light, rather than painted edge lines.
+  function roundedSlab(w,h,d,corner=.09,bevel=.025){
+    const x=w/2-bevel,z=d/2-bevel,r=Math.min(corner,x,z),shape=new THREE.Shape();
+    shape.moveTo(-x+r,-z);shape.lineTo(x-r,-z);shape.quadraticCurveTo(x,-z,x,-z+r);
+    shape.lineTo(x,z-r);shape.quadraticCurveTo(x,z,x-r,z);shape.lineTo(-x+r,z);
+    shape.quadraticCurveTo(-x,z,-x,z-r);shape.lineTo(-x,-z+r);shape.quadraticCurveTo(-x,-z,-x+r,-z);
+    const g=new THREE.ExtrudeGeometry(shape,{depth:Math.max(.01,h-2*bevel),bevelEnabled:true,bevelSegments:3,steps:1,bevelSize:bevel,bevelThickness:bevel,curveSegments:8});
+    g.rotateX(-Math.PI/2);g.translate(0,-h/2+bevel,0);return g;
+  }
+  function block(w,h,d,color,x,y,z,rough=.4){const m=new THREE.Mesh(roundedSlab(w,h,d,.14,Math.min(.045,h/4)),new THREE.MeshStandardMaterial({color,roughness:rough}));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m;}
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.MeshStandardMaterial({color:0x243f52,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-1.0;floor.receiveShadow=true;scene.add(floor);
   // Layered collectible-tabletop arena, not noisy texture maps.
   block(9.5,.26,9.5,0x173b55,0,-.44,0);block(9.3,.18,9.3,0x51b8bb,0,-.65,0);block(8.8,.25,8.8,0x245574,0,-.85,0);
   block(8.9,.14,8.9,0xd2b77d,0,-.24,0);
   for(const x of [-4.5,4.5])for(const z of [-4.5,4.5]){const jewel=new THREE.Mesh(new THREE.SphereGeometry(.14,20,12),new THREE.MeshStandardMaterial({color:0xffcb69,metalness:.65,roughness:.25}));jewel.position.set(x,-.16,z);scene.add(jewel);}
-  const tileMat=[new THREE.MeshPhysicalMaterial({color:0x8ea9a3,roughness:.32,clearcoat:.6}),new THREE.MeshPhysicalMaterial({color:0x234a60,roughness:.28,clearcoat:.6})];
-  const squares=[],sqGeo=new THREE.BoxGeometry(.975,.15,.975);
-  for(let c=0;c<8;c++)for(let r=0;r<8;r++){const m=new THREE.Mesh(sqGeo,tileMat[(c+r)%2]);m.position.set(c-3.5,-.025,3.5-r);m.receiveShadow=true;m.userData={c,r};scene.add(m);squares.push(m);}
+  const tileMat=[new THREE.MeshPhysicalMaterial({color:0x8ea9a3,roughness:.36,clearcoat:.65,clearcoatRoughness:.24}),new THREE.MeshPhysicalMaterial({color:0x234a60,roughness:.32,clearcoat:.65,clearcoatRoughness:.24})];
+  const tileEdge=[new THREE.MeshStandardMaterial({color:0x5e807f,roughness:.42}),new THREE.MeshStandardMaterial({color:0x153546,roughness:.4})];
+  const squares=[],sqGeo=roundedSlab(.96,.18,.96,.07,.04);
+  for(let c=0;c<8;c++)for(let r=0;r<8;r++){const m=new THREE.Mesh(sqGeo,[tileMat[(c+r)%2],tileEdge[(c+r)%2]]);m.position.set(c-3.5,-.025,3.5-r);m.receiveShadow=true;m.userData={c,r};scene.add(m);squares.push(m);}
   function label(text,x,z){const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');g.fillStyle='#294e62';g.font='bold 42px sans-serif';g.textAlign='center';g.fillText(text,32,46);const m=new THREE.Mesh(new THREE.PlaneGeometry(.25,.25),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(x,-.15,z);scene.add(m);}
   for(let i=0;i<8;i++){label('abcdefgh'[i],i-3.5,4.22);label(String(i+1),-4.22,3.5-i);}
   const pieceGroup = new THREE.Group(); scene.add(pieceGroup);
