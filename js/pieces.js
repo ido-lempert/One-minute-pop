@@ -8,13 +8,19 @@ function mesh(g,geometry,material,x=0,y=0,z=0){const m=new THREE.Mesh(geometry,m
 const body=[[0,0],[.31,0],[.36,.04],[.37,.09],[.35,.16],[.29,.20],[.25,.24],[.21,.30],[.16,.48],[.14,.65],[.19,.71],[.25,.73],[.27,.78],[.23,.83],[0,.84]];
 export function chessMesh(type,color){
  const g=new THREE.Group(),m=mats[color],t=trim[color];
- mesh(g,lathe('body',body),m);
+ mesh(g,lathe(type==='r'?'rookBody':'body',type==='r'?[[0,0],[.31,0],[.37,.04],[.38,.10],[.35,.18],[.28,.23],[.25,.27],[.23,.76],[.28,.81],[.31,.85],[0,.85]]:body),m);
  const ring=mesh(g,new THREE.TorusGeometry(.3,.025,8,40),t,0,.18,0);ring.rotation.x=Math.PI/2;
  if(type==='p'){mesh(g,new THREE.SphereGeometry(.22,28,18),m,0,.91);mesh(g,new THREE.SphereGeometry(.07,16,12),t,0,1.1);}
  if(type==='r'){
-  mesh(g,new THREE.CylinderGeometry(.29,.23,.32,32),m,0,.91);
-  for(let i=0;i<6;i++){const a=i*Math.PI/3;const tooth=mesh(g,new THREE.BoxGeometry(.14,.18,.16),m,Math.cos(a)*.23,1.12,Math.sin(a)*.23);tooth.rotation.y=-a;}
-  mesh(g,new THREE.CylinderGeometry(.18,.18,.04,28),t,0,1.06);
+  // A real hollow tower crown, bevelled battlements and recessed courtyard.
+  if(!geo.rookCrown){const outer=new THREE.Shape();outer.absarc(0,0,.31,0,Math.PI*2,false);const hole=new THREE.Path();hole.absarc(0,0,.21,0,Math.PI*2,true);outer.holes.push(hole);geo.rookCrown=new THREE.ExtrudeGeometry(outer,{depth:.22,bevelEnabled:true,bevelSize:.025,bevelThickness:.025,bevelSegments:3,curveSegments:32,steps:1});geo.rookCrown.rotateX(-Math.PI/2);}
+  mesh(g,geo.rookCrown,m,0,.84);
+  mesh(g,new THREE.CylinderGeometry(.205,.205,.02,40),dark,0,.865);
+  if(!geo.rookTooth){const q=new THREE.Shape();q.moveTo(-.065,-.06);q.lineTo(.065,-.06);q.lineTo(.065,.06);q.lineTo(-.065,.06);q.closePath();geo.rookTooth=new THREE.ExtrudeGeometry(q,{depth:.15,bevelEnabled:true,bevelSize:.022,bevelThickness:.022,bevelSegments:3,steps:1});geo.rookTooth.rotateX(-Math.PI/2);}
+  for(let i=0;i<6;i++){const a=i*Math.PI/3;const tooth=mesh(g,geo.rookTooth,m,Math.cos(a)*.265,1.055,Math.sin(a)*.265);tooth.rotation.y=-a;}
+  for(const y of [.32,.77]){const collar=mesh(g,new THREE.TorusGeometry(y===.32?.249:.258,.017,10,48),t,0,y);collar.rotation.x=Math.PI/2;}
+  // Four inset metal shield accents break up the tower shaft without noisy texture.
+  for(let i=0;i<4;i++){const a=i*Math.PI/2;const shield=mesh(g,new THREE.SphereGeometry(.055,16,10),t,Math.cos(a)*.235,.54,Math.sin(a)*.235);shield.scale.set(.7,1.35,.7);}
  }
  if(type==='b'){
   mesh(g,new THREE.SphereGeometry(.24,28,18),m,0,.98);const head=mesh(g,new THREE.ConeGeometry(.20,.43,32),m,0,1.16);head.rotation.z=-.1;
