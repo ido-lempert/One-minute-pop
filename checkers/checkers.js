@@ -38,7 +38,7 @@ function draw() {
   const targets = selected ? [...new Set(candidates().filter(m => m.path.length > path.length).map(m => m.path[path.length].join()))].map(s => s.split(',').map(Number)) : [];
   board.setMarks({ selected: path.length ? path[path.length - 1] : selected, targets, last });
   const w = R.winner(state), forced = R.legalMoves(state).some(m => m.captures.length);
-  status.textContent = w ? (w === 'w' ? 'White' : 'Red') + ' wins.' : (state.turn === 'w' ? 'White' : 'Red') + ' to move' + (forced ? ' - you must capture' : '');
+  status.textContent = w === 'draw' ? 'Draw (40 moves without a capture or a man move).' : w ? (w === 'w' ? 'White' : 'Red') + ' wins.' : (state.turn === 'w' ? 'White' : 'Red') + ' to move' + (forced ? ' - you must capture' : '');
   document.body.dataset.turn = state.turn;
 }
 document.getElementById('new').onclick = () => { state = R.initial(); selected = null; path = []; last = []; draw(); };

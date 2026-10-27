@@ -59,9 +59,13 @@ export function apply(state, move) {
   const [ec, er] = move.path[move.path.length - 1];
   if ((p.color === 'w' && er === 7) || (p.color === 'b' && er === 0)) p.king = true;
   board[er * 8 + ec] = p;
-  return { board, turn: state.turn === 'w' ? 'b' : 'w' };
+  const quiet = move.captures.length || !state.board[r * 8 + c].king ? 0 : (state.quiet || 0) + 1;
+  return { board, turn: state.turn === 'w' ? 'b' : 'w', quiet };
 }
+// Draw: 40 plies in a row with no capture and no man move (kings only shuffling).
+export function isDraw(state) { return (state.quiet || 0) >= 40; }
 export function winner(state) {
+  if (isDraw(state)) return 'draw';
   return legalMoves(state).length ? null : (state.turn === 'w' ? 'b' : 'w');
 }
 // Simple AI: depth-limited minimax with alpha-beta on material (+ advancement).
@@ -77,6 +81,7 @@ export function evaluate(s) {
 export function bestMove(state, depth = 4) {
   const search = (s, d, a, b) => {
     const ms = legalMoves(s);
+    if (isDraw(s)) return { v: 0 };
     if (!ms.length) return { v: s.turn === 'w' ? -1000 - d : 1000 + d };
     if (d === 0) return { v: evaluate(s) };
     let best = null;
