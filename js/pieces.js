@@ -39,6 +39,9 @@ export function chessMesh(type,color){
   mesh(g,geo.bishopMitre,m,0,0,-.105);
   for(const y of [.82,.87]){const collar=mesh(g,new THREE.TorusGeometry(.20,.018,10,40),t,0,y);collar.rotation.x=Math.PI/2;}
   for(const z of [-.168,.168]){const jewel=mesh(g,new THREE.SphereGeometry(.06,20,12),t,-.065,1.025,z);jewel.scale.set(.7,1,.45);}
+  // Twin swept ceremonial stole ribbons lie over the bishop's turned shoulders.
+  if(!geo.bishopStole){const profile=[[.27,.23],[.222,.32],[.184,.44],[.16,.57],[.197,.69],[.284,.77],[.23,.81]],pos=[],uv=[],indices=[];for(let j=0;j<profile.length;j++){const [radius,y]=profile[j];for(const a of [-.14,.14]){pos.push(Math.sin(a)*radius,y,Math.cos(a)*radius+.012);uv.push(a,j/profile.length);}}for(let j=0;j<profile.length-1;j++){const k=j*2;indices.push(k,k+1,k+2,k+1,k+3,k+2);}geo.bishopStole=new THREE.BufferGeometry();geo.bishopStole.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.bishopStole.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.bishopStole.setIndex(indices);geo.bishopStole.computeVertexNormals();}
+  for(const side of [-1,1])for(const facing of [0,Math.PI]){const ribbon=mesh(g,geo.bishopStole,t);ribbon.rotation.y=facing+side*.48;const jewel=mesh(g,new THREE.SphereGeometry(.024,16,10),t,Math.sin(facing+side*.48)*.275,.24,Math.cos(facing+side*.48)*.275);jewel.scale.set(1,.8,.4);}
   g.rotation.y=color==='w'?.20:Math.PI+.20;
  }
  if(type==='q'){

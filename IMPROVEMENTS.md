@@ -169,3 +169,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 A rounded woven felt runner now cushions the rack and catches its contact shadows. Fine instanced stitches follow its border, bringing the same tabletop material language as chess/checkers to Connect Four. Camera fitting includes the runner so its edge stays visible on narrow screens.
 
 Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero errors/no390px overflow. Final phone/desktop pixels inspected against the previous bare tabletop. Physical-device FPS remains unverified.
+
+## 28. Swept bishop stole inlays
+
+Paired ceremonial metal stole ribbons now follow the bishop's turned ceramic shoulders and stem on both sides, with small rounded end details. The surface-fitted ribbon geometry adds recognizable bishop detail without changing the diagonal mitre opening or footprint.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-bishop studio before/after and final phone/desktop board pixels inspected. Studio images are model tests, not live boards. Physical-device FPS remains unverified.
