@@ -259,3 +259,9 @@ Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellati
 Rook crown blocks now follow the circular tower wall as curved annular ceramic merlons, rather than rectangular blocks projecting outside it. Bevelled edges catch light around the continuous outside curve while six gaps and the hollow courtyard remain open. The change is clearest in the model studio and modest at phone board scale. Rejected contact-shadow experiments were reverted and not counted.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode lifecycle exit0, zero page errors/no390px overflow. Matched local studio before/after and actual390px/desktop board pixels inspected. Physical-device FPS remains unverified.
+
+## 43. Rounded bishop mitre
+
+The bishop mitre now has a rounded lens-shaped ceramic front and back instead of parallel slab faces. Subdivided cap triangles and shared smooth normals provide continuous highlights; the genuine diagonal slot remains open. Face jewels were moved outward to remain seated on the new surface. The change is clearest in studio close-ups and subtle at phone board scale. The initial faceted experiment was rejected.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode lifecycle exit0, zero page errors/no390px overflow. Matched local studio before/after and390px/desktop board pixels inspected. Physical-device FPS remains unverified.

@@ -41,10 +41,18 @@ export function chessMesh(type,color){
  }
  if(type==='b'){
   // Bevelled mitre with a genuine diagonal opening, visible from either side.
-  if(!geo.bishopMitre){const s=new THREE.Shape();s.moveTo(-.12,.83);s.bezierCurveTo(-.28,.94,-.28,1.12,-.19,1.28);s.quadraticCurveTo(-.10,1.43,0,1.53);s.lineTo(.10,1.39);s.lineTo(-.055,1.15);s.lineTo(.01,1.10);s.lineTo(.16,1.32);s.bezierCurveTo(.28,1.15,.29,.97,.12,.83);s.closePath();geo.bishopMitre=new THREE.ExtrudeGeometry(s,{depth:.21,bevelEnabled:true,bevelSize:.026,bevelThickness:.055,bevelSegments:5,curveSegments:16,steps:1});}
+  if(!geo.bishopMitre){const s=new THREE.Shape();s.moveTo(-.12,.83);s.bezierCurveTo(-.28,.94,-.28,1.12,-.19,1.28);s.quadraticCurveTo(-.10,1.43,0,1.53);s.lineTo(.10,1.39);s.lineTo(-.055,1.15);s.lineTo(.01,1.10);s.lineTo(.16,1.32);s.bezierCurveTo(.28,1.15,.29,.97,.12,.83);s.closePath();geo.bishopMitre=new THREE.ExtrudeGeometry(s,{depth:.21,bevelEnabled:true,bevelSize:.026,bevelThickness:.055,bevelSegments:5,curveSegments:24,steps:4});
+   // Subdivide cap triangles before shaping the rounded lens, avoiding planar facets.
+   const base=geo.bishopMitre.toNonIndexed(),points=[];const pos=base.attributes.position;
+   function split(a,b,c,n){if(!n){points.push(...a,...b,...c);return;}const mid=(u,v)=>u.map((x,i)=>(x+v[i])/2),ab=mid(a,b),bc=mid(b,c),ca=mid(c,a);split(a,ab,ca,n-1);split(ab,b,bc,n-1);split(ca,bc,c,n-1);split(ab,bc,ca,n-1);}
+   for(let i=0;i<pos.count;i+=3)split([pos.getX(i),pos.getY(i),pos.getZ(i)],[pos.getX(i+1),pos.getY(i+1),pos.getZ(i+1)],[pos.getX(i+2),pos.getY(i+2),pos.getZ(i+2)],2);
+   geo.bishopMitre.dispose();geo.bishopMitre=new THREE.BufferGeometry();geo.bishopMitre.setAttribute('position',new THREE.Float32BufferAttribute(points,3));const p=geo.bishopMitre.attributes.position;
+   for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i),bulge=.055*Math.max(0,1-(x/.30)**2)*Math.max(0,Math.sin((y-.80)/.78*Math.PI));p.setZ(i,z+(z-.105)/.16*bulge);}geo.bishopMitre.computeVertexNormals();
+   const normal=geo.bishopMitre.attributes.normal,shared=new Map(),key=i=>[p.getX(i),p.getY(i),p.getZ(i)].map(v=>v.toFixed(5)).join(',');for(let i=0;i<p.count;i++){const k=key(i),v=shared.get(k)||new THREE.Vector3();v.add(new THREE.Vector3(normal.getX(i),normal.getY(i),normal.getZ(i)));shared.set(k,v);}for(let i=0;i<p.count;i++){const v=shared.get(key(i)).normalize();normal.setXYZ(i,v.x,v.y,v.z);}base.dispose();}
+
   mesh(g,geo.bishopMitre,m,0,0,-.105);
   for(const y of [.82,.87]){const collar=mesh(g,new THREE.TorusGeometry(.20,.018,10,40),t,0,y);collar.rotation.x=Math.PI/2;}
-  for(const z of [-.168,.168]){const jewel=mesh(g,new THREE.SphereGeometry(.06,20,12),t,-.065,1.025,z);jewel.scale.set(.7,1,.45);}
+  for(const z of [-.225,.225]){const jewel=mesh(g,new THREE.SphereGeometry(.06,20,12),t,-.065,1.025,z);jewel.scale.set(.7,1,.45);}
   // Twin swept ceremonial stole ribbons lie over the bishop's turned shoulders.
   if(!geo.bishopStole){const profile=[[.27,.23],[.222,.32],[.184,.44],[.16,.57],[.197,.69],[.284,.77],[.23,.81]],pos=[],uv=[],indices=[];for(let j=0;j<profile.length;j++){const [radius,y]=profile[j];for(const a of [-.14,.14]){pos.push(Math.sin(a)*radius,y,Math.cos(a)*radius+.012);uv.push(a,j/profile.length);}}for(let j=0;j<profile.length-1;j++){const k=j*2;indices.push(k,k+1,k+2,k+1,k+3,k+2);}geo.bishopStole=new THREE.BufferGeometry();geo.bishopStole.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.bishopStole.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.bishopStole.setIndex(indices);geo.bishopStole.computeVertexNormals();}
   for(const side of [-1,1])for(const facing of [0,Math.PI]){const ribbon=mesh(g,geo.bishopStole,t);ribbon.rotation.y=facing+side*.48;const jewel=mesh(g,new THREE.SphereGeometry(.024,16,10),t,Math.sin(facing+side*.48)*.275,.24,Math.cos(facing+side*.48)*.275);jewel.scale.set(1,.8,.4);}
