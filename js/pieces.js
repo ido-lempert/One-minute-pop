@@ -60,9 +60,13 @@ export function chessMesh(type,color){
  }
  if(type==='n'){
   // Sculpted horse profile, bevelled for a soft, recognisable silhouette.
-  const s=new THREE.Shape();s.moveTo(-.26,.73);s.lineTo(-.23,1.04);s.quadraticCurveTo(-.27,1.23,-.13,1.4);s.lineTo(-.1,1.56);s.lineTo(.02,1.43);s.lineTo(.15,1.4);s.lineTo(.35,1.2);s.quadraticCurveTo(.43,1.1,.29,1.04);s.lineTo(.1,1.1);s.quadraticCurveTo(.04,.86,.2,.73);s.closePath();
+  const s=new THREE.Shape();s.moveTo(-.26,.73);s.lineTo(-.23,1.04);s.quadraticCurveTo(-.27,1.23,-.13,1.4);s.quadraticCurveTo(-.1,1.47,.02,1.43);s.lineTo(.15,1.4);s.lineTo(.35,1.2);s.quadraticCurveTo(.43,1.1,.29,1.04);s.lineTo(.1,1.1);s.quadraticCurveTo(.04,.86,.2,.73);s.closePath();
   const h=mesh(g,new THREE.ExtrudeGeometry(s,{depth:.22,bevelEnabled:true,bevelSize:.045,bevelThickness:.04,bevelSegments:3,steps:1}),m,0,0,-.11);
   for(const z of [-.165,.165])mesh(g,new THREE.SphereGeometry(.035,12,8),dark,.06,1.30,z);
+  // Paired, separated sculpted ears and a rounded muzzle replace the single flat spike.
+  if(!geo.knightEar){const ear=new THREE.Shape();ear.moveTo(-.065,0);ear.quadraticCurveTo(-.09,.13,-.032,.255);ear.quadraticCurveTo(.025,.16,.06,.035);ear.closePath();geo.knightEar=new THREE.ExtrudeGeometry(ear,{depth:.035,bevelEnabled:true,bevelSize:.014,bevelThickness:.014,bevelSegments:4,curveSegments:16,steps:1});}
+  for(const z of [-.13,.13]){const ear=mesh(g,geo.knightEar,m,-.09,1.37,z-.018);ear.rotation.z=-.12;const inset=mesh(g,new THREE.SphereGeometry(.042,16,12),t,-.12,1.49,z+Math.sign(z)*.038);inset.scale.set(.36,1.35,.22);}
+  const muzzle=mesh(g,new THREE.SphereGeometry(.13,32,20),m,.27,1.15,0);muzzle.scale.set(1.05,.72,1.35);
   // Swept mane follows the neck instead of a floating rectangular block.
   if(!geo.knightMane){const s=new THREE.Shape();s.moveTo(-.24,.78);s.quadraticCurveTo(-.31,.99,-.28,1.20);s.quadraticCurveTo(-.23,1.36,-.13,1.42);s.lineTo(-.08,1.36);s.quadraticCurveTo(-.20,1.22,-.19,1.06);s.quadraticCurveTo(-.19,.91,-.16,.79);s.closePath();geo.knightMane=new THREE.ExtrudeGeometry(s,{depth:.235,bevelEnabled:true,bevelSize:.018,bevelThickness:.015,bevelSegments:3,curveSegments:16,steps:1});}
   mesh(g,geo.knightMane,t,0,0,-.1175);

@@ -139,3 +139,9 @@ Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellati
 Replaced the solid plain bottom bar with a rounded open ceramic tray: a real inset opening, lower teal bed and29 fine physical ribs. The supported tray sits below the lowest playable row and preserves the existing rack feet and controls.
 
 Checks:32 rules/controller tests exit0. Chrome C4 win/reset-cancellation/AI exit0, zero errors/no390px overflow. Actual final phone/desktop pixels inspected against the prior solid bar. Physical-device FPS remains unverified.
+
+## 23. Paired sculpted knight ears and rounded muzzle
+
+Replaced the knight's single extruded spike with two separated bevelled ears, each with a metal inset, and a rounded ceramic muzzle. The softened head outline keeps the existing mane/bridle and recognizable side-specific horse silhouette.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero errors/no390px overflow. Before/after four-knight studio and final phone/desktop board pixels inspected. Studio views are model tests, not live boards. Physical-device FPS remains unverified.
