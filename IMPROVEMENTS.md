@@ -247,3 +247,9 @@ Checks:32 rules/controller tests exit0. Chrome checkers move/reset-cancellation 
 Eight broad radial flutes are now sculpted directly into the shared chess stem, fading into the neck and foot collars. Normal-smoothed shared geometry replaces the plain turned surface on pawns, knights, bishops, queens and kings, without adding separate floating ribs. Rook and checker meshes are unchanged.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-piece studio before/after and final phone/desktop board pixels inspected. Studio is a model test, not a live board. Physical-device FPS remains unverified.
+
+## 41. Turned ceramic aperture rims
+
+Connect Four's inflated donut surrounds are replaced by turned ceramic rims with a broad shoulder, recessed inner wall and narrow lip. The opening reads wider and reveals more of the token face; the rack retains its42 real cut-through holes. Rejected shadow-filter and hidden-sleeve experiments were not published or counted.
+
+Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero page errors/no390px overflow. Matched played desktop before/after and phone pixels inspected. Physical-device FPS remains unverified.

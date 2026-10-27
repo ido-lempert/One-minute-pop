@@ -31,7 +31,9 @@ const thread=new THREE.MeshStandardMaterial({color:0x799da0,roughness:.9}),stitc
 const plate=roundedShape(7.3,6.2,.24,2.5);
 for(let c=0;c<7;c++)for(let r=0;r<6;r++){const h=new THREE.Path();h.absarc(c-3,r,.40,0,Math.PI*2,true);plate.holes.push(h);}
 const back=new THREE.Mesh(new THREE.ExtrudeGeometry(plate,{depth:.22,bevelEnabled:true,bevelThickness:.035,bevelSize:.035,bevelSegments:2,steps:1,curveSegments:28}),blue);back.position.z=-.20;back.castShadow=true;back.receiveShadow=true;scene.add(back);
-const ringGeo = new THREE.TorusGeometry(0.4, 0.12, 12, 28);
+// Turned ceramic aperture surrounds replace inflated donut rings.
+const apertureProfile=[[.398,-.09],[.465,-.09],[.505,-.055],[.516,-.015],[.510,.025],[.49,.06],[.45,.085],[.405,.085],[.388,.06],[.388,-.05],[.398,-.09]];
+const ringGeo=new THREE.LatheGeometry(apertureProfile.map(([r,y])=>new THREE.Vector2(r,y)),64);ringGeo.rotateX(Math.PI/2);
 for (let c = 0; c < 7; c++) for (let r = 0; r < 6; r++) { const m = new THREE.Mesh(ringGeo, blue); m.position.set(c - 3, r - 0.0, 0.1); m.castShadow=true;m.receiveShadow=true;scene.add(m); }
 const metal=new THREE.MeshStandardMaterial({color:0xd6b46f,metalness:.65,roughness:.25});
 for (const x of [-3.72,3.72]){
