@@ -47,5 +47,5 @@ export function createFx(scene, { max = 600, size = 0.26 } = {}) {
       if (ice) parts.push({ p: [x, 4 + Math.random() * 2, z], v: [(Math.random() - 0.5) * 0.3, -0.5 - Math.random() * 0.4, (Math.random() - 0.5) * 0.3], life: 5, age: 0, type: 'snow' });
       else parts.push({ p: [x, -0.4, z], v: [(Math.random() - 0.5) * 0.3, 0.5 + Math.random() * 0.7, (Math.random() - 0.5) * 0.3], life: 4, age: 0, type: 'ember' }); }
   }
-  return { burst, update: dt => { ambientUpdate(dt); update(dt); }, setAmbient: v => { ambient = v; }, count: () => parts.length };
+  return { clear: () => { parts.length=0; update(0); }, burst, update: dt => { ambientUpdate(dt); update(dt); }, setAmbient: v => { ambient = v; }, count: () => parts.length };
 }

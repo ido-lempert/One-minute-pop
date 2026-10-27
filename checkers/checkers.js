@@ -5,7 +5,7 @@ import { sound, addMuteButton } from '../js/sound.js';
 import { addLiteButton } from '../js/prefs.js';
 addMuteButton();
 addLiteButton();
-let state = R.initial(), selected = null, path = [], last = [];
+let state = R.initial(), selected = null, path = [], last = [], aiTimer = null;
 const status = document.getElementById('status'), mode = document.getElementById('mode');
 const board = createBoard(document.getElementById('view'), { onSquare,  });
 window.__checkers = () => state; window.__fx = board.fx;
@@ -39,7 +39,7 @@ function commit(m) {
   if (m.captures.length) { before.turn === 'w' ? sound.fire() : sound.ice(); } else sound.knock();
   if (R.winner(state)) sound.win();
   last = [m.from, m.path[m.path.length - 1]]; selected = null; path = []; draw(); { const e = m.path[m.path.length - 1]; board.animateMove(m.from[0], m.from[1], e[0], e[1]); }
-  if (mode.value === 'ai' && state.turn === 'b' && !R.winner(state)) setTimeout(() => { const a = R.bestMove(state, 5); if (a) commit(a); }, 350);
+  scheduleAI();
 }
 function draw() {
   const list = [];
@@ -51,5 +51,7 @@ function draw() {
   status.textContent = w === 'draw' ? 'Draw (40 moves without a capture or a man move).' : w ? (w === 'w' ? 'White' : 'Red') + ' wins.' : (state.turn === 'w' ? 'White' : 'Red') + ' to move' + (forced ? ' - you must capture' : '');
   document.body.dataset.turn = state.turn;
 }
-document.getElementById('new').onclick = () => { state = R.initial(); selected = null; path = []; last = []; draw(); };
+function scheduleAI(){clearTimeout(aiTimer);aiTimer=null;if(mode.value==='ai' && state.turn==='b' && !R.winner(state))aiTimer=setTimeout(()=>{aiTimer=null;if(mode.value!=='ai'||state.turn!=='b')return;const a=R.bestMove(state,5);if(a)commit(a);},350);}
+function reset(){ board.resetAnimation(); clearTimeout(aiTimer);aiTimer=null;state=R.initial();selected=null;path=[];last=[];draw();}
+document.getElementById('new').onclick = reset;mode.onchange=()=>{selected=null;path=[];draw();scheduleAI();};
 draw();

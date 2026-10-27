@@ -27,3 +27,12 @@ Any static server works, for example `python3 -m http.server` in this folder, th
 ## Licenses
 
 three.js (MIT) in `lib/`, see `LICENSE-three.txt`. chess.js (BSD-2-Clause) in `lib/`, see `LICENSE-chess.js.txt`. The game code has no license set yet.
+
+
+## Tabletop redesign
+
+The 3D chess and checkers sets use original smooth ceramic-style models, a teal and gold board, directional lighting and contact shading. Connect Four uses a perforated 3D frame and ivory/coral discs with separate face marks. The menu uses screenshots from the actual renderer.
+
+Run `npm test` for 32 local controller/rules regressions. The tests stub rendering and audio; browser checks are separate. Computer callbacks are cancelled on reset, Undo and mode changes, and enabling the computer on its turn schedules its move.
+
+Limitations: computer play is basic, chess promotion currently chooses a queen, and real-phone frame rate, heard audio and home-screen installation have not been verified.

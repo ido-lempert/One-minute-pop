@@ -1,38 +1,44 @@
 import * as THREE from '../lib/three.module.js';
-// Ice set (light pieces): faceted frosted crystal. Fire set (dark pieces): obsidian with glowing embers.
-const iceMat = new THREE.MeshPhysicalMaterial({ color: 0x58b6ff, emissive: 0x1565b0, emissiveIntensity: 0.5, roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.05, flatShading: true });
-const fireMat = new THREE.MeshPhysicalMaterial({ color: 0x120708, emissive: 0xff3a08, emissiveIntensity: 0.16, roughness: 0.3, clearcoat: 0.8, flatShading: true });
-const trim = { w: new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xaee6ff, emissiveIntensity: 1.2, roughness: 0.2 }), b: new THREE.MeshStandardMaterial({ color: 0xffb300, emissive: 0xff7a00, emissiveIntensity: 1.6, roughness: 0.3 }) };
-const mats = { w: iceMat, b: fireMat };
-const lathe = pts => new THREE.LatheGeometry(pts.map(([x, y]) => new THREE.Vector2(x, y)), 9);
-const prof = {
-  p: [[0, 0], [0.36, 0], [0.38, 0.1], [0.22, 0.24], [0.17, 0.44], [0.27, 0.52], [0.2, 0.6], [0.24, 0.7], [0.24, 0.8], [0.13, 0.9], [0, 0.95]],
-  r: [[0, 0], [0.4, 0], [0.4, 0.12], [0.3, 0.24], [0.27, 0.7], [0.38, 0.78], [0.4, 1.02], [0.3, 1.02], [0.3, 0.94], [0, 0.94]],
-  n: [[0, 0], [0.4, 0], [0.4, 0.12], [0.3, 0.24], [0.24, 0.6], [0, 0.6]],
-  b: [[0, 0], [0.38, 0], [0.38, 0.12], [0.25, 0.24], [0.16, 0.6], [0.28, 0.7], [0.25, 0.92], [0.12, 1.15], [0.05, 1.25], [0, 1.25]],
-  q: [[0, 0], [0.42, 0], [0.42, 0.12], [0.27, 0.24], [0.18, 0.7], [0.34, 0.84], [0.4, 1.1], [0.2, 1.04], [0.12, 1.3], [0, 1.38]],
-  k: [[0, 0], [0.42, 0], [0.42, 0.12], [0.27, 0.24], [0.2, 0.7], [0.34, 0.86], [0.34, 1.06], [0.14, 1.12], [0, 1.12]],
-};
-function gem(color, y, s = 0.12) { const g = new THREE.Mesh(new THREE.OctahedronGeometry(s), trim[color]); g.position.y = y; g.castShadow = false; return g; }
-export function chessMesh(type, color) {
-  const g = new THREE.Group(), m = mats[color];
-  const body = new THREE.Mesh(lathe(prof[type]), m); body.castShadow = true; body.receiveShadow = true; g.add(body);
-  if (type === 'n') {
-    const head = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.62, 0.6), m); head.position.set(0, 0.85, 0.1); head.rotation.x = -0.4; head.castShadow = true; g.add(head);
-    const horn = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.3, 6), trim[color]); horn.position.set(0, 1.25, -0.08); horn.rotation.x = -0.5; g.add(horn);
-    g.rotation.y = color === 'w' ? Math.PI : 0;
-  }
-  if (type === 'k') { const a = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.42, 0.12), trim[color]), b = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.12, 0.12), trim[color]); a.position.y = 1.35; b.position.y = 1.38; g.add(a, b); }
-  if (type === 'q') g.add(gem(color, 1.5, 0.14));
-  if (type === 'b') g.add(gem(color, 1.36, 0.09));
-  if (type === 'r') for (let i = 0; i < 4; i++) { const t = gem(color, 1.08, 0.06); t.position.x = Math.cos(i * 1.57) * 0.3; t.position.z = Math.sin(i * 1.57) * 0.3; g.add(t); }
-  g.userData.side = color === 'w' ? 'ice' : 'fire';
-  g.scale.setScalar(0.92); return g;
+// Original toy-sculpted chess set. Clear silhouettes, glazed ceramic, warm metal details.
+const mats={w:new THREE.MeshPhysicalMaterial({color:0xe2f2df,roughness:.22,metalness:.05,clearcoat:1}),b:new THREE.MeshPhysicalMaterial({color:0xc95038,roughness:.25,metalness:.05,clearcoat:1})};
+const trim={w:new THREE.MeshStandardMaterial({color:0x19adc2,metalness:.45,roughness:.25}),b:new THREE.MeshStandardMaterial({color:0xffd16e,metalness:.55,roughness:.25})};
+const dark=new THREE.MeshStandardMaterial({color:0x193b52,roughness:.3});
+const geo={};const lathe=(key,points)=>geo[key]||(geo[key]=new THREE.LatheGeometry(points.map(([x,y])=>new THREE.Vector2(x,y)),48));
+function mesh(g,geometry,material,x=0,y=0,z=0){const m=new THREE.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;g.add(m);return m;}
+const body=[[0,0],[.31,0],[.36,.04],[.37,.09],[.35,.16],[.29,.20],[.25,.24],[.21,.30],[.16,.48],[.14,.65],[.19,.71],[.25,.73],[.27,.78],[.23,.83],[0,.84]];
+export function chessMesh(type,color){
+ const g=new THREE.Group(),m=mats[color],t=trim[color];
+ mesh(g,lathe('body',body),m);
+ const ring=mesh(g,new THREE.TorusGeometry(.3,.025,8,40),t,0,.18,0);ring.rotation.x=Math.PI/2;
+ if(type==='p'){mesh(g,new THREE.SphereGeometry(.22,28,18),m,0,.91);mesh(g,new THREE.SphereGeometry(.07,16,12),t,0,1.1);}
+ if(type==='r'){
+  mesh(g,new THREE.CylinderGeometry(.29,.23,.32,32),m,0,.91);
+  for(let i=0;i<6;i++){const a=i*Math.PI/3;const tooth=mesh(g,new THREE.BoxGeometry(.14,.18,.16),m,Math.cos(a)*.23,1.12,Math.sin(a)*.23);tooth.rotation.y=-a;}
+  mesh(g,new THREE.CylinderGeometry(.18,.18,.04,28),t,0,1.06);
+ }
+ if(type==='b'){
+  mesh(g,new THREE.SphereGeometry(.24,28,18),m,0,.98);const head=mesh(g,new THREE.ConeGeometry(.20,.43,32),m,0,1.16);head.rotation.z=-.1;
+  mesh(g,new THREE.SphereGeometry(.065,16,12),t,0,1.4);
+  const slash=mesh(g,new THREE.BoxGeometry(.035,.25,.025),t,.04,1.18,.165);slash.rotation.z=-.4;
+ }
+ if(type==='q'){
+  mesh(g,new THREE.CylinderGeometry(.3,.2,.3,32),m,0,.97);
+  for(let i=0;i<7;i++){const a=i*Math.PI*2/7;mesh(g,new THREE.SphereGeometry(.07,16,12),t,Math.cos(a)*.27,1.18,Math.sin(a)*.27);}
+  mesh(g,new THREE.SphereGeometry(.13,24,16),m,0,1.18);mesh(g,new THREE.SphereGeometry(.065,16,12),t,0,1.34);
+ }
+ if(type==='k'){
+  mesh(g,new THREE.CylinderGeometry(.25,.19,.33,32),m,0,1.0);
+  mesh(g,new THREE.SphereGeometry(.18,24,16),m,0,1.18);
+  mesh(g,new THREE.BoxGeometry(.09,.36,.09),t,0,1.44);mesh(g,new THREE.BoxGeometry(.29,.09,.09),t,0,1.48);
+ }
+ if(type==='n'){
+  // Sculpted horse profile, bevelled for a soft, recognisable silhouette.
+  const s=new THREE.Shape();s.moveTo(-.26,.73);s.lineTo(-.23,1.04);s.quadraticCurveTo(-.27,1.23,-.13,1.4);s.lineTo(-.1,1.56);s.lineTo(.02,1.43);s.lineTo(.15,1.4);s.lineTo(.35,1.2);s.quadraticCurveTo(.43,1.1,.29,1.04);s.lineTo(.1,1.1);s.quadraticCurveTo(.04,.86,.2,.73);s.closePath();
+  const h=mesh(g,new THREE.ExtrudeGeometry(s,{depth:.22,bevelEnabled:true,bevelSize:.045,bevelThickness:.04,bevelSegments:3,steps:1}),m,0,0,-.11);
+  for(const z of [-.165,.165])mesh(g,new THREE.SphereGeometry(.035,12,8),dark,.06,1.30,z);
+  const mane=mesh(g,new THREE.BoxGeometry(.07,.42,.21),t,-.20,1.12);mane.rotation.z=-.12;
+  g.rotation.y=color==='w'?.25:Math.PI-.25;
+ }
+ g.userData.side=color==='w'?'ice':'fire';g.scale.setScalar(.98);return g;
 }
-export function checkerMesh(color, king) {
-  const g = new THREE.Group(), m = mats[color], h = 0.2;
-  const d = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.44, h, 10), m); d.position.y = h / 2; d.castShadow = true; d.receiveShadow = true; g.add(d);
-  const rim = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.03, 8, 30), trim[color]); rim.rotation.x = Math.PI / 2; rim.position.y = h + 0.005; g.add(rim);
-  if (king) { const c = new THREE.Mesh(new THREE.ConeGeometry(0.26, 0.34, 5), trim[color]); c.position.y = h + 0.17; c.castShadow = true; g.add(c); }
-  return g;
-}
+export function checkerMesh(color,king){const g=new THREE.Group(),m=mats[color],t=trim[color];mesh(g,lathe('checker',[[0,0],[.32,0],[.4,.05],[.42,.12],[.4,.22],[.34,.27],[0,.27]]),m);const rim=mesh(g,new THREE.TorusGeometry(.30,.035,10,40),t,0,.28);rim.rotation.x=Math.PI/2;mesh(g,new THREE.CylinderGeometry(.23,.23,.02,32),t,0,.275);if(king){for(let i=0;i<5;i++){const a=i*6.283/5;mesh(g,new THREE.SphereGeometry(.055,12,10),t,Math.cos(a)*.18,.4,Math.sin(a)*.18);}mesh(g,new THREE.CylinderGeometry(.19,.14,.12,24),m,0,.34);}return g;}

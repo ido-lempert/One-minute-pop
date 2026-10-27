@@ -6,7 +6,7 @@ import { addLiteButton } from '../js/prefs.js';
 addMuteButton();
 addLiteButton();
 const game = new Chess();
-let selected = null, last = [];
+let selected = null, last = [], aiTimer = null;
 const sq = (c, r) => 'abcdefgh'[c] + (r + 1);
 const unsq = s => [s.charCodeAt(0) - 97, +s[1] - 1];
 const status = document.getElementById('status'), mode = document.getElementById('mode');
@@ -50,7 +50,7 @@ function onSquare(c, r) {
   const s = sq(c, r);
   if (selected) {
     const mv = game.moves({ square: selected, verbose: true }).filter(m => m.to === s);
-    if (mv.length) { play({ from: selected, to: s, promotion: 'q' }); if (mode.value === 'ai' && !game.isGameOver()) setTimeout(aiMove, 250); return; }
+    if (mv.length) { play({ from: selected, to: s, promotion: 'q' }); scheduleAI(); return; }
   }
   const p = game.get(s);
   selected = p && p.color === game.turn() ? s : null; draw();
@@ -67,6 +67,8 @@ function draw() {
   else t = (game.turn() === 'w' ? 'White' : 'Black') + ' to move' + (game.inCheck() ? ' - check!' : '');
   status.textContent = t; document.body.dataset.fen = game.fen();
 }
-document.getElementById('new').onclick = () => { game.reset(); selected = null; last = []; draw(); };
-document.getElementById('undo').onclick = () => { game.undo(); if (mode.value === 'ai') game.undo(); selected = null; last = []; draw(); };
+function scheduleAI(){ clearTimeout(aiTimer);aiTimer=null;if(mode.value==='ai' && game.turn()==='b' && !game.isGameOver())aiTimer=setTimeout(()=>{aiTimer=null;if(mode.value==='ai' && game.turn()==='b' && !game.isGameOver())aiMove();},250);}
+function reset() { board.resetAnimation(); clearTimeout(aiTimer); aiTimer=null; game.reset(); selected=null; last=[]; draw(); }
+document.getElementById('new').onclick = reset;mode.onchange=()=>{ selected=null;draw();scheduleAI(); };
+document.getElementById('undo').onclick = () => { board.resetAnimation();clearTimeout(aiTimer);aiTimer=null;const turn=game.turn();game.undo();if(mode.value==='ai' && turn==='w')game.undo();selected=null;last=[];draw();scheduleAI(); };
 draw();

@@ -2,7 +2,7 @@ import * as THREE from '../lib/three.module.js';
 import { RoomEnvironment } from '../lib/RoomEnvironment.js';
 import { createFx } from './fx.js';
 import { prefs } from './prefs.js';
-import { iceTexture, lavaTextures, frameTexture, skyTexture, glowTexture } from './theme.js';
+import { glowTexture } from './theme.js';
 
 // Shared 3D 8x8 board in a fire-vs-ice fantasy setting. Square (c, r): c = file 0..7, r = rank 0..7.
 // Dark side (rank 8, far) is fire; light side (rank 1, near) is ice.
@@ -11,49 +11,32 @@ export function createBoard(container, { onSquare }) {
   const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
   const pr = () => prefs.lite ? 1 : Math.min(devicePixelRatio, small ? 1.75 : 2); renderer.setPixelRatio(pr()); prefs.onChange(() => { renderer.setPixelRatio(pr()); resize(); });
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
   container.appendChild(renderer.domElement);
   const scene = new THREE.Scene();
-  const sky = new THREE.Mesh(new THREE.SphereGeometry(60, 24, 16), new THREE.MeshBasicMaterial({ map: skyTexture(), side: THREE.BackSide, fog: false }));
-  scene.add(sky);
-  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture; scene.environmentIntensity = 0.5;
-  const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 150);
-  scene.add(new THREE.HemisphereLight(0xaad4ff, 0x552211, 0.35));
-  const sun = new THREE.DirectionalLight(0xfff0e0, 1.2); sun.position.set(4, 10, 6); sun.castShadow = true;
-  sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02; sun.shadow.radius = 3;
-  sun.shadow.mapSize.set(small ? 1024 : 2048, small ? 1024 : 2048);
-  Object.assign(sun.shadow.camera, { left: -7, right: 7, top: 7, bottom: -7 }); scene.add(sun);
-  const fireLight = new THREE.PointLight(0xff5a1a, 14, 16, 1.6); fireLight.position.set(0, 2.5, -6); scene.add(fireLight);
-  const iceLight = new THREE.PointLight(0x4fb8ff, 14, 16, 1.6); iceLight.position.set(0, 2.5, 6); scene.add(iceLight);
-
-  // frame, island, floating debris
-  const frame = new THREE.Mesh(new THREE.BoxGeometry(9.5, 0.55, 9.5), new THREE.MeshPhysicalMaterial({ map: frameTexture(), roughness: 0.4, metalness: 0.2, clearcoat: 0.5, emissiveMap: frameTexture(), emissive: 0xffffff, emissiveIntensity: 0.25 }));
-  frame.position.y = -0.33; frame.receiveShadow = true; frame.castShadow = true; scene.add(frame);
-  const [lavaMap, lavaGlow] = lavaTextures(3), [lavaMap2, lavaGlow2] = lavaTextures(8);
-  const island = new THREE.Mesh(new THREE.CylinderGeometry(5.6, 1.2, 4, 9, 1), new THREE.MeshStandardMaterial({ map: lavaMap, emissiveMap: lavaGlow, emissive: 0xffffff, emissiveIntensity: 0.5, roughness: 0.9, flatShading: true }));
-  island.position.y = -2.65; scene.add(island);
-  const debris = [];
-  const rockMat = new THREE.MeshStandardMaterial({ color: 0x2a2024, emissive: 0xff4a10, emissiveIntensity: 0.25, roughness: 0.8, flatShading: true });
-  const crystalMat = new THREE.MeshPhysicalMaterial({ color: 0x9fe4ff, emissive: 0x2a8acc, emissiveIntensity: 0.7, roughness: 0.1, clearcoat: 1, flatShading: true });
-  for (let i = 0; i < 9; i++) {
-    const ice = i % 2 === 0, a = i * 0.7 + 0.4, d = 7 + (i % 3) * 1.8;
-    const m = new THREE.Mesh(ice ? new THREE.OctahedronGeometry(0.5 + (i % 3) * 0.25) : new THREE.IcosahedronGeometry(0.5 + (i % 3) * 0.25, 0), ice ? crystalMat : rockMat);
-    m.position.set(Math.cos(a) * d, -1 + (i % 4) * 0.9, Math.sin(a) * d - (ice ? -1 : 1)); m.userData = { spin: 0.2 + (i % 3) * 0.15, y0: m.position.y, ph: i }; scene.add(m); debris.push(m);
-  }
-
-  // squares
-  const iceMats = [0, 1].map(i => new THREE.MeshPhysicalMaterial({ map: iceTexture(1 + i * 5), roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.1, emissive: 0x2b6a9a, emissiveIntensity: 0.28, metalness: 0.0 }));
-  const lavaMats = [[lavaMap, lavaGlow], [lavaMap2, lavaGlow2]].map(([m, e]) => new THREE.MeshPhysicalMaterial({ map: m, emissiveMap: e, emissive: 0xffffff, emissiveIntensity: 0.55, roughness: 0.35, clearcoat: 0.6 }));
-  const squares = [], sqGeo = new THREE.BoxGeometry(1, 0.12, 1);
-  for (let c = 0; c < 8; c++) for (let r = 0; r < 8; r++) {
-    const light = (c + r) % 2 === 1, m = new THREE.Mesh(sqGeo, (light ? iceMats : lavaMats)[(c * 3 + r * 5) % 2]);
-    m.position.set(c - 3.5, -0.03, 3.5 - r); m.receiveShadow = true; m.userData = { c, r }; scene.add(m); squares.push(m);
-  }
+  scene.background = new THREE.Color(0x243f52); scene.fog = new THREE.Fog(0x243f52,25,65);
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture; scene.environmentIntensity = 0.22;
+  const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 150);
+  scene.add(new THREE.HemisphereLight(0xbcd8ef,0x142436,.45));
+  const sun = new THREE.DirectionalLight(0xffe2b4,3.8); sun.position.set(-3,7,3);sun.castShadow=true;sun.shadow.bias=-.0004;sun.shadow.normalBias=.025;sun.shadow.radius=4;
+  sun.shadow.mapSize.set(small?1024:2048,small?1024:2048);Object.assign(sun.shadow.camera,{left:-9,right:9,top:9,bottom:-9});scene.add(sun);
+  const rimLight=new THREE.DirectionalLight(0xb1e5ff,1.6);rimLight.position.set(7,6,-7);scene.add(rimLight);
+  function block(w,h,d,color,x,y,z,rough=.4){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),new THREE.MeshStandardMaterial({color,roughness:rough}));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m;}
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.MeshStandardMaterial({color:0x243f52,roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-1.0;floor.receiveShadow=true;scene.add(floor);
+  // Layered collectible-tabletop arena, not noisy texture maps.
+  block(9.5,.26,9.5,0x173b55,0,-.44,0);block(9.3,.18,9.3,0x51b8bb,0,-.65,0);block(8.8,.25,8.8,0x245574,0,-.85,0);
+  block(8.9,.14,8.9,0xd2b77d,0,-.24,0);
+  for(const x of [-4.5,4.5])for(const z of [-4.5,4.5]){const jewel=new THREE.Mesh(new THREE.SphereGeometry(.14,20,12),new THREE.MeshStandardMaterial({color:0xffcb69,metalness:.65,roughness:.25}));jewel.position.set(x,-.16,z);scene.add(jewel);}
+  const tileMat=[new THREE.MeshPhysicalMaterial({color:0x8ea9a3,roughness:.32,clearcoat:.6}),new THREE.MeshPhysicalMaterial({color:0x234a60,roughness:.28,clearcoat:.6})];
+  const squares=[],sqGeo=new THREE.BoxGeometry(.975,.15,.975);
+  for(let c=0;c<8;c++)for(let r=0;r<8;r++){const m=new THREE.Mesh(sqGeo,tileMat[(c+r)%2]);m.position.set(c-3.5,-.025,3.5-r);m.receiveShadow=true;m.userData={c,r};scene.add(m);squares.push(m);}
+  function label(text,x,z){const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');g.fillStyle='#294e62';g.font='bold 42px sans-serif';g.textAlign='center';g.fillText(text,32,46);const m=new THREE.Mesh(new THREE.PlaneGeometry(.25,.25),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(x,-.15,z);scene.add(m);}
+  for(let i=0;i<8;i++){label('abcdefgh'[i],i-3.5,4.22);label(String(i+1),-4.22,3.5-i);}
   const pieceGroup = new THREE.Group(); scene.add(pieceGroup);
   const markGroup = new THREE.Group(); scene.add(markGroup);
   const haloTex = { ice: glowTexture('rgba(110,200,255,0.9)'), fire: glowTexture('rgba(255,110,40,0.9)') };
 
-  let yaw = 0, pitch = 0.95, dist = 13;
+  let yaw = 0.22, pitch = 0.95, dist = 13;
   function placeCamera() { camera.position.set(Math.sin(yaw) * Math.cos(pitch) * dist, Math.sin(pitch) * dist, Math.cos(yaw) * Math.cos(pitch) * dist); camera.lookAt(0, 0.2, 0); }
   function resize() {
     const w = container.clientWidth || 600, h = container.clientHeight || 600;
@@ -81,12 +64,14 @@ export function createBoard(container, { onSquare }) {
     ray.setFromCamera(ndc, camera); const hit = ray.intersectObjects(squares)[0]; if (hit) onSquare(hit.object.userData.c, hit.object.userData.r);
   });
 
+  const contactCanvas=document.createElement('canvas');contactCanvas.width=contactCanvas.height=64;const cg=contactCanvas.getContext('2d');const grad=cg.createRadialGradient(32,32,6,32,32,32);grad.addColorStop(0,'rgba(9,30,42,.55)');grad.addColorStop(.5,'rgba(9,30,42,.25)');grad.addColorStop(1,'rgba(9,30,42,0)');cg.fillStyle=grad;cg.fillRect(0,0,64,64);const contactMap=new THREE.CanvasTexture(contactCanvas);
   const meshAt = new Map(), tweens = []; let selKey = null;
   function setPieces(list, makeMesh) {
     pieceGroup.clear(); meshAt.clear();
     for (const p of list) {
       const m = makeMesh(p); m.position.set(p.c - 3.5, 0.03, 3.5 - p.r); pieceGroup.add(m); meshAt.set(p.c + ',' + p.r, m);
-      const halo = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.5), new THREE.MeshBasicMaterial({ map: haloTex[p.side === 'fire' ? 'fire' : 'ice'], transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.3 }));
+      const contact=new THREE.Mesh(new THREE.PlaneGeometry(.96,.96),new THREE.MeshBasicMaterial({map:contactMap,transparent:true,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.set(0,.025,0);m.add(contact);
+      const halo = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.5), new THREE.MeshBasicMaterial({ map: haloTex[p.side === 'fire' ? 'fire' : 'ice'], transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.08 }));
       halo.rotation.x = -Math.PI / 2; halo.position.set(0, 0.06, 0); halo.name = 'halo'; m.add(halo);
     }
   }
@@ -113,13 +98,12 @@ export function createBoard(container, { onSquare }) {
     if (selected) add(selected[0], selected[1], 0xffd23d, true, 0.45);
   }
   function setSide() { yaw = 0; placeCamera(); }
-  const fx = createFx(scene); const clock = new THREE.Clock();
+  function resetAnimation() { for(const w of ghosts)scene.remove(w.g);ghosts.length=0;tweens.length=0;fx.clear(); }
+  const fx = createFx(scene); fx.setAmbient(false); const clock = new THREE.Clock();
   function project(c, r) { const v = new THREE.Vector3(c - 3.5, 0.1, 3.5 - r).project(camera); const b = el.getBoundingClientRect(); return [b.left + (v.x + 1) / 2 * b.width, b.top + (1 - v.y) / 2 * b.height]; }
   window.__project = project;
   function loop() {
     const dt = clock.getDelta(), t = clock.elapsedTime; fx.update(dt);
-    for (const m of lavaMats) m.emissiveIntensity = 0.5 + Math.sin(t * 2.1) * 0.08 + Math.sin(t * 5.3) * 0.04;
-    fireLight.intensity = 13 + Math.sin(t * 7) * 1.5; for (const d of debris) { d.rotation.y += d.userData.spin * dt; d.rotation.x += d.userData.spin * 0.5 * dt; d.position.y = d.userData.y0 + Math.sin(t * 0.8 + d.userData.ph) * 0.2; }
     for (let i = tweens.length - 1; i >= 0; i--) { const w = tweens[i]; w.t += dt; const k = Math.min(1, w.t / w.dur), e = k * k * (3 - 2 * k);
       w.m.position.set(w.x0 + (w.x1 - w.x0) * e, 0.03 + Math.sin(k * Math.PI) * 0.55, w.z0 + (w.z1 - w.z0) * e); if (k >= 1) { w.m.position.y = 0.03; tweens.splice(i, 1); } }
     for (let i = ghosts.length - 1; i >= 0; i--) { const w = ghosts[i]; w.t += dt; const k = Math.min(1, w.t / w.dur);
@@ -128,5 +112,5 @@ export function createBoard(container, { onSquare }) {
     renderer.render(scene, camera);
   }
   renderer.setAnimationLoop(loop);
-  return { THREE, fx, project, setPieces, setMarks, setSide, animateMove, captureAt, canvas: el, renderer };
+  return { THREE, fx, resetAnimation, project, setPieces, setMarks, setSide, animateMove, captureAt, canvas: el, renderer };
 }
