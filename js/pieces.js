@@ -113,6 +113,9 @@ export function checkerMesh(color,king){
  if(king){
   // A second sculpted disc and an open five-point crown make promotion readable by silhouette.
   mesh(g,lathe('kingDisc',[[0,0],[.30,0],[.35,.03],[.36,.08],[.34,.14],[.29,.18],[0,.18]]),m,0,.27);
+  // Scalloped ceramic lobes shape the promoted disc into a raised royal tier.
+  if(!geo.checkerRoyalLobe){const profile=[[0,0],[.026,0],[.040,.035],[.044,.075],[.036,.115],[.020,.145],[0,.15]];geo.checkerRoyalLobe=new THREE.LatheGeometry(profile.map(([r,y])=>new THREE.Vector2(r,y)),16);}
+  for(let i=0;i<12;i++){const a=i*Math.PI/6,lobe=mesh(g,geo.checkerRoyalLobe,m,Math.cos(a)*.337,.292,Math.sin(a)*.337);}
   const belt=mesh(g,new THREE.TorusGeometry(.335,.023,12,48),t,0,.365);belt.rotation.x=Math.PI/2;
   mesh(g,new THREE.CylinderGeometry(.225,.225,.02,40),dark,0,.455);
   const band=mesh(g,new THREE.TorusGeometry(.235,.025,10,48),t,0,.46);band.rotation.x=Math.PI/2;

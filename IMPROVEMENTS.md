@@ -193,3 +193,9 @@ Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellati
 Seven overlapping bevelled locks now follow the knight's rear neck, breaking the smooth metal slab into a flowing mane silhouette. Shared curved extrusions add real relief and light-catching edges without changing the horse face or bridle.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-knight studio before/after and final phone/desktop board pixels inspected. Studio images are model tests, not live boards. Physical-device FPS remains unverified.
+
+## 32. Scalloped checker king tiers
+
+Twelve rounded ceramic lobes now shape the checker king's raised disc into a scalloped royal tier. The upper level is distinct from the normal reeded disc and retains its metal belt and open crown. Shared lathed geometry adds physical relief without changing normal pieces.
+
+Checks:32 rules/controller tests exit0. Chrome checkers move/reset-cancellation exit0, zero page errors/no390px overflow. Matched normal/king studio before/after and phone/desktop board pixels inspected using an explicit all-kings test fixture, not the normal opening. Physical-device FPS remains unverified.
