@@ -211,3 +211,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 Four raised metal arches now follow the chess king's ceramic dome from the royal band to a small cross seat. The curved ribs replace the plain dome with a traditional closed-crown silhouette, retaining the ceramic body and heraldic cross. One cached tube geometry is shared by all kings.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-king studio before/after and final phone/desktop board pixels inspected. Studio views are model tests, not live boards. Physical-device FPS remains unverified.
+
+## 35. Sculpted crystal and open flame token emblems
+
+Connect Four ivory discs now carry forked snow-crystal branches instead of plain six-spoke marks. Coral discs gain a real cut-through flame center with bevelled walls. The raised metal shapes remain visible on both token faces and use shared geometry.
+
+Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero page errors/no390px overflow. Matched four-token studio before/after and final played phone/desktop board pixels inspected. Studio views are model tests, not live boards. Physical-device FPS remains unverified.

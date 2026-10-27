@@ -62,7 +62,10 @@ const tokenTrim={1:new THREE.MeshStandardMaterial({color:0x20859a,roughness:.3,m
 const tokenGeo=new THREE.LatheGeometry([[0,-.125],[.31,-.125],[.36,-.12],[.39,-.09],[.397,-.045],[.397,.045],[.39,.09],[.36,.12],[.31,.125],[0,.125]].map(([x,y])=>new THREE.Vector2(x,y)),48);tokenGeo.rotateX(Math.PI/2);
 const rimGeo=new THREE.TorusGeometry(.31,.018,10,48);
 const snowPaths=[];for(let i=0;i<3;i++){const a=i*Math.PI/3;snowPaths.push(new THREE.TubeGeometry(new THREE.LineCurve3(new THREE.Vector3(Math.cos(a)*.22,Math.sin(a)*.22,0),new THREE.Vector3(-Math.cos(a)*.22,-Math.sin(a)*.22,0)),1,.014,8,false));}
-const flame=new THREE.Shape();flame.moveTo(0,-.22);flame.bezierCurveTo(-.25,-.07,-.09,.09,0,.23);flame.bezierCurveTo(.10,.09,.23,-.08,0,-.22);const flameGeo=new THREE.ExtrudeGeometry(flame,{depth:.012,bevelEnabled:true,bevelSize:.012,bevelThickness:.009,bevelSegments:3,curveSegments:18,steps:1});
+// Sculpted forked crystal branches replace the plain six-spoke ivory token emblem.
+for(let i=0;i<6;i++){const a=i*Math.PI/3,axis=new THREE.Vector3(Math.cos(a),Math.sin(a),0),across=new THREE.Vector3(-Math.sin(a),Math.cos(a),0);for(const side of [-1,1]){const root=axis.clone().multiplyScalar(.115),tip=axis.clone().multiplyScalar(.18).addScaledVector(across,.053*side);snowPaths.push(new THREE.TubeGeometry(new THREE.LineCurve3(root,tip),1,.011,8,false));}}
+
+const flame=new THREE.Shape();flame.moveTo(0,-.22);flame.bezierCurveTo(-.25,-.07,-.09,.09,0,.23);flame.bezierCurveTo(.10,.09,.23,-.08,0,-.22);const flameHeart=new THREE.Path();flameHeart.moveTo(0,-.12);flameHeart.bezierCurveTo(.08,-.065,.03,.005,0,.075);flameHeart.bezierCurveTo(-.035,.005,-.075,-.065,0,-.12);flame.holes.push(flameHeart);const flameGeo=new THREE.ExtrudeGeometry(flame,{depth:.012,bevelEnabled:true,bevelSize:.012,bevelThickness:.009,bevelSegments:3,curveSegments:18,steps:1});
 function token(player){const g=new THREE.Group();const add=(geo,mat,z=0)=>{const m=new THREE.Mesh(geo,mat);m.position.z=z;m.castShadow=m.receiveShadow=true;g.add(m);return m;};add(tokenGeo,tokenMat[player]);
  for(const sign of [-1,1]){add(rimGeo,tokenTrim[player],sign*.13);if(player===1){for(const geo of snowPaths)add(geo,tokenTrim[player],sign*.14);}else{const mark=add(flameGeo,tokenTrim[player],sign*.133);if(sign<0)mark.rotation.y=Math.PI;}}
  return g;
