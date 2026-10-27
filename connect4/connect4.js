@@ -56,11 +56,21 @@ function fit() {
     if (pts.every(v => { const q = v.clone().project(camera); return Math.abs(q.x) < 0.95 && Math.abs(q.y) < 0.95; })) break; }
 }
 new ResizeObserver(fit).observe(view); fit(); const fx = createFx(scene); fx.setAmbient(false); const clock = new THREE.Clock(); window.__fx = fx;
-renderer.setAnimationLoop(() => { fx.update(clock.getDelta()); renderer.render(scene, camera); });
-let board = R.empty(), turn = 1, over = false, busy = false, aiTimer = null; window.__c4 = () => ({ board, turn, over });
+const dropAnimations=new Map();let tokenKeys=new Set();
+renderer.setAnimationLoop(() => {
+ const dt=Math.min(clock.getDelta(),.05);fx.update(dt);
+ for(const m of discs.children){const a=dropAnimations.get(m.userData.cell);if(!a)continue;a.t=(performance.now()-a.start)/1000;const u=Math.min(1,a.t/.62);const fall=Math.min(1,u/.72);let y=a.y+(6.1-a.y)*(1-fall*fall);
+  if(u>.72){const b=(u-.72)/.28;y=a.y+Math.sin(b*Math.PI)*.20*(1-b);}
+  m.position.y=y;a.currentY=y;if(u>=1){m.position.y=a.y;dropAnimations.delete(m.userData.cell);}
+ }
+ renderer.render(scene,camera);
+});
+let board = R.empty(), turn = 1, over = false, busy = false, aiTimer = null; window.__c4 = () => ({ board, turn, over });window.__c4Visual=()=>({active:dropAnimations.size,tokens:discs.children.filter(m=>m.userData.cell).map(m=>({cell:m.userData.cell,y:m.position.y}))});
 function show() {
   discs.clear();
-  for (let c = 0; c < 7; c++) for (let r = 0; r < 6; r++) if (board[c][r]) { const m = token(board[c][r]); m.position.set(c - 3, r, 0); discs.add(m); }
+  const nextKeys=new Set();
+  for (let c = 0; c < 7; c++) for (let r = 0; r < 6; r++) if (board[c][r]) { const key=c+','+r;nextKeys.add(key);if(!tokenKeys.has(key))dropAnimations.set(key,{t:0,start:performance.now(),y:r,currentY:6.1});const m = token(board[c][r]);m.userData.cell=key;m.position.set(c - 3,dropAnimations.has(key)?dropAnimations.get(key).currentY:r,0);discs.add(m); }
+  tokenKeys=nextKeys;
   const w = R.winLine(board);
   if (w) { over = true; for (const [c, r] of w.cells) { const m = new THREE.Mesh(new THREE.TorusGeometry(0.46, 0.05, 8, 24), new THREE.MeshBasicMaterial({ color: 0xffffff })); m.position.set(c - 3, r, 0.2); discs.add(m); } }
   else if (R.isFull(board)) over = true;
@@ -91,6 +101,6 @@ renderer.domElement.addEventListener('pointerup', e => {
   ray.setFromCamera(ndc, camera); const hit = ray.intersectObjects(colHit)[0]; if (hit) choose(hit.object.userData.c);
 });
 window.__c4col = c => { const v = new THREE.Vector3(c - 3, 2.5, 0.2).project(camera); const b = renderer.domElement.getBoundingClientRect(); return [b.left + (v.x + 1) / 2 * b.width, b.top + (1 - v.y) / 2 * b.height]; };
-function reset() { fx.clear(); clearTimeout(aiTimer); aiTimer = null; board = R.empty(); turn = 1; over = false; busy = false; show(); }
+function reset() { dropAnimations.clear();tokenKeys.clear();fx.clear(); clearTimeout(aiTimer); aiTimer = null; board = R.empty(); turn = 1; over = false; busy = false; show(); }
 document.getElementById('new').onclick = reset; mode.onchange = scheduleAI;
 show();

@@ -89,3 +89,11 @@ Checks:32 rules/controller regressions; actual Chrome chess capture/reset/AI/und
 The rack now stands on a matte physical tabletop instead of floating against a solid background. A correctly bounded shadow camera captures the complete rack and feet, with bias tuned to avoid surface acne and distant fog blending into the backdrop. The true rack holes cast patterned shadows.
 
 Checks:32 rules/controller regressions; actual Chrome Connect Four win/AI/reset, zero errors/no390px overflow; matched phone/desktop rendering inspected after the tabletop/fog revision.
+
+## 15. Gravity-driven token drop and landing bounce
+
+Connect Four tokens now fall from the top with gravity-like acceleration, a small landing bounce and an exact settled position instead of appearing instantly in their cell. Each token keeps its own animation across AI redraws; New clears pending animations. Wall-clock timing prevents slow rendering from stretching the fall indefinitely.
+
+Checks:32 rules/controller tests genuinely pass (npm test exit0); actual Chrome win/AI/reset and phone/desktop fall/settle/reset sampling passed. Actual falling and settled rendered frames inspected. Software rendering samples establish motion/settling, not physical-phone smoothness.
+
+Test reporting correction for12-14: the25 rules/chess/checker tests passed but7 C4 controller harness tests failed because token() was outside its sliced controller source. Real-browser C4 tests passed. The harness now provides its rendering/time stubs and all32 pass; this harness repair is not counted as a separate graphical improvement.
