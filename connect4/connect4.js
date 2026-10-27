@@ -39,6 +39,10 @@ for (const x of [-3.72,3.72]){
  const footGeo=new THREE.ExtrudeGeometry(roundedShape(.8,2.2,.25),{depth:.19,bevelEnabled:true,bevelSize:.09,bevelThickness:.08,bevelSegments:4,steps:1});footGeo.rotateX(-Math.PI/2);const foot=new THREE.Mesh(footGeo,blue);foot.position.set(x,-.81,0);foot.castShadow=foot.receiveShadow=true;scene.add(foot);
  for(const y of [-.35,5.35]){const bolt=new THREE.Mesh(new THREE.CylinderGeometry(.085,.085,.045,24),metal);bolt.rotation.x=Math.PI/2;bolt.position.set(x,y,.2);bolt.castShadow=true;scene.add(bolt);const slit=new THREE.Mesh(new THREE.BoxGeometry(.08,.014,.012),new THREE.MeshStandardMaterial({color:0x36505a,roughness:.5}));slit.position.set(x,y,.23);scene.add(slit);}
 }
+// Swept ceramic braces join each upright to its foot, giving the rack real side depth.
+const braceShape=new THREE.Shape();braceShape.moveTo(-.02,-.66);braceShape.lineTo(.96,-.66);braceShape.quadraticCurveTo(.86,-.48,.62,-.27);braceShape.quadraticCurveTo(.22,.16,.08,.75);braceShape.lineTo(-.02,.75);braceShape.closePath();
+const braceGeo=new THREE.ExtrudeGeometry(braceShape,{depth:.18,bevelEnabled:true,bevelSize:.045,bevelThickness:.035,bevelSegments:4,curveSegments:20,steps:1});braceGeo.rotateY(Math.PI/2);
+for(const x of [-3.72,3.72])for(const side of [-1,1]){const brace=new THREE.Mesh(braceGeo,blue);brace.position.set(x-.09,0,0);brace.scale.z=side;brace.castShadow=brace.receiveShadow=true;scene.add(brace);}
 // Seven open loading funnels show where each disc enters its column.
 const funnelProfile=[[.29,-.16],[.29,.06],[.31,.18],[.33,.19],[.34,.16],[.32,.03],[.32,-.16]];
 const funnelGeo=new THREE.LatheGeometry(funnelProfile.map(([r,y])=>new THREE.Vector2(r,y)),48);

@@ -181,3 +181,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 Eight bevelled petal panels now wrap the queen mantle below its open crown. The raised ceramic relief replaces the plain neck with a layered sculpted silhouette while retaining the recessed crown and metal insets. The panel geometry is cached and shared across queens.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-queen studio before/after and final phone/desktop board pixels inspected. Studio images are model tests, not live boards. Physical-device FPS remains unverified.
+
+## 30. Swept ceramic rack braces
+
+Four rounded ceramic braces now sweep from the Connect Four uprights down to the feet, front and back. The supports add structural side depth to the toy rack without covering playable holes or changing its footprint. Shared bevelled geometry catches the studio lighting and casts real shadows.
+
+Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero page errors/no390px overflow. Matched local desktop before/after and final phone board pixels inspected. Physical-device FPS remains unverified.
