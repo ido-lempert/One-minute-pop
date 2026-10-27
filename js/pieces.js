@@ -15,6 +15,9 @@ export function chessMesh(type,color){
   // A turned collar supports the pawn orb; an inlaid equator and crest replace a bead.
   mesh(g,lathe('pawnCollar',[[0,0],[.16,0],[.22,.035],[.23,.065],[.20,.095],[.15,.115],[0,.115]]),m,0,.76);
   const collar=mesh(g,new THREE.TorusGeometry(.215,.018,12,48),t,0,.81);collar.rotation.x=Math.PI/2;
+  // A six-lobed ceramic calyx replaces the pawn's flat supporting collar.
+  if(!geo.pawnCalyx){const pos=[],uv=[],indices=[],n=64,rings=12;for(let j=0;j<=rings;j++){const u=j/rings,y=.81+u*.13;const radius=.21-.065*u+.055*Math.sin(u*Math.PI);for(let i=0;i<=n;i++){const a=i/n*Math.PI*2,r=radius+Math.sin(u*Math.PI)*.018*Math.cos(6*a);pos.push(Math.cos(a)*r,y,Math.sin(a)*r);uv.push(i/n,u);}}for(let j=0;j<rings;j++)for(let i=0;i<n;i++){const k=j*(n+1)+i;indices.push(k,k+n+1,k+1,k+1,k+n+1,k+n+2);}geo.pawnCalyx=new THREE.BufferGeometry();geo.pawnCalyx.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.pawnCalyx.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.pawnCalyx.setIndex(indices);geo.pawnCalyx.computeVertexNormals();}
+  mesh(g,geo.pawnCalyx,m);
   mesh(g,new THREE.SphereGeometry(.215,40,28),m,0,1.005);
   const equator=mesh(g,new THREE.TorusGeometry(.211,.012,10,48),t,0,1.005);equator.rotation.x=Math.PI/2;
   mesh(g,lathe('pawnCrest',[[0,0],[.045,0],[.065,.025],[.053,.055],[.028,.085],[0,.095]]),t,0,1.205);

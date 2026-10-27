@@ -217,3 +217,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 Connect Four ivory discs now carry forked snow-crystal branches instead of plain six-spoke marks. Coral discs gain a real cut-through flame center with bevelled walls. The raised metal shapes remain visible on both token faces and use shared geometry.
 
 Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero page errors/no390px overflow. Matched four-token studio before/after and final played phone/desktop board pixels inspected. Studio views are model tests, not live boards. Physical-device FPS remains unverified.
+
+## 36. Sculpted ceramic pawn calyx
+
+A continuous six-lobed ceramic calyx now cradles each pawn orb above the turned collar. The smooth radial relief replaces the plain supporting neck without changing the pawn footprint or metal equator. A cached normal-smoothed mesh is shared across pawns. An initial separate-petal experiment was rejected during visual review before publication.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-pawn studio before/after and final phone/desktop board pixels inspected. Studio views are model tests, not live boards. Physical-device FPS remains unverified.
