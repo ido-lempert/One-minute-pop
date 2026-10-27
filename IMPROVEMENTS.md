@@ -47,3 +47,9 @@ Checks:32 rules/controller regressions and real Chrome legal checker move/reset,
 Promoted checkers get a second sculpted disc and an open five-point metal crown with ceramic tips, replacing the tiny cylinder/bead marker. The taller silhouette makes kings visually distinct even without color.
 
 Checks:32 rules/controller regressions; actual Chrome near-promotion fixture promotes via legal pointer move, crown geometry inspected in phone/desktop fixture views; normal move/reset still pass.
+
+## 8. Sculpted Connect Four rack
+
+The Connect Four rack has rounded outer corners, capsule-shaped uprights, wide bevelled stabilizing feet, recessed screw heads and a rounded support rail. These replace box supports and a knife-edge rectangular plate; the42 holes stay genuinely open.
+
+Checks:32 rules/controller regressions and real Chrome win/AI/reset; matched populated phone/desktop before/after images inspected.

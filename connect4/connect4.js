@@ -15,16 +15,22 @@ const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
 scene.add(new THREE.HemisphereLight(0xcfe5f5, 0x233543, .8));
 const iceSun = new THREE.DirectionalLight(0xfff4df, 3.5); iceSun.position.set(-6, 8, 8); iceSun.castShadow=true;iceSun.shadow.mapSize.set(1024,1024);scene.add(iceSun);
 const fireSun = new THREE.DirectionalLight(0xc0e9ff, 1.8); fireSun.position.set(6, 5, 8); scene.add(fireSun);
-// frame: frosted ice board on a lava base. 7x6 holes (rings), discs sit behind.
+// Rounded tabletop rack with true cut-through holes and shaped supports.
 const blue = new THREE.MeshStandardMaterial({ color: 0x32859a, roughness: 0.25, metalness: 0.05 });
-const plate=new THREE.Shape();plate.moveTo(-3.65,-.6);plate.lineTo(3.65,-.6);plate.lineTo(3.65,5.6);plate.lineTo(-3.65,5.6);plate.closePath();
+function roundedShape(w,h,r,cy=0){const x=w/2,y=h/2,q=new THREE.Shape();q.moveTo(-x+r,-y);q.lineTo(x-r,-y);q.quadraticCurveTo(x,-y,x,-y+r);q.lineTo(x,y-r);q.quadraticCurveTo(x,y,x-r,y);q.lineTo(-x+r,y);q.quadraticCurveTo(-x,y,-x,y-r);q.lineTo(-x,-y+r);q.quadraticCurveTo(-x,-y,-x+r,-y);if(cy){for(const curve of q.curves){for(const key of ['v0','v1','v2','v3'])if(curve[key])curve[key].y+=cy;}}return q;}
+const plate=roundedShape(7.3,6.2,.24,2.5);
 for(let c=0;c<7;c++)for(let r=0;r<6;r++){const h=new THREE.Path();h.absarc(c-3,r,.40,0,Math.PI*2,true);plate.holes.push(h);}
 const back=new THREE.Mesh(new THREE.ExtrudeGeometry(plate,{depth:.22,bevelEnabled:true,bevelThickness:.035,bevelSize:.035,bevelSegments:2,steps:1,curveSegments:28}),blue);back.position.z=-.20;back.castShadow=true;back.receiveShadow=true;scene.add(back);
 const ringGeo = new THREE.TorusGeometry(0.4, 0.12, 12, 28);
 for (let c = 0; c < 7; c++) for (let r = 0; r < 6; r++) { const m = new THREE.Mesh(ringGeo, blue); m.position.set(c - 3, r - 0.0, 0.1); m.castShadow=true;m.receiveShadow=true;scene.add(m); }
-for (const x of [-3.7, 3.7]) { const m = new THREE.Mesh(new THREE.BoxGeometry(0.3, 6.4, 0.9), blue); m.position.set(x, 2.5, 0); m.castShadow=true;m.receiveShadow=true;scene.add(m); }
+const metal=new THREE.MeshStandardMaterial({color:0xd6b46f,metalness:.65,roughness:.25});
+for (const x of [-3.72,3.72]){
+ const support=new THREE.Mesh(new THREE.CapsuleGeometry(.19,6.0,6,16),blue);support.position.set(x,2.5,-.02);support.castShadow=support.receiveShadow=true;scene.add(support);
+ const footGeo=new THREE.ExtrudeGeometry(roundedShape(.8,2.2,.25),{depth:.19,bevelEnabled:true,bevelSize:.09,bevelThickness:.08,bevelSegments:4,steps:1});footGeo.rotateX(-Math.PI/2);const foot=new THREE.Mesh(footGeo,blue);foot.position.set(x,-.81,0);foot.castShadow=foot.receiveShadow=true;scene.add(foot);
+ for(const y of [-.35,5.35]){const bolt=new THREE.Mesh(new THREE.CylinderGeometry(.085,.085,.045,24),metal);bolt.rotation.x=Math.PI/2;bolt.position.set(x,y,.2);bolt.castShadow=true;scene.add(bolt);const slit=new THREE.Mesh(new THREE.BoxGeometry(.08,.014,.012),new THREE.MeshStandardMaterial({color:0x36505a,roughness:.5}));slit.position.set(x,y,.23);scene.add(slit);}
+}
 const lavaMat = new THREE.MeshStandardMaterial({ color:0xf5d797,roughness:.4 });
-const base = new THREE.Mesh(new THREE.BoxGeometry(8, 0.5, 1.6), lavaMat); base.position.set(0, -0.95, 0); scene.add(base);
+const base = new THREE.Mesh(new THREE.ExtrudeGeometry(roundedShape(8,.38,.16),{depth:.95,bevelEnabled:true,bevelSize:.07,bevelThickness:.07,bevelSegments:4,steps:1}), lavaMat); base.position.set(0,-.91,-.48);base.castShadow=base.receiveShadow=true;scene.add(base);
 // discs: player 1 = ice (frost-blue with a six-point star), player 2 = fire (dark ember with a flame ring). The face mark keeps them apart without relying on colour.
 const face = (draw) => { const c = document.createElement('canvas'); c.width = c.height = 128; draw(c.getContext('2d')); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; };
 const iceFace = face(g => { g.fillStyle = '#ecfff9'; g.fillRect(0, 0, 128, 128); g.strokeStyle = '#21869b'; g.lineWidth = 7; g.lineCap = 'round'; for (let i = 0; i < 3; i++) { const a = i * Math.PI / 3; g.beginPath(); g.moveTo(64 + Math.cos(a) * 44, 64 + Math.sin(a) * 44); g.lineTo(64 - Math.cos(a) * 44, 64 - Math.sin(a) * 44); g.stroke(); } g.strokeStyle = '#ffffff'; g.lineWidth = 3; g.strokeRect(0, 0, 128, 128); });
