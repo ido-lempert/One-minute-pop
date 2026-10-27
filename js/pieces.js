@@ -23,9 +23,12 @@ export function chessMesh(type,color){
   for(let i=0;i<4;i++){const a=i*Math.PI/2;const shield=mesh(g,new THREE.SphereGeometry(.055,16,10),t,Math.cos(a)*.235,.54,Math.sin(a)*.235);shield.scale.set(.7,1.35,.7);}
  }
  if(type==='b'){
-  mesh(g,new THREE.SphereGeometry(.24,28,18),m,0,.98);const head=mesh(g,new THREE.ConeGeometry(.20,.43,32),m,0,1.16);head.rotation.z=-.1;
-  mesh(g,new THREE.SphereGeometry(.065,16,12),t,0,1.4);
-  const slash=mesh(g,new THREE.BoxGeometry(.035,.25,.025),t,.04,1.18,.165);slash.rotation.z=-.4;
+  // Bevelled mitre with a genuine diagonal opening, visible from either side.
+  if(!geo.bishopMitre){const s=new THREE.Shape();s.moveTo(-.12,.83);s.bezierCurveTo(-.28,.94,-.28,1.12,-.19,1.28);s.quadraticCurveTo(-.10,1.43,0,1.53);s.lineTo(.10,1.39);s.lineTo(-.055,1.15);s.lineTo(.01,1.10);s.lineTo(.16,1.32);s.bezierCurveTo(.28,1.15,.29,.97,.12,.83);s.closePath();geo.bishopMitre=new THREE.ExtrudeGeometry(s,{depth:.21,bevelEnabled:true,bevelSize:.026,bevelThickness:.055,bevelSegments:5,curveSegments:16,steps:1});}
+  mesh(g,geo.bishopMitre,m,0,0,-.105);
+  for(const y of [.82,.87]){const collar=mesh(g,new THREE.TorusGeometry(.20,.018,10,40),t,0,y);collar.rotation.x=Math.PI/2;}
+  for(const z of [-.168,.168]){const jewel=mesh(g,new THREE.SphereGeometry(.06,20,12),t,-.065,1.025,z);jewel.scale.set(.7,1,.45);}
+  g.rotation.y=color==='w'?.20:Math.PI+.20;
  }
  if(type==='q'){
   mesh(g,new THREE.CylinderGeometry(.3,.2,.3,32),m,0,.97);
