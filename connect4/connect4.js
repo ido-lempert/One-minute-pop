@@ -31,17 +31,17 @@ for (const x of [-3.72,3.72]){
 }
 const lavaMat = new THREE.MeshStandardMaterial({ color:0xf5d797,roughness:.4 });
 const base = new THREE.Mesh(new THREE.ExtrudeGeometry(roundedShape(8,.38,.16),{depth:.95,bevelEnabled:true,bevelSize:.07,bevelThickness:.07,bevelSegments:4,steps:1}), lavaMat); base.position.set(0,-.91,-.48);base.castShadow=base.receiveShadow=true;scene.add(base);
-// discs: player 1 = ice (frost-blue with a six-point star), player 2 = fire (dark ember with a flame ring). The face mark keeps them apart without relying on colour.
-const face = (draw) => { const c = document.createElement('canvas'); c.width = c.height = 128; draw(c.getContext('2d')); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; };
-const iceFace = face(g => { g.fillStyle = '#ecfff9'; g.fillRect(0, 0, 128, 128); g.strokeStyle = '#21869b'; g.lineWidth = 7; g.lineCap = 'round'; for (let i = 0; i < 3; i++) { const a = i * Math.PI / 3; g.beginPath(); g.moveTo(64 + Math.cos(a) * 44, 64 + Math.sin(a) * 44); g.lineTo(64 - Math.cos(a) * 44, 64 - Math.sin(a) * 44); g.stroke(); } g.strokeStyle = '#ffffff'; g.lineWidth = 3; g.strokeRect(0, 0, 128, 128); });
-const fireFace = face(g => { g.fillStyle = '#ea7455'; g.fillRect(0, 0, 128, 128); g.strokeStyle = '#ffe294'; g.lineWidth = 9; g.beginPath(); g.arc(64, 64, 40, 0, 6.283); g.stroke(); g.fillStyle = '#fff0af'; g.beginPath(); g.moveTo(64, 34); g.quadraticCurveTo(88, 62, 64, 94); g.quadraticCurveTo(40, 62, 64, 34); g.fill(); });
-fireFace.center.set(0.5, 0.5); fireFace.rotation = Math.PI / 2;
-const sideIce = new THREE.MeshStandardMaterial({ color: 0xd5f8ee, roughness: 0.2 });
-const sideFire = new THREE.MeshStandardMaterial({ color: 0xe96849, roughness: 0.3 });
-const mat = {
-  1: [sideIce, new THREE.MeshStandardMaterial({ map: iceFace, roughness: 0.25, emissive: 0x000000 }), new THREE.MeshStandardMaterial({ map: iceFace, roughness: 0.25 })],
-  2: [sideFire, new THREE.MeshStandardMaterial({ map: fireFace, roughness: 0.35, emissive: 0x000000 }), new THREE.MeshStandardMaterial({ map: fireFace, roughness: 0.5 })],
-};
+// Bevelled ceramic tokens with recessed faces and raised, genuinely lit symbols.
+const tokenMat={1:new THREE.MeshPhysicalMaterial({color:0xe5fff4,roughness:.24,clearcoat:.7}),2:new THREE.MeshPhysicalMaterial({color:0xe96e4b,roughness:.28,clearcoat:.65})};
+const tokenTrim={1:new THREE.MeshStandardMaterial({color:0x20859a,roughness:.3,metalness:.5}),2:new THREE.MeshStandardMaterial({color:0xffd379,roughness:.3,metalness:.5})};
+const tokenGeo=new THREE.LatheGeometry([[0,-.125],[.31,-.125],[.36,-.12],[.39,-.09],[.397,-.045],[.397,.045],[.39,.09],[.36,.12],[.31,.125],[0,.125]].map(([x,y])=>new THREE.Vector2(x,y)),48);tokenGeo.rotateX(Math.PI/2);
+const rimGeo=new THREE.TorusGeometry(.31,.018,10,48);
+const snowPaths=[];for(let i=0;i<3;i++){const a=i*Math.PI/3;snowPaths.push(new THREE.TubeGeometry(new THREE.LineCurve3(new THREE.Vector3(Math.cos(a)*.22,Math.sin(a)*.22,0),new THREE.Vector3(-Math.cos(a)*.22,-Math.sin(a)*.22,0)),1,.014,8,false));}
+const flame=new THREE.Shape();flame.moveTo(0,-.22);flame.bezierCurveTo(-.25,-.07,-.09,.09,0,.23);flame.bezierCurveTo(.10,.09,.23,-.08,0,-.22);const flameGeo=new THREE.ExtrudeGeometry(flame,{depth:.012,bevelEnabled:true,bevelSize:.012,bevelThickness:.009,bevelSegments:3,curveSegments:18,steps:1});
+function token(player){const g=new THREE.Group();const add=(geo,mat,z=0)=>{const m=new THREE.Mesh(geo,mat);m.position.z=z;m.castShadow=m.receiveShadow=true;g.add(m);return m;};add(tokenGeo,tokenMat[player]);
+ for(const sign of [-1,1]){add(rimGeo,tokenTrim[player],sign*.13);if(player===1){for(const geo of snowPaths)add(geo,tokenTrim[player],sign*.14);}else{const mark=add(flameGeo,tokenTrim[player],sign*.133);if(sign<0)mark.rotation.y=Math.PI;}}
+ return g;
+}
 const discs = new THREE.Group(); scene.add(discs);
 const colHit = []; // invisible column pickers
 for (let c = 0; c < 7; c++) { const m = new THREE.Mesh(new THREE.BoxGeometry(1, 6.4, 1.2), new THREE.MeshBasicMaterial({ visible: false })); m.position.set(c - 3, 2.5, 0.2); m.userData.c = c; scene.add(m); colHit.push(m); }
@@ -58,7 +58,7 @@ renderer.setAnimationLoop(() => { fx.update(clock.getDelta()); renderer.render(s
 let board = R.empty(), turn = 1, over = false, busy = false, aiTimer = null; window.__c4 = () => ({ board, turn, over });
 function show() {
   discs.clear();
-  for (let c = 0; c < 7; c++) for (let r = 0; r < 6; r++) if (board[c][r]) { const m = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.25, 32), mat[board[c][r]]); m.rotation.x = Math.PI / 2; m.position.set(c - 3, r, 0); discs.add(m); }
+  for (let c = 0; c < 7; c++) for (let r = 0; r < 6; r++) if (board[c][r]) { const m = token(board[c][r]); m.position.set(c - 3, r, 0); discs.add(m); }
   const w = R.winLine(board);
   if (w) { over = true; for (const [c, r] of w.cells) { const m = new THREE.Mesh(new THREE.TorusGeometry(0.46, 0.05, 8, 24), new THREE.MeshBasicMaterial({ color: 0xffffff })); m.position.set(c - 3, r, 0.2); discs.add(m); } }
   else if (R.isFull(board)) over = true;

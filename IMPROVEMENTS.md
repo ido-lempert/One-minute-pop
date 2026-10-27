@@ -71,3 +71,9 @@ Checks:32 rules/controller regressions; actual Chrome chess capture/reset/AI/und
 Chess/checkers boards gain continuous thin brass perimeter inlays and recessed lower metal rails. Sculpted bevelled corner shoes with slotted screw heads replace the floating gold beads. The frame reads as a built object while retaining clear coordinate labels.
 
 Checks:32 regressions; real Chrome chess capture/reset/AI/undo/mode and checkers move/reset pass, zero errors/no390px overflow. Matched phone/desktop pixels inspected.
+
+## 12. Modelled Connect Four ceramic tokens
+
+Bevelled lathed discs replace plain cylinders. Both faces have raised metal rims and real three-dimensional snow/star or flame symbols instead of flat texture decals. Lit ceramic shoulders and recessed faces stay readable through the rack holes.
+
+Checks:32 rules/controller regressions; actual Chrome Connect Four win/AI/reset, zero errors/no390px overflow; populated phone/desktop matched before/after pixels inspected.
