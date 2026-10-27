@@ -1,4 +1,4 @@
-const CACHE='games-v53';
+const CACHE='games-v54';
 const FILES=["./docs/studio-chess.jpg","./docs/studio-checkers.jpg","./docs/studio-connect4.jpg","./js/theme.js","./js/wood.js","./js/fx.js","./js/prefs.js","./js/sound.js","./lib/RoomEnvironment.js","./connect4/connect4.js","./connect4/index.html","./js/connect4-rules.js","./connect4/","./checkers/checkers.js","./checkers/index.html","./chess/chess.js","./chess/index.html","./icons/icon-192.png","./icons/icon-512.png","./index.html","./js/board3d.js","./js/checkers-rules.js","./js/pieces.js","./js/ui.css","./lib/chess.js","./lib/three.core.js","./lib/three.module.js","./manifest.webmanifest","./pop/index.html",'./','./chess/','./checkers/','./pop/'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))))});

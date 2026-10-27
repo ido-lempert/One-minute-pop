@@ -49,9 +49,9 @@ const braceShape=new THREE.Shape();braceShape.moveTo(-.02,-.66);braceShape.lineT
 const braceGeo=new THREE.ExtrudeGeometry(braceShape,{depth:.18,bevelEnabled:true,bevelSize:.045,bevelThickness:.035,bevelSegments:4,curveSegments:20,steps:1});braceGeo.rotateY(Math.PI/2);
 for(const x of [-3.72,3.72])for(const side of [-1,1]){const brace=new THREE.Mesh(braceGeo,blue);brace.position.set(x-.09,0,0);brace.scale.z=side;brace.castShadow=brace.receiveShadow=true;scene.add(brace);}
 // Seven open loading funnels show where each disc enters its column.
-const funnelProfile=[[.29,-.16],[.29,.06],[.31,.18],[.33,.19],[.34,.16],[.32,.03],[.32,-.16]];
+const funnelProfile=[[.27,-.16],[.27,-.015],[.29,.10],[.35,.25],[.38,.29],[.40,.28],[.405,.255],[.38,.22],[.32,.07],[.30,-.015],[.30,-.16],[.27,-.16]];
 const funnelGeo=new THREE.LatheGeometry(funnelProfile.map(([r,y])=>new THREE.Vector2(r,y)),48);
-for(let c=0;c<7;c++){const funnel=new THREE.Mesh(funnelGeo,blue);funnel.scale.set(1.4,1,.5);funnel.position.set(c-3,5.58,0);funnel.castShadow=funnel.receiveShadow=true;scene.add(funnel);const lip=new THREE.Mesh(new THREE.TorusGeometry(.33,.012,10,48),metal);lip.rotation.x=Math.PI/2;lip.scale.set(1.4,.5,1);lip.position.set(c-3,5.77,0);scene.add(lip);}
+for(let c=0;c<7;c++){const funnel=new THREE.Mesh(funnelGeo,blue);funnel.scale.set(1.18,1,.5);funnel.position.set(c-3,5.58,0);funnel.castShadow=funnel.receiveShadow=true;scene.add(funnel);const lip=new THREE.Mesh(new THREE.TorusGeometry(.39,.014,12,48),metal);lip.rotation.x=Math.PI/2;lip.scale.set(1.18,.5,1);lip.position.set(c-3,5.86,0);scene.add(lip);}
 const lavaMat = new THREE.MeshStandardMaterial({ color:0xf5d797,roughness:.4 });
 // Open, recessed ceramic catch tray: floor, rounded perimeter and a dark inset bed.
 const trayShape=roundedShape(7.95,1.48,.24),trayOpening=roundedShape(7.55,1.08,.17);trayShape.holes.push(new THREE.Path(trayOpening.getPoints(48).reverse()));
@@ -82,7 +82,7 @@ function fit() {
   const w = view.clientWidth || 600, h = view.clientHeight || 600; renderer.setSize(w, h, false);
   renderer.domElement.style.width = '100%'; renderer.domElement.style.height = '100%';
   camera.aspect = w / h; camera.updateProjectionMatrix();
-  const pts = [[-4.65, -1.2, 1.95], [4.65, -1.2, 1.95], [-3.9, 5.8, 0.8], [3.9, 5.8, 0.8]].map(a => new THREE.Vector3(...a));
+  const pts = [[-4.65, -1.2, 1.95], [4.65, -1.2, 1.95], [-3.9, 5.96, 0.8], [3.9, 5.96, 0.8]].map(a => new THREE.Vector3(...a));
   for (let d = 8; d < 60; d += 0.25) { camera.position.set(.6, 3.8, d); camera.lookAt(0, 2.4, 0); camera.updateMatrixWorld();
     if (pts.every(v => { const q = v.clone().project(camera); return Math.abs(q.x) < 0.95 && Math.abs(q.y) < 0.95; })) break; }
 }

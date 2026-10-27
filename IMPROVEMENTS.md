@@ -265,3 +265,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 The bishop mitre now has a rounded lens-shaped ceramic front and back instead of parallel slab faces. Subdivided cap triangles and shared smooth normals provide continuous highlights; the genuine diagonal slot remains open. Face jewels were moved outward to remain seated on the new surface. The change is clearest in studio close-ups and subtle at phone board scale. The initial faceted experiment was rejected.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode lifecycle exit0, zero page errors/no390px overflow. Matched local studio before/after and390px/desktop board pixels inspected. Physical-device FPS remains unverified.
+
+## 44. Flared Connect Four loading funnels
+
+Seven straight loading tubes become open flared ceramic funnels with turned shoulders and raised metal lips. Each funnel is separate from its neighbors; a too-wide experiment was narrowed before release. Camera fitting includes the taller rim. All42 cut-through rack apertures are unchanged.
+
+Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI lifecycle exit0, zero page errors/no390px overflow. Matched desktop before/after and390px played board pixels inspected. Physical-device FPS remains unverified.
