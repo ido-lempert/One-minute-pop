@@ -1,0 +1,7 @@
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#10141c;color:#e8edf5;min-height:100vh;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#182030}
+header a{color:#8ec5ff;text-decoration:none}header h1{font-size:1.1rem;margin:0;flex:1}
+#view{flex:1;min-height:60vh;position:relative}#status{padding:8px 14px;background:#182030;min-height:2.4em}
+.bar{display:flex;gap:8px;flex-wrap:wrap;padding:8px 14px;background:#141b28}
+button,select{background:#2a3a55;color:#fff;border:0;border-radius:8px;padding:10px 14px;font-size:1rem}
+button:hover{background:#3b5078}
