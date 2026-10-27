@@ -103,15 +103,16 @@ export function createBoard(container, { onSquare }) {
     pieceGroup.clear(); meshAt.clear();
     for (const p of list) {
       const m = makeMesh(p); m.position.set(p.c - 3.5, 0.03, 3.5 - p.r); pieceGroup.add(m); meshAt.set(p.c + ',' + p.r, m);
-      const contact=new THREE.Mesh(new THREE.PlaneGeometry(.96,.96),new THREE.MeshBasicMaterial({map:contactMap,transparent:true,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.set(0,.025,0);m.add(contact);
+      const contact=new THREE.Mesh(new THREE.PlaneGeometry(.96,.96),new THREE.MeshBasicMaterial({map:contactMap,transparent:true,depthWrite:false}));contact.name='contact';contact.rotation.x=-Math.PI/2;contact.position.set(0,.025,0);m.add(contact);
       const halo = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.5), new THREE.MeshBasicMaterial({ map: haloTex[p.side === 'fire' ? 'fire' : 'ice'], transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.08 }));
       halo.rotation.x = -Math.PI / 2; halo.position.set(0, 0.06, 0); halo.name = 'halo'; m.add(halo);
     }
   }
-  // slide a piece (already placed at its new square) from the old square with a hop
+  // Knights leap over pieces; other chess pieces glide while checkers keep their hop.
   function animateMove(fc, fr, tc, tr, dur = 0.32) {
     const m = meshAt.get(tc + ',' + tr); if (!m) return;
-    tweens.push({ m, x0: fc - 3.5, z0: 3.5 - fr, x1: tc - 3.5, z1: 3.5 - tr, t: 0, dur }); m.position.set(fc - 3.5, 0.03, 3.5 - fr);
+    const leap=m.userData.pieceType==='n',span=Math.hypot(tc-fc,tr-fr);
+    tweens.push({ m, leap, span, baseRotation:m.rotation.z, x0: fc - 3.5, z0: 3.5 - fr, x1: tc - 3.5, z1: 3.5 - tr, t: 0, dur:leap?.58:Math.max(.32,Math.min(.5,span*.11)) }); m.position.set(fc - 3.5, 0.03, 3.5 - fr);
   }
   const ghosts = [];
   // call BEFORE the redraw: the captured piece shrinks, spins and rises away instead of vanishing
@@ -136,10 +137,15 @@ export function createBoard(container, { onSquare }) {
   const fx = createFx(scene); fx.setAmbient(false); const clock = new THREE.Clock();
   function project(c, r) { const v = new THREE.Vector3(c - 3.5, 0.1, 3.5 - r).project(camera); const b = el.getBoundingClientRect(); return [b.left + (v.x + 1) / 2 * b.width, b.top + (1 - v.y) / 2 * b.height]; }
   window.__project = project;
+  window.__boardVisual=()=>({active:tweens.length,pieces:[...meshAt].map(([square,m])=>({square,type:m.userData.pieceType,y:m.position.y,z:m.position.z,x:m.position.x,tilt:m.rotation.z}))});
   function loop() {
     const dt = clock.getDelta(), t = clock.elapsedTime; fx.update(dt);
     for (let i = tweens.length - 1; i >= 0; i--) { const w = tweens[i]; w.t += dt; const k = Math.min(1, w.t / w.dur), e = k * k * (3 - 2 * k);
-      w.m.position.set(w.x0 + (w.x1 - w.x0) * e, 0.03 + Math.sin(k * Math.PI) * 0.55, w.z0 + (w.z1 - w.z0) * e); if (k >= 1) { w.m.position.y = 0.03; tweens.splice(i, 1); } }
+      const lift=Math.sin(k*Math.PI)*(w.leap?1.45:(w.m.userData.pieceType ? .065 : .55));
+      w.m.position.set(w.x0 + (w.x1 - w.x0) * e, 0.03 + lift, w.z0 + (w.z1 - w.z0) * e);
+      if(w.leap)w.m.rotation.z=w.baseRotation+Math.sin(k*Math.PI*2)*.13;
+      const contact=w.m.getObjectByName('contact');if(contact){contact.position.y=.025-lift;contact.material.opacity=1-lift*.45;contact.scale.setScalar(1+lift*.2);}
+      if (k >= 1) { w.m.position.y = 0.03;w.m.rotation.z=w.baseRotation;if(contact){contact.position.y=.025;contact.material.opacity=1;contact.scale.setScalar(1);} tweens.splice(i, 1); } }
     for (let i = ghosts.length - 1; i >= 0; i--) { const w = ghosts[i]; w.t += dt; const k = Math.min(1, w.t / w.dur);
       w.g.scale.setScalar(Math.max(0.001, 1 - k * k)); w.g.rotation.y += dt * 9; w.g.position.y = w.y0 + k * 0.9; if (k >= 1) { scene.remove(w.g); ghosts.splice(i, 1); } }
     const sm = selKey && meshAt.get(selKey); if (sm && !tweens.some(w => w.m === sm)) sm.position.y = 0.03 + 0.1 + Math.sin(t * 4) * 0.05;

@@ -103,3 +103,9 @@ Test reporting correction for12-14: the25 rules/chess/checker tests passed but7 
 A rounded, physical felt mat now supports the board: deterministic woven bump texture, rough cloth material, a fine instanced stitched border and received shadows. Updated framing includes the mat so the lower seam is not cut off. Shared by chess and checkers.
 
 Checks:32 rules/controller tests passed exit0. Chrome chess capture/reset/AI/undo/mode and checkers move/reset-cancellation passed exit0, zero page errors/no390px overflow. Before/after phone and desktop inspected; final phone chess/checkers framing inspected.
+
+## 17. Distinctive knight leap and grounded chess glides
+
+Knights now leap high over pieces with a restrained rocking motion and exact upright landing. Other chess pieces glide close to the board instead of all using the same hop. The moving contact shadow stays on the board and softens as the knight rises. Checkers keep their existing hop.
+
+Checks:32 rules/controller tests exit0; ordinary Chrome chess/checkers lifecycle exit0, zero errors/no390px overflow. Deterministic-step rendered trajectory check: knight apex1.478 then exact .03 and zero tilt, pawn maximum .094. Actual leap/settled pixels inspected. Deterministic rendering is not evidence of physical-phone FPS. A stone-texture experiment was discarded before publication and does not count.

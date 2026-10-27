@@ -78,7 +78,7 @@ export function chessMesh(type,color){
   mesh(g,new THREE.TubeGeometry(nose,32,.012,8,false),t);
   g.rotation.y=color==='w'?.25:Math.PI-.25;
  }
- g.userData.side=color==='w'?'ice':'fire';g.scale.setScalar(.98);return g;
+ g.userData.pieceType=type;g.userData.side=color==='w'?'ice':'fire';g.scale.setScalar(.98);return g;
 }
 export function checkerMesh(color,king){
  const g=new THREE.Group(),m=mats[color],t=trim[color];
