@@ -55,4 +55,15 @@ export function chessMesh(type,color){
  }
  g.userData.side=color==='w'?'ice':'fire';g.scale.setScalar(.98);return g;
 }
-export function checkerMesh(color,king){const g=new THREE.Group(),m=mats[color],t=trim[color];mesh(g,lathe('checker',[[0,0],[.32,0],[.4,.05],[.42,.12],[.4,.22],[.34,.27],[0,.27]]),m);const rim=mesh(g,new THREE.TorusGeometry(.30,.035,10,40),t,0,.28);rim.rotation.x=Math.PI/2;mesh(g,new THREE.CylinderGeometry(.23,.23,.02,32),t,0,.275);if(king){for(let i=0;i<5;i++){const a=i*6.283/5;mesh(g,new THREE.SphereGeometry(.055,12,10),t,Math.cos(a)*.18,.4,Math.sin(a)*.18);}mesh(g,new THREE.CylinderGeometry(.19,.14,.12,24),m,0,.34);}return g;}
+export function checkerMesh(color,king){
+ const g=new THREE.Group(),m=mats[color],t=trim[color];
+ mesh(g,lathe('checkerSculpt',[[0,0],[.32,0],[.39,.025],[.415,.065],[.415,.10],[.388,.125],[.415,.15],[.415,.18],[.39,.21],[.35,.25],[.31,.265],[.28,.245],[0,.245]]),m);
+ const rim=mesh(g,new THREE.TorusGeometry(.315,.024,12,48),t,0,.258);rim.rotation.x=Math.PI/2;
+ // An inset ceramic face, a raised geometric rosette and eight metal inlays.
+ mesh(g,new THREE.CylinderGeometry(.276,.276,.018,48),m,0,.249);
+ if(!geo.checkerSeal){const star=new THREE.Shape();for(let i=0;i<16;i++){const a=i*Math.PI/8,r=i%2?.068:.125;const x=Math.cos(a)*r,y=Math.sin(a)*r;i?star.lineTo(x,y):star.moveTo(x,y);}star.closePath();geo.checkerSeal=new THREE.ExtrudeGeometry(star,{depth:.014,bevelEnabled:true,bevelSize:.009,bevelThickness:.009,bevelSegments:2,steps:1});geo.checkerSeal.rotateX(-Math.PI/2);}
+ mesh(g,geo.checkerSeal,t,0,.267);
+ for(let i=0;i<8;i++){const a=i*Math.PI/4;const stud=mesh(g,new THREE.SphereGeometry(.022,12,8),t,Math.cos(a)*.22,.271,Math.sin(a)*.22);stud.scale.y=.45;}
+ if(king){for(let i=0;i<5;i++){const a=i*6.283/5;mesh(g,new THREE.SphereGeometry(.055,12,10),t,Math.cos(a)*.18,.4,Math.sin(a)*.18);}mesh(g,new THREE.CylinderGeometry(.19,.14,.12,24),m,0,.34);}
+ return g;
+}
