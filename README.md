@@ -4,6 +4,7 @@ Browser games with a 3D board (three.js), a game menu, and PWA support (installa
 
 - **Chess**: full rules through chess.js, play the computer (white) or two players on one device. The computer is a shallow search, so it is weak.
 - **Checkers**: American rules (forced captures, multi-jumps, kings, promotion ends the move). Computer or two players. No draw rule yet.
+- **Connect Four**: 7x6 board in 3D, computer (depth-5 search) or two players. Rules tested in node: horizontal, vertical, diagonal wins, full column, full board, the computer takes a win and blocks one.
 - **One Minute Pop**: a small 2D tap game.
 
 Drag to tilt the board, tap a piece and then a square to move.
