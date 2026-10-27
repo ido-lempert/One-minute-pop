@@ -35,6 +35,10 @@ for (const x of [-3.72,3.72]){
  const footGeo=new THREE.ExtrudeGeometry(roundedShape(.8,2.2,.25),{depth:.19,bevelEnabled:true,bevelSize:.09,bevelThickness:.08,bevelSegments:4,steps:1});footGeo.rotateX(-Math.PI/2);const foot=new THREE.Mesh(footGeo,blue);foot.position.set(x,-.81,0);foot.castShadow=foot.receiveShadow=true;scene.add(foot);
  for(const y of [-.35,5.35]){const bolt=new THREE.Mesh(new THREE.CylinderGeometry(.085,.085,.045,24),metal);bolt.rotation.x=Math.PI/2;bolt.position.set(x,y,.2);bolt.castShadow=true;scene.add(bolt);const slit=new THREE.Mesh(new THREE.BoxGeometry(.08,.014,.012),new THREE.MeshStandardMaterial({color:0x36505a,roughness:.5}));slit.position.set(x,y,.23);scene.add(slit);}
 }
+// Seven open loading funnels show where each disc enters its column.
+const funnelProfile=[[.29,-.16],[.29,.06],[.31,.18],[.33,.19],[.34,.16],[.32,.03],[.32,-.16]];
+const funnelGeo=new THREE.LatheGeometry(funnelProfile.map(([r,y])=>new THREE.Vector2(r,y)),48);
+for(let c=0;c<7;c++){const funnel=new THREE.Mesh(funnelGeo,blue);funnel.scale.set(1.4,1,.5);funnel.position.set(c-3,5.58,0);funnel.castShadow=funnel.receiveShadow=true;scene.add(funnel);const lip=new THREE.Mesh(new THREE.TorusGeometry(.33,.012,10,48),metal);lip.rotation.x=Math.PI/2;lip.scale.set(1.4,.5,1);lip.position.set(c-3,5.77,0);scene.add(lip);}
 const lavaMat = new THREE.MeshStandardMaterial({ color:0xf5d797,roughness:.4 });
 // Open, recessed ceramic catch tray: floor, rounded perimeter and a dark inset bed.
 const trayShape=roundedShape(7.95,1.48,.24),trayOpening=roundedShape(7.55,1.08,.17);trayShape.holes.push(new THREE.Path(trayOpening.getPoints(48).reverse()));
