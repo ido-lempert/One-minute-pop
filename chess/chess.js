@@ -38,7 +38,7 @@ function aiMove() {
 }
 function play(m) {
   const r = game.move(m); last = [unsq(r.from), unsq(r.to)]; selected = null; draw();
-  const [tc, tr] = unsq(r.to), wx = tc - 3.5, wz = 3.5 - tr;
+  const [tc, tr] = unsq(r.to), wx = tc - 3.5, wz = 3.5 - tr; const [fc, fr] = unsq(r.from); board.animateMove(fc, fr, tc, tr);
   if (r.captured) { const t = r.color === 'w' ? 'fire' : 'ice'; board.fx.burst(wx, 0.3, wz, t); t === 'fire' ? sound.fire() : sound.ice(); } else sound.knock();
   if (game.isCheckmate()) { sound.win(); board.fx.burst(wx, 0.3, wz, 'fire', 90); board.fx.burst(wx, 0.3, wz, 'ice', 90); } else if (game.inCheck()) sound.check();
 }
@@ -55,7 +55,7 @@ function onSquare(c, r) {
 }
 function draw() {
   const list = [];
-  for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) { const p = game.get(sq(c, r)); if (p) list.push({ c, r, type: p.type, color: p.color }); }
+  for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) { const p = game.get(sq(c, r)); if (p) list.push({ c, r, type: p.type, color: p.color, side: p.color === 'w' ? 'ice' : 'fire' }); }
   board.setPieces(list, p => chessMesh(p.type, p.color));
   board.setMarks({ selected: selected && unsq(selected), targets: selected ? game.moves({ square: selected, verbose: true }).map(m => unsq(m.to)) : [], last });
   let t;

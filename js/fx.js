@@ -22,7 +22,7 @@ export function createFx(scene, { max = 600, size = 0.26 } = {}) {
     dt = Math.min(dt, 0.05);
     for (let i = parts.length - 1; i >= 0; i--) {
       const q = parts[i]; q.age += dt; if (q.age >= q.life) { parts.splice(i, 1); continue; }
-      if (q.type === 'fire') { q.v[1] += 0.6 * dt; q.v[0] += (Math.random() - 0.5) * 3 * dt; q.v[2] += (Math.random() - 0.5) * 3 * dt; } else q.v[1] -= 4.5 * dt;
+      if (q.type === 'snow' || q.type === 'ember') { /* drift */ } else if (q.type === 'fire') { q.v[1] += 0.6 * dt; q.v[0] += (Math.random() - 0.5) * 3 * dt; q.v[2] += (Math.random() - 0.5) * 3 * dt; } else q.v[1] -= 4.5 * dt;
       q.p[0] += q.v[0] * dt; q.p[1] += q.v[1] * dt; q.p[2] += q.v[2] * dt;
     }
     for (let i = 0; i < max; i++) {
@@ -30,10 +30,20 @@ export function createFx(scene, { max = 600, size = 0.26 } = {}) {
       if (!q) { col[i * 3] = col[i * 3 + 1] = col[i * 3 + 2] = 0; continue; }
       pos[i * 3] = q.p[0]; pos[i * 3 + 1] = q.p[1]; pos[i * 3 + 2] = q.p[2];
       const t = 1 - q.age / q.life;
-      if (q.type === 'fire') { col[i * 3] = t * 0.7; col[i * 3 + 1] = t * t * 0.14; col[i * 3 + 2] = 0; }
+      if (q.type === 'snow') { const f = Math.min(1, t * 3, (1 - t) * 4) * 0.5; col[i * 3] = f * 0.7; col[i * 3 + 1] = f * 0.9; col[i * 3 + 2] = f; }
+      else if (q.type === 'ember') { const f = Math.min(1, t * 3, (1 - t) * 4) * 0.7; col[i * 3] = f; col[i * 3 + 1] = f * 0.35; col[i * 3 + 2] = 0; }
+      else if (q.type === 'fire') { col[i * 3] = t * 0.7; col[i * 3 + 1] = t * t * 0.14; col[i * 3 + 2] = 0; }
       else { col[i * 3] = 0; col[i * 3 + 1] = t * 0.38; col[i * 3 + 2] = t * 0.8; }
     }
     geo.attributes.position.needsUpdate = geo.attributes.color.needsUpdate = true;
   }
-  return { burst, update, count: () => parts.length };
+  let acc = 0, ambient = true;
+  function ambientUpdate(dt) {
+    if (!ambient) return; acc += dt * (innerWidth < 700 ? 6 : 12);
+    while (acc >= 1 && parts.length < max - 140) { acc -= 1;
+      const ice = Math.random() < 0.5, x = (Math.random() - 0.5) * 12, z = ice ? 2 + Math.random() * 4 : -2 - Math.random() * 4;
+      if (ice) parts.push({ p: [x, 4 + Math.random() * 2, z], v: [(Math.random() - 0.5) * 0.3, -0.5 - Math.random() * 0.4, (Math.random() - 0.5) * 0.3], life: 5, age: 0, type: 'snow' });
+      else parts.push({ p: [x, -0.4, z], v: [(Math.random() - 0.5) * 0.3, 0.5 + Math.random() * 0.7, (Math.random() - 0.5) * 0.3], life: 4, age: 0, type: 'ember' }); }
+  }
+  return { burst, update: dt => { ambientUpdate(dt); update(dt); }, setAmbient: v => { ambient = v; }, count: () => parts.length };
 }

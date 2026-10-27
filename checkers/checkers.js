@@ -5,7 +5,7 @@ import { sound, addMuteButton } from '../js/sound.js';
 addMuteButton();
 let state = R.initial(), selected = null, path = [], last = [];
 const status = document.getElementById('status'), mode = document.getElementById('mode');
-const board = createBoard(document.getElementById('view'), { onSquare, lightColor: 0xe8d9b5, darkColor: 0x3d2b1f });
+const board = createBoard(document.getElementById('view'), { onSquare,  });
 window.__checkers = () => state; window.__fx = board.fx;
 const eq = (a, b) => a[0] === b[0] && a[1] === b[1];
 function candidates() {
@@ -35,12 +35,12 @@ function commit(m) {
   for (const [cc, cr] of m.captures) { const t = before.board[cr * 8 + cc].color === 'b' ? 'fire' : 'ice'; board.fx.burst(cc - 3.5, 0.3, 3.5 - cr, t, 40); }
   if (m.captures.length) { before.turn === 'w' ? sound.fire() : sound.ice(); } else sound.knock();
   if (R.winner(state)) sound.win();
-  last = [m.from, m.path[m.path.length - 1]]; selected = null; path = []; draw();
+  last = [m.from, m.path[m.path.length - 1]]; selected = null; path = []; draw(); { const e = m.path[m.path.length - 1]; board.animateMove(m.from[0], m.from[1], e[0], e[1]); }
   if (mode.value === 'ai' && state.turn === 'b' && !R.winner(state)) setTimeout(() => { const a = R.bestMove(state, 5); if (a) commit(a); }, 350);
 }
 function draw() {
   const list = [];
-  state.board.forEach((p, i) => { if (p) list.push({ c: i % 8, r: (i / 8) | 0, color: p.color, king: p.king }); });
+  state.board.forEach((p, i) => { if (p) list.push({ c: i % 8, r: (i / 8) | 0, color: p.color, king: p.king, side: p.color === 'w' ? 'ice' : 'fire' }); });
   board.setPieces(list, p => checkerMesh(p.color, p.king));
   const targets = selected ? [...new Set(candidates().filter(m => m.path.length > path.length).map(m => m.path[path.length].join()))].map(s => s.split(',').map(Number)) : [];
   board.setMarks({ selected: path.length ? path[path.length - 1] : selected, targets, last });
