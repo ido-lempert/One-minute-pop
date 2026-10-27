@@ -235,3 +235,9 @@ Checks:32 rules/controller tests exit0. Separate Chrome chess capture/reset/AI/u
 Connect Four's plain capsule uprights are now shaped lathe columns with tapered shafts, widened ceramic feet/capitals and thin metal collars. The change gives the rack a built tabletop silhouette without obscuring the42 playable holes or seven loading funnels.
 
 Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero page errors/no390px overflow. Matched played desktop before/after and final phone pixels inspected. Physical-device FPS remains unverified.
+
+## 39. Open metal checker rosettes
+
+Ordinary checker faces now carry eight raised teardrop petals with real cut-through centers and a low central boss, replacing the solid star stamp. Shared bevelled geometry catches light around the open petals; body, grip and royal crown silhouettes remain unchanged.
+
+Checks:32 rules/controller tests exit0. Chrome checkers move/reset-cancellation exit0, zero page errors/no390px overflow. Matched four-disc studio before/after and phone/desktop board pixels inspected. Studio is a model test, not a live board. Physical-device FPS remains unverified.

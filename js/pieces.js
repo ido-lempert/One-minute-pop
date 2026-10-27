@@ -115,8 +115,10 @@ export function checkerMesh(color,king){
  const rim=mesh(g,new THREE.TorusGeometry(.315,.024,12,48),t,0,.258);rim.rotation.x=Math.PI/2;
  // An inset ceramic face, a raised geometric rosette and eight metal inlays.
  mesh(g,new THREE.CylinderGeometry(.276,.276,.018,48),m,0,.249);
- if(!geo.checkerSeal){const star=new THREE.Shape();for(let i=0;i<16;i++){const a=i*Math.PI/8,r=i%2?.068:.125;const x=Math.cos(a)*r,y=Math.sin(a)*r;i?star.lineTo(x,y):star.moveTo(x,y);}star.closePath();geo.checkerSeal=new THREE.ExtrudeGeometry(star,{depth:.014,bevelEnabled:true,bevelSize:.009,bevelThickness:.009,bevelSegments:2,steps:1});geo.checkerSeal.rotateX(-Math.PI/2);}
- mesh(g,geo.checkerSeal,t,0,.267);
+ // Eight open teardrop petals form a raised metal rosette with real cut-through centers.
+ if(!geo.checkerPetal){const petal=new THREE.Shape();petal.moveTo(0,.032);petal.bezierCurveTo(-.075,.085,-.060,.16,0,.183);petal.bezierCurveTo(.060,.16,.075,.085,0,.032);const opening=new THREE.Path();opening.moveTo(0,.075);opening.bezierCurveTo(.028,.102,.025,.135,0,.151);opening.bezierCurveTo(-.025,.135,-.028,.102,0,.075);petal.holes.push(opening);geo.checkerPetal=new THREE.ExtrudeGeometry(petal,{depth:.018,bevelEnabled:true,bevelSize:.006,bevelThickness:.006,bevelSegments:3,curveSegments:16,steps:1});geo.checkerPetal.rotateX(-Math.PI/2);}
+ for(let i=0;i<8;i++){const petal=mesh(g,geo.checkerPetal,t,0,.268);petal.rotation.y=i*Math.PI/4;}
+ const heart=mesh(g,new THREE.SphereGeometry(.042,20,12),t,0,.286);heart.scale.y=.45;
  for(let i=0;i<8;i++){const a=i*Math.PI/4;const stud=mesh(g,new THREE.SphereGeometry(.022,12,8),t,Math.cos(a)*.22,.271,Math.sin(a)*.22);stud.scale.y=.45;}
  if(king){
   // A second sculpted disc and an open five-point crown make promotion readable by silhouette.
