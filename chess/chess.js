@@ -55,7 +55,21 @@ function onSquare(c, r) {
   const p = game.get(s);
   selected = p && p.color === game.turn() ? s : null; draw();
 }
+function renderHistory() {
+  const el=document.getElementById('move-history'),count=document.getElementById('move-count');
+  if(!el?.replaceChildren)return;
+  const moves=game.history();el.replaceChildren();
+  if(count)count.textContent=moves.length+' played';
+  if(!moves.length){el.textContent='Your moves will appear here.';return;}
+  for(let i=0;i<moves.length;i+=2){
+    const row=document.createElement('div');row.className='move-row';
+    for(const [text,cls] of [[String(i/2+1)+'.','move-number'],[moves[i],'white-move'],[moves[i+1]||'…','black-move']]){const s=document.createElement('span');s.className=cls;s.textContent=text;row.appendChild(s);}
+    el.appendChild(row);
+  }
+  el.scrollTop=el.scrollHeight;
+}
 function draw() {
+  renderHistory();
   const list = [];
   for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) { const p = game.get(sq(c, r)); if (p) list.push({ c, r, type: p.type, color: p.color, side: p.color === 'w' ? 'ice' : 'fire' }); }
   board.setPieces(list, p => chessMesh(p.type, p.color));
