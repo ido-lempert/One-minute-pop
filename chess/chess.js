@@ -86,3 +86,5 @@ function reset() { board.resetAnimation(); clearTimeout(aiTimer); aiTimer=null; 
 document.getElementById('new').onclick = reset;mode.onchange=()=>{ selected=null;draw();scheduleAI(); };
 document.getElementById('undo').onclick = () => { board.resetAnimation();clearTimeout(aiTimer);aiTimer=null;const turn=game.turn();game.undo();if(mode.value==='ai' && turn==='w')game.undo();selected=null;last=[];draw();scheduleAI(); };
 draw();
+
+document.getElementById('reset-view')?.addEventListener?.('click', () => board.resetView());

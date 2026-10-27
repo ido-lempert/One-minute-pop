@@ -55,3 +55,5 @@ function scheduleAI(){clearTimeout(aiTimer);aiTimer=null;if(mode.value==='ai' &&
 function reset(){ board.resetAnimation(); clearTimeout(aiTimer);aiTimer=null;state=R.initial();selected=null;path=[];last=[];draw();}
 document.getElementById('new').onclick = reset;mode.onchange=()=>{selected=null;path=[];draw();scheduleAI();};
 draw();
+
+document.getElementById('reset-view')?.addEventListener?.('click', () => board.resetView());

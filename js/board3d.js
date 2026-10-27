@@ -97,7 +97,8 @@ export function createBoard(container, { onSquare }) {
     for (const [c, r] of targets) add(c, r, 0x7dff6a, false, 0.95);
     if (selected) add(selected[0], selected[1], 0xffd23d, true, 0.45);
   }
-  function setSide() { yaw = 0; placeCamera(); }
+  function resetView() { yaw=.22;pitch=.95;resize(); }
+  function setSide() { resetView(); }
   function resetAnimation() { for(const w of ghosts)scene.remove(w.g);ghosts.length=0;tweens.length=0;fx.clear(); }
   const fx = createFx(scene); fx.setAmbient(false); const clock = new THREE.Clock();
   function project(c, r) { const v = new THREE.Vector3(c - 3.5, 0.1, 3.5 - r).project(camera); const b = el.getBoundingClientRect(); return [b.left + (v.x + 1) / 2 * b.width, b.top + (1 - v.y) / 2 * b.height]; }
@@ -112,5 +113,5 @@ export function createBoard(container, { onSquare }) {
     renderer.render(scene, camera);
   }
   renderer.setAnimationLoop(loop);
-  return { THREE, fx, resetAnimation, project, setPieces, setMarks, setSide, animateMove, captureAt, canvas: el, renderer };
+  return { THREE, fx, resetView, resetAnimation, project, setPieces, setMarks, setSide, animateMove, captureAt, canvas: el, renderer };
 }
