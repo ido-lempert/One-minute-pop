@@ -1,10 +1,12 @@
 import * as R from '../js/checkers-rules.js';
 import { createBoard } from '../js/board3d.js';
 import { checkerMesh } from '../js/pieces.js';
+import { sound, addMuteButton } from '../js/sound.js';
+addMuteButton();
 let state = R.initial(), selected = null, path = [], last = [];
 const status = document.getElementById('status'), mode = document.getElementById('mode');
 const board = createBoard(document.getElementById('view'), { onSquare, lightColor: 0xe8d9b5, darkColor: 0x3d2b1f });
-window.__checkers = () => state;
+window.__checkers = () => state; window.__fx = board.fx;
 const eq = (a, b) => a[0] === b[0] && a[1] === b[1];
 function candidates() {
   // moves consistent with the squares clicked so far
@@ -28,7 +30,12 @@ function onSquare(c, r) {
   draw();
 }
 function commit(m) {
-  state = R.apply(state, m); last = [m.from, m.path[m.path.length - 1]]; selected = null; path = []; draw();
+  const before = state;
+  state = R.apply(state, m);
+  for (const [cc, cr] of m.captures) { const t = before.board[cr * 8 + cc].color === 'b' ? 'fire' : 'ice'; board.fx.burst(cc - 3.5, 0.3, 3.5 - cr, t, 40); }
+  if (m.captures.length) { before.turn === 'w' ? sound.fire() : sound.ice(); } else sound.knock();
+  if (R.winner(state)) sound.win();
+  last = [m.from, m.path[m.path.length - 1]]; selected = null; path = []; draw();
   if (mode.value === 'ai' && state.turn === 'b' && !R.winner(state)) setTimeout(() => { const a = R.bestMove(state, 5); if (a) commit(a); }, 350);
 }
 function draw() {

@@ -1,5 +1,8 @@
 import * as THREE from '../lib/three.module.js';
 import * as R from '../js/connect4-rules.js';
+import { createFx } from '../js/fx.js';
+import { sound, addMuteButton } from '../js/sound.js';
+addMuteButton();
 const view = document.getElementById('view'), status = document.getElementById('status'), mode = document.getElementById('mode');
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); view.appendChild(renderer.domElement);
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.domElement.style.touchAction = 'manipulation';
@@ -25,7 +28,8 @@ function fit() {
   for (let d = 8; d < 60; d += 0.25) { camera.position.set(0, 3.2, d); camera.lookAt(0, 2.4, 0); camera.updateMatrixWorld();
     if (pts.every(v => { const q = v.clone().project(camera); return Math.abs(q.x) < 0.95 && Math.abs(q.y) < 0.95; })) break; }
 }
-new ResizeObserver(fit).observe(view); fit(); renderer.setAnimationLoop(() => renderer.render(scene, camera));
+new ResizeObserver(fit).observe(view); fit(); const fx = createFx(scene); const clock = new THREE.Clock(); window.__fx = fx;
+renderer.setAnimationLoop(() => { fx.update(clock.getDelta()); renderer.render(scene, camera); });
 let board = R.empty(), turn = 1, over = false, busy = false; window.__c4 = () => ({ board, turn, over });
 function show() {
   discs.clear();
@@ -39,7 +43,9 @@ function show() {
 }
 function play(c) {
   const n = R.drop(board, c, turn); if (!n) return false;
-  board = n.board; turn = turn === 1 ? 2 : 1; show(); return true;
+  board = n.board; const mover = turn; turn = turn === 1 ? 2 : 1; show(); sound.thud();
+  const w = R.winLine(board); if (w) { sound.win(); for (const [wc, wr] of w.cells) fx.burst(wc - 3, wr, 0.4, mover === 1 ? 'fire' : 'ice', 25); }
+  return true;
 }
 const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
 renderer.domElement.addEventListener('pointerup', e => {

@@ -1,13 +1,15 @@
 import { Chess } from '../lib/chess.js';
 import { createBoard } from '../js/board3d.js';
 import { chessMesh } from '../js/pieces.js';
+import { sound, addMuteButton } from '../js/sound.js';
+addMuteButton();
 const game = new Chess();
 let selected = null, last = [];
 const sq = (c, r) => 'abcdefgh'[c] + (r + 1);
 const unsq = s => [s.charCodeAt(0) - 97, +s[1] - 1];
 const status = document.getElementById('status'), mode = document.getElementById('mode');
 const board = createBoard(document.getElementById('view'), { onSquare });
-window.__chess = game;
+window.__chess = game; window.__fx = board.fx;
 
 const VAL = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 0 };
 function evalPos(g) {
@@ -36,6 +38,9 @@ function aiMove() {
 }
 function play(m) {
   const r = game.move(m); last = [unsq(r.from), unsq(r.to)]; selected = null; draw();
+  const [tc, tr] = unsq(r.to), wx = tc - 3.5, wz = 3.5 - tr;
+  if (r.captured) { const t = r.color === 'w' ? 'fire' : 'ice'; board.fx.burst(wx, 0.3, wz, t); t === 'fire' ? sound.fire() : sound.ice(); } else sound.knock();
+  if (game.isCheckmate()) { sound.win(); board.fx.burst(wx, 0.3, wz, 'fire', 90); board.fx.burst(wx, 0.3, wz, 'ice', 90); } else if (game.inCheck()) sound.check();
 }
 function onSquare(c, r) {
   if (game.isGameOver()) return;

@@ -7,6 +7,8 @@ Browser games with a 3D board (three.js), a game menu, and PWA support (installa
 - **Connect Four**: 7x6 board in 3D, computer (depth-5 search) or two players. Rules tested in node: horizontal, vertical, diagonal wins, full column, full board, the computer takes a win and blocks one.
 - **One Minute Pop**: a small 2D tap game.
 
+Graphics: procedural wood grain with bump and clear coat, soft shadows, an image-based reflection environment, ACES tone mapping. Captures burst into fire (dark pieces) or ice (light pieces) particles. Sounds are synthesised with Web Audio (no audio files), start after the first tap, and can be muted with the Sound button (remembered).
+
 Drag to tilt the board, tap a piece and then a square to move.
 
 ## Run
