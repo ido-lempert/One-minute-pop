@@ -83,3 +83,9 @@ Checks:32 rules/controller regressions; actual Chrome Connect Four win/AI/reset,
 Pawn heads now sit on a turned ceramic collar with a fine metal edge, rather than intersecting the generic body. A thin metal equator wraps the higher-resolution orb and a turned crest replaces the top bead. Their shorter silhouette remains clearly separate from bishops and royalty.
 
 Checks:32 rules/controller regressions; actual Chrome chess capture/reset/AI/undo/mode, zero errors/no390px overflow; matched phone/desktop before/after pixels inspected.
+
+## 14. Physical Connect Four tabletop and cast shadows
+
+The rack now stands on a matte physical tabletop instead of floating against a solid background. A correctly bounded shadow camera captures the complete rack and feet, with bias tuned to avoid surface acne and distant fog blending into the backdrop. The true rack holes cast patterned shadows.
+
+Checks:32 rules/controller regressions; actual Chrome Connect Four win/AI/reset, zero errors/no390px overflow; matched phone/desktop rendering inspected after the tabletop/fog revision.

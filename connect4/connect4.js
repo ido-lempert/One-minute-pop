@@ -10,10 +10,12 @@ const view = document.getElementById('view'), status = document.getElementById('
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); view.appendChild(renderer.domElement);
 const pr = () => prefs.lite ? 1 : Math.min(devicePixelRatio, 2); renderer.setPixelRatio(pr()); prefs.onChange(() => { renderer.setPixelRatio(pr()); fit(); }); renderer.domElement.style.touchAction = 'manipulation';
 const scene = new THREE.Scene();
-scene.background=new THREE.Color(0x304d5c);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.toneMapping=THREE.ACESFilmicToneMapping;
+scene.background=new THREE.Color(0x304d5c);scene.fog=new THREE.Fog(0x304d5c,17,45);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.toneMapping=THREE.ACESFilmicToneMapping;
 const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
 scene.add(new THREE.HemisphereLight(0xcfe5f5, 0x233543, .8));
-const iceSun = new THREE.DirectionalLight(0xfff4df, 3.5); iceSun.position.set(-6, 8, 8); iceSun.castShadow=true;iceSun.shadow.mapSize.set(1024,1024);scene.add(iceSun);
+const iceSun = new THREE.DirectionalLight(0xfff4df, 3.5); iceSun.position.set(-6, 8, 8); iceSun.castShadow=true;iceSun.shadow.mapSize.set(1024,1024);Object.assign(iceSun.shadow.camera,{left:-8,right:8,top:8,bottom:-8,near:.5,far:30});iceSun.shadow.normalBias=.025;iceSun.shadow.bias=-.00015;iceSun.shadow.radius=3;scene.add(iceSun);
+// A physical matte tabletop receives the rack and token shadows, grounding the toy.
+const table=new THREE.Mesh(new THREE.PlaneGeometry(2000,2000),new THREE.MeshStandardMaterial({color:0x304d5c,roughness:.93}));table.rotation.x=-Math.PI/2;table.position.y=-1.19;table.receiveShadow=true;scene.add(table);
 const fireSun = new THREE.DirectionalLight(0xc0e9ff, 1.8); fireSun.position.set(6, 5, 8); scene.add(fireSun);
 // Rounded tabletop rack with true cut-through holes and shaped supports.
 const blue = new THREE.MeshStandardMaterial({ color: 0x32859a, roughness: 0.25, metalness: 0.05 });
