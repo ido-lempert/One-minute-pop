@@ -133,3 +133,9 @@ Checks:32 rules/controller tests exit0; Chrome checkers move/reset-cancellation 
 Added a prefiltered studio environment to the Connect Four scene, bringing soft reflection cards into the glazed ceramic discs, rack and metal trim instead of leaving the reflective surfaces without an environment. Temporary environment geometry and generator are disposed after baking. Existing directional lighting/shadows remain.
 
 Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero page errors/no390px overflow. Matched before/after phone board and final phone/desktop pixels inspected; reflection strength tuned down before release. Physical-device FPS remains unverified.
+
+## 22. Recessed ceramic Connect Four catch tray
+
+Replaced the solid plain bottom bar with a rounded open ceramic tray: a real inset opening, lower teal bed and29 fine physical ribs. The supported tray sits below the lowest playable row and preserves the existing rack feet and controls.
+
+Checks:32 rules/controller tests exit0. Chrome C4 win/reset-cancellation/AI exit0, zero errors/no390px overflow. Actual final phone/desktop pixels inspected against the prior solid bar. Physical-device FPS remains unverified.

@@ -36,7 +36,14 @@ for (const x of [-3.72,3.72]){
  for(const y of [-.35,5.35]){const bolt=new THREE.Mesh(new THREE.CylinderGeometry(.085,.085,.045,24),metal);bolt.rotation.x=Math.PI/2;bolt.position.set(x,y,.2);bolt.castShadow=true;scene.add(bolt);const slit=new THREE.Mesh(new THREE.BoxGeometry(.08,.014,.012),new THREE.MeshStandardMaterial({color:0x36505a,roughness:.5}));slit.position.set(x,y,.23);scene.add(slit);}
 }
 const lavaMat = new THREE.MeshStandardMaterial({ color:0xf5d797,roughness:.4 });
-const base = new THREE.Mesh(new THREE.ExtrudeGeometry(roundedShape(8,.38,.16),{depth:.95,bevelEnabled:true,bevelSize:.07,bevelThickness:.07,bevelSegments:4,steps:1}), lavaMat); base.position.set(0,-.91,-.48);base.castShadow=base.receiveShadow=true;scene.add(base);
+// Open, recessed ceramic catch tray: floor, rounded perimeter and a dark inset bed.
+const trayShape=roundedShape(7.95,1.48,.24),trayOpening=roundedShape(7.55,1.08,.17);trayShape.holes.push(new THREE.Path(trayOpening.getPoints(48).reverse()));
+const trayRimGeo=new THREE.ExtrudeGeometry(trayShape,{depth:.23,bevelEnabled:true,bevelSize:.045,bevelThickness:.045,bevelSegments:4,steps:1,curveSegments:20});trayRimGeo.rotateX(-Math.PI/2);
+const trayRim=new THREE.Mesh(trayRimGeo,lavaMat);trayRim.position.set(0,-1.04,.38);trayRim.castShadow=trayRim.receiveShadow=true;scene.add(trayRim);
+const trayBedGeo=new THREE.ExtrudeGeometry(roundedShape(7.70,1.23,.20),{depth:.065,bevelEnabled:true,bevelSize:.025,bevelThickness:.025,bevelSegments:3,steps:1});trayBedGeo.rotateX(-Math.PI/2);
+const trayBed=new THREE.Mesh(trayBedGeo,new THREE.MeshStandardMaterial({color:0x335b65,roughness:.82}));trayBed.position.set(0,-1.105,.38);trayBed.castShadow=trayBed.receiveShadow=true;scene.add(trayBed);
+// Fine radial ribs catch the key light along the inset rather than a flat painted stripe.
+const ribGeo=new THREE.CapsuleGeometry(.012,.70,3,6);ribGeo.rotateX(Math.PI/2);const ribs=new THREE.InstancedMesh(ribGeo,blue,29),ribPose=new THREE.Object3D();for(let i=0;i<29;i++){ribPose.position.set(-3.5+i*.25,-1.026,.38);ribPose.updateMatrix();ribs.setMatrixAt(i,ribPose.matrix);}ribs.receiveShadow=true;scene.add(ribs);
 // Bevelled ceramic tokens with recessed faces and raised, genuinely lit symbols.
 const tokenMat={1:new THREE.MeshPhysicalMaterial({color:0xe5fff4,roughness:.24,clearcoat:.7}),2:new THREE.MeshPhysicalMaterial({color:0xe96e4b,roughness:.28,clearcoat:.65})};
 const tokenTrim={1:new THREE.MeshStandardMaterial({color:0x20859a,roughness:.3,metalness:.5}),2:new THREE.MeshStandardMaterial({color:0xffd379,roughness:.3,metalness:.5})};
