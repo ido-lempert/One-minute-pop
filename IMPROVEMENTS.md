@@ -77,3 +77,9 @@ Checks:32 regressions; real Chrome chess capture/reset/AI/undo/mode and checkers
 Bevelled lathed discs replace plain cylinders. Both faces have raised metal rims and real three-dimensional snow/star or flame symbols instead of flat texture decals. Lit ceramic shoulders and recessed faces stay readable through the rack holes.
 
 Checks:32 rules/controller regressions; actual Chrome Connect Four win/AI/reset, zero errors/no390px overflow; populated phone/desktop matched before/after pixels inspected.
+
+## 13. Turned pawn collar, orb inlay and crest
+
+Pawn heads now sit on a turned ceramic collar with a fine metal edge, rather than intersecting the generic body. A thin metal equator wraps the higher-resolution orb and a turned crest replaces the top bead. Their shorter silhouette remains clearly separate from bishops and royalty.
+
+Checks:32 rules/controller regressions; actual Chrome chess capture/reset/AI/undo/mode, zero errors/no390px overflow; matched phone/desktop before/after pixels inspected.

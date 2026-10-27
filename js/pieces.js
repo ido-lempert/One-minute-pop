@@ -10,7 +10,14 @@ export function chessMesh(type,color){
  const g=new THREE.Group(),m=mats[color],t=trim[color];
  mesh(g,lathe(type==='r'?'rookBody':'body',type==='r'?[[0,0],[.31,0],[.37,.04],[.38,.10],[.35,.18],[.28,.23],[.25,.27],[.23,.76],[.28,.81],[.31,.85],[0,.85]]:body),m);
  const ring=mesh(g,new THREE.TorusGeometry(.3,.025,8,40),t,0,.18,0);ring.rotation.x=Math.PI/2;
- if(type==='p'){mesh(g,new THREE.SphereGeometry(.22,28,18),m,0,.91);mesh(g,new THREE.SphereGeometry(.07,16,12),t,0,1.1);}
+ if(type==='p'){
+  // A turned collar supports the pawn orb; an inlaid equator and crest replace a bead.
+  mesh(g,lathe('pawnCollar',[[0,0],[.16,0],[.22,.035],[.23,.065],[.20,.095],[.15,.115],[0,.115]]),m,0,.76);
+  const collar=mesh(g,new THREE.TorusGeometry(.215,.018,12,48),t,0,.81);collar.rotation.x=Math.PI/2;
+  mesh(g,new THREE.SphereGeometry(.215,40,28),m,0,1.005);
+  const equator=mesh(g,new THREE.TorusGeometry(.211,.012,10,48),t,0,1.005);equator.rotation.x=Math.PI/2;
+  mesh(g,lathe('pawnCrest',[[0,0],[.045,0],[.065,.025],[.053,.055],[.028,.085],[0,.095]]),t,0,1.205);
+ }
  if(type==='r'){
   // A real hollow tower crown, bevelled battlements and recessed courtyard.
   if(!geo.rookCrown){const outer=new THREE.Shape();outer.absarc(0,0,.31,0,Math.PI*2,false);const hole=new THREE.Path();hole.absarc(0,0,.21,0,Math.PI*2,true);outer.holes.push(hole);geo.rookCrown=new THREE.ExtrudeGeometry(outer,{depth:.22,bevelEnabled:true,bevelSize:.025,bevelThickness:.025,bevelSegments:3,curveSegments:32,steps:1});geo.rookCrown.rotateX(-Math.PI/2);}
