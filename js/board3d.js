@@ -60,6 +60,10 @@ export function createBoard(container, { onSquare }) {
     const slot=detail(roundedSlab(.078,.008,.014,.006,.002),slotMat,x,-.114,z);slot.rotation.y=Math.PI/4;
   }
   const tileMat=[new THREE.MeshPhysicalMaterial({color:0x8ea9a3,roughness:.36,clearcoat:.65,clearcoatRoughness:.24}),new THREE.MeshPhysicalMaterial({color:0x234a60,roughness:.32,clearcoat:.65,clearcoatRoughness:.24})];
+  // Fine kiln glaze: broad roughness variation and tiny ceramic pores, without painted noise.
+  const glazeCanvas=document.createElement('canvas');glazeCanvas.width=glazeCanvas.height=256;const glaze=glazeCanvas.getContext('2d'),image=glaze.createImageData(256,256);let glazeSeed=57;
+  for(let y=0;y<256;y++)for(let x=0;x<256;x++){glazeSeed=(glazeSeed*1664525+1013904223)>>>0;const pore=(glazeSeed>>>24)/255;const cloud=Math.sin(x*.045+Math.sin(y*.03))*Math.cos(y*.052);const v=Math.round(170+cloud*24+(pore-.5)*14),i=(y*256+x)*4;image.data[i]=image.data[i+1]=image.data[i+2]=v;image.data[i+3]=255;}glaze.putImageData(image,0,0);
+  const glazeMap=new THREE.CanvasTexture(glazeCanvas);glazeMap.wrapS=glazeMap.wrapT=THREE.RepeatWrapping;for(const material of tileMat){material.roughnessMap=glazeMap;material.bumpMap=glazeMap;material.bumpScale=.014;material.roughness=.62;material.clearcoat=.45;material.clearcoatRoughness=.38;}
   const tileEdge=[new THREE.MeshStandardMaterial({color:0x5e807f,roughness:.42}),new THREE.MeshStandardMaterial({color:0x153546,roughness:.4})];
   const squares=[],sqGeo=roundedSlab(.96,.18,.96,.07,.04);
   for(let c=0;c<8;c++)for(let r=0;r<8;r++){const m=new THREE.Mesh(sqGeo,[tileMat[(c+r)%2],tileEdge[(c+r)%2]]);m.position.set(c-3.5,-.025,3.5-r);m.receiveShadow=true;m.userData={c,r};scene.add(m);squares.push(m);}

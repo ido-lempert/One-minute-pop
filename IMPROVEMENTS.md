@@ -157,3 +157,9 @@ Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellati
 Four swept ceramic buttresses now support the rook tower between the foot and crown. The bevelled supports replace a plain cylindrical shaft silhouette while preserving the hollow courtyard, battlements and inset shields. Shared cached geometry is used across all rooks.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-rook studio before/after and final phone/desktop board pixels inspected. Studio images are model tests, not live boards. Physical-device FPS remains unverified.
+
+## 26. Kiln-glazed ceramic board tiles
+
+Chess and checkers tiles now use a deterministic ceramic roughness/bump map with broad glaze variation and fine pores. The satin finish breaks up the previously uniform plastic reflections while preserving tile colors, bevels and clear legal-move markers. One small generated texture is shared across both tile materials.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode and checkers move/reset-cancellation exit0, zero page errors/no390px overflow. Matched desktop before/after, final phone chess/checkers and desktop chess pixels inspected. Physical-device FPS remains unverified.
