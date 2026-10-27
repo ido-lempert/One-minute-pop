@@ -229,3 +229,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 Chess/checkers move destinations now combine large pale mint discs with physically lit rings. Amber inlays mark selection and the last move. Saturated orange rings and four corner tabs distinguish occupied capture targets, remaining visible around a piece at phone size. The first published small-ring variant was corrected before counting this iteration because it reduced move discovery. Both legends now call these mint rings.
 
 Checks:32 rules/controller tests exit0. Separate Chrome chess capture/reset/AI/undo/mode and checkers move/reset-cancellation checks exit0, zero page errors/no390px overflow. Matched phone selection before/after, played chess capture position, chess desktop and checkers phone pixels inspected. Physical-device FPS remains unverified.
+
+## 38. Turned ceramic rack columns
+
+Connect Four's plain capsule uprights are now shaped lathe columns with tapered shafts, widened ceramic feet/capitals and thin metal collars. The change gives the rack a built tabletop silhouette without obscuring the42 playable holes or seven loading funnels.
+
+Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero page errors/no390px overflow. Matched played desktop before/after and final phone pixels inspected. Physical-device FPS remains unverified.

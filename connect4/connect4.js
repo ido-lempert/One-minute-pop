@@ -35,7 +35,10 @@ const ringGeo = new THREE.TorusGeometry(0.4, 0.12, 12, 28);
 for (let c = 0; c < 7; c++) for (let r = 0; r < 6; r++) { const m = new THREE.Mesh(ringGeo, blue); m.position.set(c - 3, r - 0.0, 0.1); m.castShadow=true;m.receiveShadow=true;scene.add(m); }
 const metal=new THREE.MeshStandardMaterial({color:0xd6b46f,metalness:.65,roughness:.25});
 for (const x of [-3.72,3.72]){
- const support=new THREE.Mesh(new THREE.CapsuleGeometry(.19,6.0,6,16),blue);support.position.set(x,2.5,-.02);support.castShadow=support.receiveShadow=true;scene.add(support);
+ // Turned ceramic uprights: broad foot and capital collars taper into a slender shaft.
+ const postProfile=[[0,-.69],[.20,-.69],[.27,-.62],[.28,-.50],[.24,-.40],[.20,-.32],[.17,-.08],[.165,4.85],[.19,5.05],[.25,5.16],[.27,5.28],[.25,5.40],[.18,5.51],[0,5.54]];
+ const support=new THREE.Mesh(new THREE.LatheGeometry(postProfile.map(([r,y])=>new THREE.Vector2(r,y)),48),blue);support.position.set(x,0,-.02);support.castShadow=support.receiveShadow=true;scene.add(support);
+ for(const y of [-.49,5.27]){const collar=new THREE.Mesh(new THREE.TorusGeometry(.272,.018,12,48),metal);collar.rotation.x=Math.PI/2;collar.position.set(x,y,-.02);collar.castShadow=true;scene.add(collar);}
  const footGeo=new THREE.ExtrudeGeometry(roundedShape(.8,2.2,.25),{depth:.19,bevelEnabled:true,bevelSize:.09,bevelThickness:.08,bevelSegments:4,steps:1});footGeo.rotateX(-Math.PI/2);const foot=new THREE.Mesh(footGeo,blue);foot.position.set(x,-.81,0);foot.castShadow=foot.receiveShadow=true;scene.add(foot);
  for(const y of [-.35,5.35]){const bolt=new THREE.Mesh(new THREE.CylinderGeometry(.085,.085,.045,24),metal);bolt.rotation.x=Math.PI/2;bolt.position.set(x,y,.2);bolt.castShadow=true;scene.add(bolt);const slit=new THREE.Mesh(new THREE.BoxGeometry(.08,.014,.012),new THREE.MeshStandardMaterial({color:0x36505a,roughness:.5}));slit.position.set(x,y,.23);scene.add(slit);}
 }
