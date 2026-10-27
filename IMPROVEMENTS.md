@@ -151,3 +151,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 Added seven open elliptical ceramic loading funnels across the rack's top edge, with thin metal lips. The flared walls give each playable column a real top opening instead of ending the model at a flat edge. The narrow depth keeps the openings aligned with the disc plane.
 
 Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI exit0, zero errors/no390px overflow. Final phone/desktop pixels inspected. Physical-device FPS remains unverified.
+
+## 25. Sculpted rook tower buttresses
+
+Four swept ceramic buttresses now support the rook tower between the foot and crown. The bevelled supports replace a plain cylindrical shaft silhouette while preserving the hollow courtyard, battlements and inset shields. Shared cached geometry is used across all rooks.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched four-rook studio before/after and final phone/desktop board pixels inspected. Studio images are model tests, not live boards. Physical-device FPS remains unverified.
