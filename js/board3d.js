@@ -130,13 +130,12 @@ export function createBoard(container, { onSquare }) {
   function setMarks({ selected, targets = [], last = [] }) {
     markGroup.clear(); selKey = selected ? selected[0] + ',' + selected[1] : null;
     // Inlaid markers use real lit rings and a shallow translucent footprint.
-    const mint=new THREE.MeshStandardMaterial({color:0x9be5ce,metalness:.30,roughness:.28,emissive:0x164b44,emissiveIntensity:.28});
+    const mint=new THREE.MeshStandardMaterial({color:0x9be5ce,metalness:.30,roughness:.28,emissive:0x164b44,emissiveIntensity:.65});
     const amber=new THREE.MeshStandardMaterial({color:0xf4d07c,metalness:.5,roughness:.26,emissive:0x5c3c0d,emissiveIntensity:.16});
-    const coral=new THREE.MeshStandardMaterial({color:0xffa17c,metalness:.25,roughness:.3,emissive:0x7a2e16,emissiveIntensity:.18});
     const ring=(c,r,radius,tube,material)=>{const m=new THREE.Mesh(new THREE.TorusGeometry(radius,tube,12,48),material);m.rotation.x=Math.PI/2;m.position.set(c-3.5,.115,3.5-r);m.castShadow=true;markGroup.add(m);};
-    const footprint=(c,r,color,opacity)=>{const m=new THREE.Mesh(new THREE.CircleGeometry(.44,48),new THREE.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(c-3.5,.082,3.5-r);markGroup.add(m);};
+    const footprint=(c,r,color,opacity,radius=.44)=>{const m=new THREE.Mesh(new THREE.CircleGeometry(radius,48),new THREE.MeshBasicMaterial({color,transparent:true,opacity,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(c-3.5,.082,3.5-r);markGroup.add(m);};
     for(const [c,r] of last){footprint(c,r,0xe3c174,.17);ring(c,r,.425,.009,amber);}
-    for(const [c,r] of targets){const occupied=meshAt.has(c+','+r);if(occupied){ring(c,r,.436,.027,coral);footprint(c,r,0xff936c,.14);}else{ring(c,r,.155,.024,mint);const pearl=new THREE.Mesh(new THREE.SphereGeometry(.055,20,12),mint);pearl.scale.y=.35;pearl.position.set(c-3.5,.108,3.5-r);markGroup.add(pearl);}}
+    for(const [c,r] of targets){const occupied=meshAt.has(c+','+r);if(occupied){ring(c,r,.455,.045,new THREE.MeshBasicMaterial({color:0xff7b45,depthTest:false}));footprint(c,r,0xff6a36,.64);for(const [x,z] of [[-.38,-.38],[-.38,.38],[.38,-.38],[.38,.38]]){const tab=new THREE.Mesh(new THREE.BoxGeometry(.23,.035,.23),new THREE.MeshBasicMaterial({color:0xff7b45,depthTest:false}));tab.position.set(c-3.5+x,.12,3.5-r+z);tab.renderOrder=5;markGroup.add(tab);}}else{footprint(c,r,0xb4ffb0,.92,.22);ring(c,r,.25,.026,mint);}}
     if(selected){const [c,r]=selected;footprint(c,r,0xf4d07c,.22);ring(c,r,.444,.026,amber);}
   }
   function resetView() { yaw=.22;pitch=.95;resize(); }

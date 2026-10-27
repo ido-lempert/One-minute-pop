@@ -226,6 +226,6 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 
 ## 37. Lit inlaid move markers
 
-Chess/checkers flat neon move dots are replaced by physically lit mint rings with center pearls. Amber inlays mark selection and the last move; coral rings distinguish occupied capture targets. Shallow translucent footprints keep the ceramic tile visible. Checkers' legend now calls these mint rings.
+Chess/checkers move destinations now combine large pale mint discs with physically lit rings. Amber inlays mark selection and the last move. Saturated orange rings and four corner tabs distinguish occupied capture targets, remaining visible around a piece at phone size. The first published small-ring variant was corrected before counting this iteration because it reduced move discovery. Both legends now call these mint rings.
 
 Checks:32 rules/controller tests exit0. Separate Chrome chess capture/reset/AI/undo/mode and checkers move/reset-cancellation checks exit0, zero page errors/no390px overflow. Matched phone selection before/after, played chess capture position, chess desktop and checkers phone pixels inspected. Physical-device FPS remains unverified.
