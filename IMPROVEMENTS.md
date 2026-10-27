@@ -115,3 +115,9 @@ Checks:32 rules/controller tests exit0; ordinary Chrome chess/checkers lifecycle
 The four winning discs receive lit metal laurel leaves and a fine gold ring within the rack holes, replacing large flat white outline rings. Winning discs have a restrained emissive material while other discs become muted and matte. The winner status now uses the winner's color instead of the next turn's color.
 
 Checks:32 rules/controller tests exit0; actual Chrome Connect Four win/reset/AI exit0, zero errors/no390px overflow. Phone/desktop rendered victory inspected after adjusting leaves to fit inside holes. Decorator rendering is covered by browser tests; sliced controller harness stubs the decorator and does not test its geometry.
+
+## 19. Refined turned ceramic chess pedestals
+
+Rebuilt the shared pedestal profile with more closely spaced turning transitions, a rounder foot and neck and two fine metal rails instead of one thick generic ring. Applies across the chess set without changing piece silhouettes. A bead-relief experiment was removed before release to keep the ceramic clean.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode exit0, zero page errors/no390px overflow. Matched phone/desktop board pixels and dedicated before/after four-piece model views inspected. The model close-up is a test studio, not a live board screenshot.

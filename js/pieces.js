@@ -5,11 +5,12 @@ const trim={w:new THREE.MeshStandardMaterial({color:0x19adc2,metalness:.45,rough
 const dark=new THREE.MeshStandardMaterial({color:0x193b52,roughness:.3});
 const geo={};const lathe=(key,points)=>geo[key]||(geo[key]=new THREE.LatheGeometry(points.map(([x,y])=>new THREE.Vector2(x,y)),48));
 function mesh(g,geometry,material,x=0,y=0,z=0){const m=new THREE.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;g.add(m);return m;}
-const body=[[0,0],[.31,0],[.36,.04],[.37,.09],[.35,.16],[.29,.20],[.25,.24],[.21,.30],[.16,.48],[.14,.65],[.19,.71],[.25,.73],[.27,.78],[.23,.83],[0,.84]];
+const body=[[0,0],[.30,0],[.34,.018],[.365,.045],[.37,.075],[.365,.105],[.35,.125],[.34,.145],[.30,.165],[.29,.19],[.27,.21],[.245,.25],[.22,.30],[.195,.36],[.173,.43],[.153,.51],[.145,.58],[.145,.63],[.157,.67],[.18,.70],[.21,.72],[.25,.73],[.266,.75],[.27,.78],[.25,.81],[.22,.83],[0,.84]];
 export function chessMesh(type,color){
  const g=new THREE.Group(),m=mats[color],t=trim[color];
  mesh(g,lathe(type==='r'?'rookBody':'body',type==='r'?[[0,0],[.31,0],[.37,.04],[.38,.10],[.35,.18],[.28,.23],[.25,.27],[.23,.76],[.28,.81],[.31,.85],[0,.85]]:body),m);
- const ring=mesh(g,new THREE.TorusGeometry(.3,.025,8,40),t,0,.18,0);ring.rotation.x=Math.PI/2;
+ // Fine turned metal footrail and neck ring make the ceramic pedestal read as built, not extruded.
+ for(const [radius,y,tube] of [[.36,.068,.011],[.294,.183,.014],[type==='r'?.247:.148,.63,.010]]){const ring=mesh(g,new THREE.TorusGeometry(radius,tube,12,64),t,0,y);ring.rotation.x=Math.PI/2;}
  if(type==='p'){
   // A turned collar supports the pawn orb; an inlaid equator and crest replace a bead.
   mesh(g,lathe('pawnCollar',[[0,0],[.16,0],[.22,.035],[.23,.065],[.20,.095],[.15,.115],[0,.115]]),m,0,.76);
