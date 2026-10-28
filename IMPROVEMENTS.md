@@ -283,3 +283,6 @@ Checks:32 rules/controller tests exit0. Chrome checkers move/reset-cancellation 
 The knight's plain black beads become inset almond-shaped eyes with metal irises, dark pupils, tiny ceramic highlights and raised ceramic upper lids. Both sides are modelled. The change is clearest in studio close-ups and subtle at normal phone board scale; the horse silhouette is unchanged.
 
 Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode lifecycle exit0, zero page errors/no390px overflow. Matched studio before/after and390px/desktop board pixels inspected. Physical-device FPS remains unverified.
+
+## 47. Sculpted Connect Four sled feet
+The support feet now have a curved narrow-waisted footprint, crowned ceramic tops and thin metal soles rather than flat rounded rectangular slabs. Matched local before/after and390px played screenshots inspected.32 local tests and Connect Four win/reset/AI lifecycle pass; live verification follows publication. Phone-scale difference is modest; physical-device FPS unverified.

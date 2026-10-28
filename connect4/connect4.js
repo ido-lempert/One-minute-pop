@@ -41,7 +41,13 @@ for (const x of [-3.72,3.72]){
  const postProfile=[[0,-.69],[.20,-.69],[.27,-.62],[.28,-.50],[.24,-.40],[.20,-.32],[.17,-.08],[.165,4.85],[.19,5.05],[.25,5.16],[.27,5.28],[.25,5.40],[.18,5.51],[0,5.54]];
  const support=new THREE.Mesh(new THREE.LatheGeometry(postProfile.map(([r,y])=>new THREE.Vector2(r,y)),48),blue);support.position.set(x,0,-.02);support.castShadow=support.receiveShadow=true;scene.add(support);
  for(const y of [-.49,5.27]){const collar=new THREE.Mesh(new THREE.TorusGeometry(.272,.018,12,48),metal);collar.rotation.x=Math.PI/2;collar.position.set(x,y,-.02);collar.castShadow=true;scene.add(collar);}
- const footGeo=new THREE.ExtrudeGeometry(roundedShape(.8,2.2,.25),{depth:.19,bevelEnabled:true,bevelSize:.09,bevelThickness:.08,bevelSegments:4,steps:1});footGeo.rotateX(-Math.PI/2);const foot=new THREE.Mesh(footGeo,blue);foot.position.set(x,-.81,0);foot.castShadow=foot.receiveShadow=true;scene.add(foot);
+ // Sculpted sled footprint: narrow waist, broad rounded toes and a crowned top surface.
+ const footShape=new THREE.Shape();footShape.moveTo(-.18,-1.10);footShape.quadraticCurveTo(-.43,-1.09,-.40,-.80);footShape.quadraticCurveTo(-.28,0,-.40,.80);footShape.quadraticCurveTo(-.43,1.09,-.18,1.10);footShape.lineTo(.18,1.10);footShape.quadraticCurveTo(.43,1.09,.40,.80);footShape.quadraticCurveTo(.28,0,.40,-.80);footShape.quadraticCurveTo(.43,-1.09,.18,-1.10);footShape.closePath();
+ const footGeo=new THREE.ExtrudeGeometry(footShape,{depth:.17,bevelEnabled:true,bevelSize:.065,bevelThickness:.065,bevelSegments:5,curveSegments:24,steps:1});footGeo.rotateX(-Math.PI/2);
+ // Crown the ceramic upper surface towards the waist, leaving the underside level.
+ const fp=footGeo.attributes.position;for(let i=0;i<fp.count;i++){const y=fp.getY(i),z=fp.getZ(i);if(y>-.07)fp.setY(i,y+.095*Math.max(0,1-z*z/1.5)*Math.max(0,(y+.07)/.14));}fp.needsUpdate=true;footGeo.computeVertexNormals();
+ const weltGeo=new THREE.ExtrudeGeometry(footShape,{depth:.025,bevelEnabled:true,bevelSize:.075,bevelThickness:.012,bevelSegments:3,curveSegments:24,steps:1});weltGeo.rotateX(-Math.PI/2);const welt=new THREE.Mesh(weltGeo,metal);welt.position.set(x,-.99,0);welt.castShadow=welt.receiveShadow=true;scene.add(welt);
+ const foot=new THREE.Mesh(footGeo,blue);foot.position.set(x,-.81,0);foot.castShadow=foot.receiveShadow=true;scene.add(foot);
  for(const y of [-.35,5.35]){const bolt=new THREE.Mesh(new THREE.CylinderGeometry(.085,.085,.045,24),metal);bolt.rotation.x=Math.PI/2;bolt.position.set(x,y,.2);bolt.castShadow=true;scene.add(bolt);const slit=new THREE.Mesh(new THREE.BoxGeometry(.08,.014,.012),new THREE.MeshStandardMaterial({color:0x36505a,roughness:.5}));slit.position.set(x,y,.23);scene.add(slit);}
 }
 // Swept ceramic braces join each upright to its foot, giving the rack real side depth.
