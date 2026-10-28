@@ -1,6 +1,5 @@
-Jet-ski demo web build (Godot 4.7.2 web export, release, threads disabled).
-Serve this directory at a subpath (e.g. /jet-ski/) of the existing games Pages site.
-Entry point: index.html. Requires no special HTTP headers (thread_support=false, so no COOP/COEP needed).
-Mobile: touch controls in portrait/landscape; '?auto=1' URL param starts autopilot demo mode.
-Attribution: see THIRD_PARTY_LICENSES.md (Grab3D jet-ski model, CC0).
-Verified: native Linux staged runs of this exact build code (0 script errors; input/ammo/restart gates passed 06:52; hit-feedback pixel check 06:59). Browser/WASM runtime NOT yet functionally tested - test after deploy before sharing as playable. No phone-performance claims.
+Jet-ski demo web build v2 (Godot 4.7.2 web export, release, threads disabled).
+Changes vs live build: chevron next-mark beacon (accepted 45), slipstream draft + DRAFT HUD chip (accepted 47), real-water shading v3 (pending acceptance), provisional engine audio - STARTS MUTED, SOUND: OFF button top-right or M key enables (provisional: needs live user-gesture audible check).
+Deploy: unzip so index.html sits at the SAME subpath /jet-ski/, replacing previous files. No special headers (threads off). .nojekyll included. Keep THIRD_PARTY_LICENSES.md reachable (Grab3D jet-ski model, CC0).
+Deploy checks requested: (1) WASM loads, throttle works; (2) touch throttle+steer at 844x390; (3) tap SOUND: OFF -> SOUND: ON and confirm engine hum is actually audible and pitch rises with speed (this is the pending audible verification for provisional candidate 46); (4) DRAFT chip appears when tucked behind the rival.
+Verified pre-export: 4/4 course regression checks PASS; deterministic shader comparison; sun-facing take; draft coverage matrix; mute flow. Software verification only - no phone-performance claims.
