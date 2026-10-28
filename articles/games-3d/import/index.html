@@ -18,17 +18,17 @@
 
 <p>Chess plays full rules through chess.js - legal moves, check, castling, en passant - verified against the standard perft counts (start position depth 3 = 8902; "Kiwipete" depth 2 = 2039). The computer opponent is a small alpha-beta search over material values, and it is weak. This is a toy you can beat, not an engine. Promotion always picks a queen.</p>
 
-<img src="studio-chess.jpg" alt="3D chess board with ceramic pieces in teal and ivory on a coral tabletop">
+<img src="studio-chess.jpg" alt="3D chess board with ivory and coral ceramic pieces on a teal tabletop">
 
 <p>Checkers follows American rules: forced captures, multi-jumps, kings, and promotion ends the move. The rules module survived 300 plies of computer self-play with every generated move legal. It declares a draw after 40 plies without a capture or an uncrowned-piece move.</p>
 
-<img src="studio-checkers.jpg" alt="3D checkers board with ceramic checkers pieces in teal and ivory">
+<img src="studio-checkers.jpg" alt="3D checkers board with ivory and coral ceramic checkers">
 
 <p>Connect Four drops discs into a 7x6 frame. Its computer searches five plies deep and is tested to take an immediate win and to block one. The rules tests cover horizontal, vertical and diagonal wins, full columns and a full board.</p>
 
-<img src="studio-connect4.jpg" alt="3D Connect Four board with red and yellow discs mid-game">
+<img src="studio-connect4.jpg" alt="3D Connect Four frame with teal ceramic rings on a teal tabletop">
 
-<p>All three games share one 3D board module: ceramic-style pieces with a procedural kiln glaze, soft shadows, hop animations, and sounds synthesised with Web Audio (mutable, and the setting is remembered). Drag to tilt the board, tap a piece and then a square. The site is set up as a PWA with a web manifest and a service worker that precaches the game files for offline use after the first visit. Actual home-screen installation and offline play after install have not been verified.</p>
+<p>Chess and checkers share a 3D board module; Connect Four has its own scene. The visual style uses ceramic-like pieces, procedural kiln glaze and soft shadows, with move animations and sounds synthesised with Web Audio (mutable, and the setting is remembered). Drag to tilt the board. In chess and checkers, tap a piece and then a square; in Connect Four, choose a column. The site is set up as a PWA with a web manifest and a service worker that precaches the game files for offline use after the first visit. Actual home-screen installation and offline play after install have not been verified.</p>
 
 <p>What this does not do: the computer play is basic in all three games and will not trouble a serious player. Chess promotion is always a queen. Testing is 32 node-based rules and controller regressions plus a scripted headless-Chrome pass at two window sizes; a real phone, an actual install, and offline play after install have not been verified.</p>
 </article>
