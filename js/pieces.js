@@ -36,8 +36,9 @@ export function chessMesh(type,color){
   // Four swept ceramic buttresses give the rook a supported castle-tower silhouette.
   if(!geo.rookButtress){const s=new THREE.Shape();s.moveTo(.22,.25);s.lineTo(.30,.25);s.quadraticCurveTo(.31,.34,.285,.43);s.quadraticCurveTo(.265,.60,.285,.79);s.lineTo(.235,.80);s.closePath();geo.rookButtress=new THREE.ExtrudeGeometry(s,{depth:.075,bevelEnabled:true,bevelSize:.014,bevelThickness:.014,bevelSegments:4,curveSegments:16,steps:1});geo.rookButtress.translate(0,0,-.0375);}
   for(let i=0;i<4;i++){const rib=mesh(g,geo.rookButtress,m);rib.rotation.y=Math.PI/4+i*Math.PI/2;}
-  // Four inset metal shield accents break up the tower shaft without noisy texture.
-  for(let i=0;i<4;i++){const a=i*Math.PI/2;const shield=mesh(g,new THREE.SphereGeometry(.055,16,10),t,Math.cos(a)*.235,.54,Math.sin(a)*.235);shield.scale.set(.7,1.35,.7);}
+  // Raised heraldic shields have a curved shoulder, pointed foot and ceramic inset.
+  if(!geo.rookShield){const s=new THREE.Shape();s.moveTo(-.062,.067);s.quadraticCurveTo(0,.040,.062,.067);s.lineTo(.058,-.005);s.quadraticCurveTo(.045,-.065,0,-.10);s.quadraticCurveTo(-.045,-.065,-.058,-.005);s.closePath();geo.rookShield=new THREE.ExtrudeGeometry(s,{depth:.012,bevelEnabled:true,bevelSize:.007,bevelThickness:.007,bevelSegments:4,curveSegments:16,steps:1});}
+  for(let i=0;i<4;i++){const a=i*Math.PI/2,shield=mesh(g,geo.rookShield,t,Math.cos(a)*.238,.55,Math.sin(a)*.238);shield.rotation.y=Math.PI/2-a;const inset=mesh(g,geo.rookShield,m,Math.cos(a)*.257,.55,Math.sin(a)*.257);inset.rotation.y=Math.PI/2-a;inset.scale.set(.64,.64,.3);}
  }
  if(type==='b'){
   // Bevelled mitre with a genuine diagonal opening, visible from either side.

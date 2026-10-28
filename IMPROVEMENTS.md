@@ -298,3 +298,6 @@ Connect Four victory laurels now use pointed curved metal leaf surfaces with rai
 
 ## 51. Turned queen crown finials
 The open queen crown has eight turned ceramic teardrop finials, slightly splayed outward, replacing round beads. Matched studio before/after and390px board inspected, with distinct queen/king silhouettes.32 rules/controller tests and local chess capture/reset/AI/undo/mode lifecycle pass, zero errors/no overflow. Detail is clearest close-up; physical-device FPS unverified.
+
+## 52. Heraldic rook shields
+Four oval shaft beads become raised metal shields with curved shoulders, pointed bases and recessed ceramic centers. Matched studio before/after and390px board inspected.32 rules/controller tests and local chess capture/reset/AI/undo/mode lifecycle pass, zero errors/no overflow. Tiny at board scale; physical-device FPS unverified.
