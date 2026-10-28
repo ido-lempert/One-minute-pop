@@ -10,7 +10,7 @@
 <article>
 <h1>Classic board games in 3D, about 1,000 lines of JavaScript</h1>
 
-<p>Chess, checkers and Connect Four, each with a 3D board you can tilt, running in the browser as one installable web app. No build step or server code, and no image assets needed to render the 3D boards: their pieces, textures and sounds are generated in code. The menu also has One Minute Pop, a small 2D tap game.</p>
+<p>Chess, checkers and Connect Four, each with a 3D board, running in the browser as one installable web app. No build step, no server code - every piece, texture and sound on the 3D boards is generated in code; the menu uses three preview images. The menu also has One Minute Pop, a small 2D tap game.</p>
 
 <img src="menu-phone.png" alt="Phone screenshot of the game menu: Classic games in 3D - Chess, Checkers, Connect Four - plus One Minute Pop">
 
@@ -20,17 +20,17 @@
 
 <img src="studio-chess.jpg" alt="3D chess board with ivory and coral ceramic pieces on a teal tabletop">
 
-<p>Checkers follows American rules: forced captures, multi-jumps, kings, and promotion ends the move. The rules module survived 300 plies of computer self-play with every generated move legal. It declares a draw after 40 plies without a capture or an uncrowned-piece move.</p>
+<p>Checkers follows American rules: forced captures, multi-jumps, kings, and promotion ends the move. The rules module survived 300 plies of computer self-play with every generated move legal, and a draw is declared after 40 plies with no capture and no man move (kings-only shuffling).</p>
 
 <img src="studio-checkers.jpg" alt="3D checkers board with ivory and coral ceramic checkers">
 
 <p>Connect Four drops discs into a 7x6 frame. Its computer searches five plies deep and is tested to take an immediate win and to block one. The rules tests cover horizontal, vertical and diagonal wins, full columns and a full board.</p>
 
-<img src="studio-connect4.jpg" alt="3D Connect Four frame with teal ceramic rings on a teal tabletop">
+<img src="connect4-phone.png" alt="Connect Four on a phone: teal 3D board with ivory and coral discs in play, seven numbered column buttons below, Ivory to move">
 
-<p>Chess and checkers share a 3D board module; Connect Four has its own scene. The visual style uses ceramic-like pieces, procedural kiln glaze and soft shadows, with move animations and sounds synthesised with Web Audio (mutable, and the setting is remembered). Drag to tilt the board. In chess and checkers, tap a piece and then a square; in Connect Four, choose a column. The site is set up as a PWA with a web manifest and a service worker that precaches the game files for offline use after the first visit. Actual home-screen installation and offline play after install have not been verified.</p>
+<p>Chess and checkers share one 3D board module - ceramic-style pieces with a procedural kiln glaze, soft shadows, hop animations - where you drag to tilt the board, tap a piece and then a square. Connect Four builds its own three.js scene with a fixed camera: you play with the seven numbered column buttons below the board, or by tapping a column on the board itself. All three synthesise sound with Web Audio (mutable, and the setting is remembered). The site is set up as a PWA with a web manifest and a service worker that precaches the listed game files for offline use after the first visit. Actual home-screen installation and offline play after install have not been verified on a real device yet.</p>
 
-<p>What this does not do: the computer play is basic in all three games and will not trouble a serious player. Chess promotion is always a queen. Testing is 32 node-based rules and controller regressions plus a scripted headless-Chrome pass at two window sizes; a real phone, an actual install, and offline play after install have not been verified.</p>
+<p>What this does not do: the computer play is basic in all three games and will not trouble a serious player. Chess promotion is always a queen. Testing is 32 node-based rules and controller regressions plus a scripted headless-Chrome pass at two window sizes; real-device behaviour (install, offline play, performance) has not been verified.</p>
 </article>
 </body>
 </html>
