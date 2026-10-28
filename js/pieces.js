@@ -140,8 +140,8 @@ export function checkerMesh(color,king){
   const belt=mesh(g,new THREE.TorusGeometry(.335,.023,12,48),t,0,.365);belt.rotation.x=Math.PI/2;
   mesh(g,new THREE.CylinderGeometry(.225,.225,.02,40),dark,0,.455);
   const band=mesh(g,new THREE.TorusGeometry(.235,.025,10,48),t,0,.46);band.rotation.x=Math.PI/2;
-  if(!geo.checkerCrownPoint){const s=new THREE.Shape();s.moveTo(-.062,0);s.lineTo(.062,0);s.lineTo(.035,.16);s.quadraticCurveTo(0,.235,-.035,.16);s.closePath();geo.checkerCrownPoint=new THREE.ExtrudeGeometry(s,{depth:.027,bevelEnabled:true,bevelSize:.013,bevelThickness:.012,bevelSegments:3,steps:1});}
-  for(let i=0;i<5;i++){const a=i*Math.PI*2/5;const point=mesh(g,geo.checkerCrownPoint,t,Math.cos(a)*.225,.455,Math.sin(a)*.225);point.rotation.y=Math.PI/2-a;mesh(g,new THREE.SphereGeometry(.034,16,12),m,Math.cos(a)*.225,.66,Math.sin(a)*.225);}
+  if(!geo.checkerCrownPoint){const s=new THREE.Shape();s.moveTo(-.060,0);s.lineTo(.060,0);s.quadraticCurveTo(.036,.07,.070,.12);s.quadraticCurveTo(.082,.17,.042,.185);s.quadraticCurveTo(.008,.205,0,.255);s.quadraticCurveTo(-.008,.205,-.042,.185);s.quadraticCurveTo(-.082,.17,-.070,.12);s.quadraticCurveTo(-.036,.07,-.060,0);s.closePath();const hole=new THREE.Path();hole.absellipse(0,.13,.020,.036,0,Math.PI*2,true);s.holes.push(hole);geo.checkerCrownPoint=new THREE.ExtrudeGeometry(s,{depth:.027,bevelEnabled:true,bevelSize:.013,bevelThickness:.012,bevelSegments:3,steps:1});}
+  for(let i=0;i<5;i++){const a=i*Math.PI*2/5;const point=mesh(g,geo.checkerCrownPoint,t,Math.cos(a)*.225,.455,Math.sin(a)*.225);point.rotation.y=Math.PI/2-a;mesh(g,new THREE.SphereGeometry(.034,16,12),m,Math.cos(a)*.225,.71,Math.sin(a)*.225);}
  }
 
  return g;

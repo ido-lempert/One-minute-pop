@@ -271,3 +271,9 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 Seven straight loading tubes become open flared ceramic funnels with turned shoulders and raised metal lips. Each funnel is separate from its neighbors; a too-wide experiment was narrowed before release. Camera fitting includes the taller rim. All42 cut-through rack apertures are unchanged.
 
 Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellation/AI lifecycle exit0, zero page errors/no390px overflow. Matched desktop before/after and390px played board pixels inspected. Physical-device FPS remains unverified.
+
+## 45. Open heraldic checker crown points
+
+Checker king crown points now have curved heraldic shoulders and genuine cut-through oval centers instead of plain tapered posts. Raised ceramic tips follow the taller silhouette. Ordinary discs are unchanged. Detail is clearest in studio; promoted silhouette remains clear at board scale.
+
+Checks:32 rules/controller tests exit0. Chrome checkers move/reset-cancellation lifecycle exit0, zero page errors/no390px overflow. Matched studio before/after and390px/desktop all-kings fixture pixels inspected (fixture, not opening position). Physical-device FPS remains unverified.
