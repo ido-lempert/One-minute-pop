@@ -153,7 +153,7 @@ export function checkerMesh(color,king){
   mesh(g,new THREE.CylinderGeometry(.225,.225,.02,40),dark,0,.455);
   const band=mesh(g,new THREE.TorusGeometry(.235,.025,10,48),t,0,.46);band.rotation.x=Math.PI/2;
   if(!geo.checkerCrownPoint){const s=new THREE.Shape();s.moveTo(-.060,0);s.lineTo(.060,0);s.quadraticCurveTo(.036,.07,.070,.12);s.quadraticCurveTo(.082,.17,.042,.185);s.quadraticCurveTo(.008,.205,0,.255);s.quadraticCurveTo(-.008,.205,-.042,.185);s.quadraticCurveTo(-.082,.17,-.070,.12);s.quadraticCurveTo(-.036,.07,-.060,0);s.closePath();const hole=new THREE.Path();hole.absellipse(0,.13,.020,.036,0,Math.PI*2,true);s.holes.push(hole);geo.checkerCrownPoint=new THREE.ExtrudeGeometry(s,{depth:.027,bevelEnabled:true,bevelSize:.013,bevelThickness:.012,bevelSegments:3,steps:1});}
-  for(let i=0;i<5;i++){const a=i*Math.PI*2/5;const point=mesh(g,geo.checkerCrownPoint,t,Math.cos(a)*.225,.455,Math.sin(a)*.225);point.rotation.y=Math.PI/2-a;mesh(g,new THREE.SphereGeometry(.034,16,12),m,Math.cos(a)*.225,.71,Math.sin(a)*.225);}
+  for(let i=0;i<5;i++){const a=i*Math.PI*2/5;const point=mesh(g,geo.checkerCrownPoint,t,Math.cos(a)*.225,.455,Math.sin(a)*.225);point.rotation.y=Math.PI/2-a;const finial=mesh(g,lathe('checkerRoyalFinial',[[0,0],[.025,0],[.041,.018],[.044,.040],[.035,.065],[.018,.085],[0,.105]]),m,Math.cos(a)*.225,.685,Math.sin(a)*.225);finial.rotation.z=Math.sin(a)*-.12;finial.rotation.x=Math.cos(a)*.12;}
  }
 
  return g;

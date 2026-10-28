@@ -310,3 +310,6 @@ Connect Four support columns now have eight ceramic flutes, gently swept along t
 
 ## 55. Rounded knight neck and cheeks
 The horse's flat extruded side becomes a subdivided curved ceramic neck and cheek. Eyes, bridle and buckles sit outside the new surface rather than sinking into it. Matched studio before/after and390px board inspected.32 rules/controller tests and local chess capture/reset/AI/undo/mode lifecycle pass, zero errors/no overflow. Detail clearest in studio; physical-device FPS unverified.
+
+## 56. Turned checker crown finials
+The promoted checker crown's round beads become turned ceramic teardrop finials, tilted slightly outward. Matched studio before/after and390px crowned-position board inspected.32 rules/controller tests and local checkers move/reset lifecycle pass, zero errors/no overflow. Detail tiny at board scale; physical-device FPS unverified.
