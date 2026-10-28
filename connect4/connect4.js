@@ -39,7 +39,12 @@ const metal=new THREE.MeshStandardMaterial({color:0xd6b46f,metalness:.65,roughne
 for (const x of [-3.72,3.72]){
  // Turned ceramic uprights: broad foot and capital collars taper into a slender shaft.
  const postProfile=[[0,-.69],[.20,-.69],[.27,-.62],[.28,-.50],[.24,-.40],[.20,-.32],[.17,-.08],[.165,4.85],[.19,5.05],[.25,5.16],[.27,5.28],[.25,5.40],[.18,5.51],[0,5.54]];
- const support=new THREE.Mesh(new THREE.LatheGeometry(postProfile.map(([r,y])=>new THREE.Vector2(r,y)),48),blue);support.position.set(x,0,-.02);support.castShadow=support.receiveShadow=true;scene.add(support);
+ // Sample the long shaft so swept flutes taper smoothly into the capital and foot.
+ const flutedProfile=[...postProfile.slice(0,7),...Array.from({length:33},(_,i)=>[.165,.06+i*4.70/32]),...postProfile.slice(8)];
+ const supportGeo=new THREE.LatheGeometry(flutedProfile.map(([r,y])=>new THREE.Vector2(r,y)),64),sp=supportGeo.attributes.position;
+ for(let i=0;i<sp.count;i++){const y=sp.getY(i),r=Math.hypot(sp.getX(i),sp.getZ(i));if(y>.06&&y<4.76&&r>0){const u=(y-.06)/4.70,a=Math.atan2(sp.getZ(i),sp.getX(i)),radius=r+.033*Math.sin(Math.PI*u)*Math.cos(8*a-u*.65);sp.setX(i,sp.getX(i)*radius/r);sp.setZ(i,sp.getZ(i)*radius/r);}}
+ supportGeo.computeVertexNormals();const sn=supportGeo.attributes.normal;for(let j=0;j<flutedProfile.length;j++){const a=j,b=64*flutedProfile.length+j,n=new THREE.Vector3(sn.getX(a)+sn.getX(b),sn.getY(a)+sn.getY(b),sn.getZ(a)+sn.getZ(b)).normalize();sn.setXYZ(a,n.x,n.y,n.z);sn.setXYZ(b,n.x,n.y,n.z);}
+ const support=new THREE.Mesh(supportGeo,blue);support.position.set(x,0,-.02);support.castShadow=support.receiveShadow=true;scene.add(support);
  for(const y of [-.49,5.27]){const collar=new THREE.Mesh(new THREE.TorusGeometry(.272,.018,12,48),metal);collar.rotation.x=Math.PI/2;collar.position.set(x,y,-.02);collar.castShadow=true;scene.add(collar);}
  // Sculpted sled footprint: narrow waist, broad rounded toes and a crowned top surface.
  const footShape=new THREE.Shape();footShape.moveTo(-.18,-1.10);footShape.quadraticCurveTo(-.43,-1.09,-.40,-.80);footShape.quadraticCurveTo(-.28,0,-.40,.80);footShape.quadraticCurveTo(-.43,1.09,-.18,1.10);footShape.lineTo(.18,1.10);footShape.quadraticCurveTo(.43,1.09,.40,.80);footShape.quadraticCurveTo(.28,0,.40,-.80);footShape.quadraticCurveTo(.43,-1.09,.18,-1.10);footShape.closePath();

@@ -304,3 +304,6 @@ Four oval shaft beads become raised metal shields with curved shoulders, pointed
 
 ## 53. Swept lacquer board apron
 The two flat under-board slabs become one continuous sculpted ogee apron with a rounded outward lip and inward waist. The turquoise lacquer edge is visible outside the dark upper plinth. Matched desktop before/after and390px board inspected.32 rules/controller tests and local chess/checkers lifecycle pass, zero errors/no overflow. Physical-device FPS unverified.
+
+## 54. Fluted rack columns
+Connect Four support columns now have eight ceramic flutes, gently swept along the long shaft and fading into the foot and capital. Matched desktop before/after and390px played board inspected.32 rules/controller tests and local C4 win/reset/AI lifecycle pass, zero errors/no overflow. Physical-device FPS unverified.
