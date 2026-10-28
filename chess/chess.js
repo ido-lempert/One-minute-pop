@@ -6,7 +6,7 @@ import { addLiteButton } from '../js/prefs.js';
 addMuteButton();
 addLiteButton();
 const game = new Chess();
-let selected = null, last = [], aiTimer = null;
+let selected = null, last = [], aiTimer = null, pendingPromotion = null;
 const sq = (c, r) => 'abcdefgh'[c] + (r + 1);
 const unsq = s => [s.charCodeAt(0) - 97, +s[1] - 1];
 const status = document.getElementById('status'), mode = document.getElementById('mode');
@@ -45,12 +45,12 @@ function play(m) {
   if (game.isCheckmate()) { sound.win(); board.fx.burst(wx, 0.3, wz, 'fire', 90); board.fx.burst(wx, 0.3, wz, 'ice', 90); } else if (game.inCheck()) sound.check();
 }
 function onSquare(c, r) {
-  if (game.isGameOver()) return;
+  if (game.isGameOver() || pendingPromotion) return;
   if (mode.value === 'ai' && game.turn() === 'b') return;
   const s = sq(c, r);
   if (selected) {
     const mv = game.moves({ square: selected, verbose: true }).filter(m => m.to === s);
-    if (mv.length) { play({ from: selected, to: s, promotion: 'q' }); scheduleAI(); return; }
+    if (mv.length) { if(mv.some(m=>m.promotion)){pendingPromotion={from:selected,to:s};document.getElementById('promotion').showModal();return;} play({ from: selected, to: s }); scheduleAI(); return; }
   }
   const p = game.get(s);
   selected = p && p.color === game.turn() ? s : null; draw();
@@ -82,9 +82,14 @@ function draw() {
   status.textContent = t; document.body.dataset.fen = game.fen();
 }
 function scheduleAI(){ clearTimeout(aiTimer);aiTimer=null;if(mode.value==='ai' && game.turn()==='b' && !game.isGameOver())aiTimer=setTimeout(()=>{aiTimer=null;if(mode.value==='ai' && game.turn()==='b' && !game.isGameOver())aiMove();},250);}
-function reset() { board.resetAnimation(); clearTimeout(aiTimer); aiTimer=null; game.reset(); selected=null; last=[]; draw(); }
-document.getElementById('new').onclick = reset;mode.onchange=()=>{ selected=null;draw();scheduleAI(); };
-document.getElementById('undo').onclick = () => { board.resetAnimation();clearTimeout(aiTimer);aiTimer=null;const turn=game.turn();game.undo();if(mode.value==='ai' && turn==='w')game.undo();selected=null;last=[];draw();scheduleAI(); };
+function cancelPromotion(){pendingPromotion=null;document.getElementById('promotion')?.close?.();}
+function reset() { cancelPromotion(); board.resetAnimation(); clearTimeout(aiTimer); aiTimer=null; game.reset(); selected=null; last=[]; draw(); }
+document.getElementById('new').onclick = reset;mode.onchange=()=>{ cancelPromotion();selected=null;draw();scheduleAI(); };
+document.getElementById('undo').onclick = () => { cancelPromotion(); board.resetAnimation();clearTimeout(aiTimer);aiTimer=null;const turn=game.turn();game.undo();if(mode.value==='ai' && turn==='w')game.undo();selected=null;last=[];draw();scheduleAI(); };
 draw();
 
 document.getElementById('reset-view')?.addEventListener?.('click', () => board.resetView());
+
+for(const button of document.querySelectorAll?.('#promotion [data-piece]')||[])button.onclick=()=>{if(!pendingPromotion)return;const move={...pendingPromotion,promotion:button.dataset.piece};cancelPromotion();play(move);scheduleAI();};
+document.getElementById('promotion-cancel').onclick=()=>{cancelPromotion();draw();};
+document.getElementById('promotion').addEventListener?.('cancel',()=>{cancelPromotion();draw();});

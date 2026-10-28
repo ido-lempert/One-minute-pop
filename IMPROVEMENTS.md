@@ -341,3 +341,7 @@ Broad procedural glaze roughness and fine pores soften the teal rack's uniform h
 ## Collection expansion: Reversi (2026-10-28)
 
 A new playable classic, separate from the completed 64 tabletop improvements and jet-ski retentions. Original two-sided discs, animated flips, legal markers, live scores, basic computer, two players, Undo and automatic pass/endgame. Rules: 10 checks plus 200 complete self-play games. Browser: 390px 3D click/flip, computer turn, Undo, reset/mode cancellation. No real-phone FPS/audio/install claim.
+
+## Chess: choose your promotion (2026-10-28)
+
+Replaced forced queen promotion with an accessible modal choice of queen, rook, bishop or knight. A pending choice never commits a move; Cancel/Escape leaves the pawn untouched, reset/mode/Undo clears it. Four additional controller checks; all four choices exercised through real 390px board clicks in a staged legal promotion position. No full natural match to promotion claimed.
