@@ -295,3 +295,6 @@ Four L-shaped forged metal guards now wrap both perimeter rails, replacing the s
 
 ## 50. Curved victory laurel leaves
 Connect Four victory laurels now use pointed curved metal leaf surfaces with raised midribs, replacing ellipsoid beads. The wreath remains around actual winning tokens, with center symbols visible. Matched winning-position desktop before/after and390px pixels inspected.32 rules/controller tests and local C4 win/reset/AI lifecycle pass, zero errors/no390px overflow. Physical-device FPS unverified.
+
+## 51. Turned queen crown finials
+The open queen crown has eight turned ceramic teardrop finials, slightly splayed outward, replacing round beads. Matched studio before/after and390px board inspected, with distinct queen/king silhouettes.32 rules/controller tests and local chess capture/reset/AI/undo/mode lifecycle pass, zero errors/no overflow. Detail is clearest close-up; physical-device FPS unverified.
