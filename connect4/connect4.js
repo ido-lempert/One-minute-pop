@@ -23,6 +23,10 @@ const table=new THREE.Mesh(new THREE.PlaneGeometry(2000,2000),new THREE.MeshStan
 const fireSun = new THREE.DirectionalLight(0xc0e9ff, 1.8); fireSun.position.set(6, 5, 8); scene.add(fireSun);
 // Rounded tabletop rack with true cut-through holes and shaped supports.
 const blue = new THREE.MeshStandardMaterial({ color: 0x32859a, roughness: 0.25, metalness: 0.05 });
+// A broad kiln glaze breaks the uniform rack highlights without changing its colour.
+const glazeCanvas=document.createElement('canvas');glazeCanvas.width=glazeCanvas.height=256;const gc=glazeCanvas.getContext('2d'),gp=gc.createImageData(256,256);let gs=73;
+for(let y=0;y<256;y++)for(let x=0;x<256;x++){gs=(gs*1664525+1013904223)>>>0;const cloud=Math.sin(x*.047+Math.sin(y*.033))*Math.cos(y*.051),v=Math.round(174+cloud*34+((gs>>>24)/255-.5)*14),i=(y*256+x)*4;gp.data[i]=gp.data[i+1]=gp.data[i+2]=v;gp.data[i+3]=255;}gc.putImageData(gp,0,0);const rackGlaze=new THREE.CanvasTexture(glazeCanvas);rackGlaze.wrapS=rackGlaze.wrapT=THREE.RepeatWrapping;blue.roughness=.70;blue.roughnessMap=rackGlaze;blue.bumpMap=rackGlaze;blue.bumpScale=.008;
+
 function roundedShape(w,h,r,cy=0){const x=w/2,y=h/2,q=new THREE.Shape();q.moveTo(-x+r,-y);q.lineTo(x-r,-y);q.quadraticCurveTo(x,-y,x,-y+r);q.lineTo(x,y-r);q.quadraticCurveTo(x,y,x-r,y);q.lineTo(-x+r,y);q.quadraticCurveTo(-x,y,-x,y-r);q.lineTo(-x,-y+r);q.quadraticCurveTo(-x,-y,-x+r,-y);if(cy){for(const curve of q.curves){for(const key of ['v0','v1','v2','v3'])if(curve[key])curve[key].y+=cy;}}return q;}
 // A woven felt runner cushions the ceramic rack and catches its contact shadows.
 const feltCanvas=document.createElement('canvas');feltCanvas.width=feltCanvas.height=128;const fg=feltCanvas.getContext('2d');fg.fillStyle='#858585';fg.fillRect(0,0,128,128);let feltSeed=27;for(let i=0;i<4500;i++){feltSeed=(feltSeed*1664525+1013904223)>>>0;const x=feltSeed%128;feltSeed=(feltSeed*1664525+1013904223)>>>0;fg.fillStyle=i%2?'#929292':'#747474';fg.fillRect(x,feltSeed%128,2,1);}const feltMap=new THREE.CanvasTexture(feltCanvas);feltMap.wrapS=feltMap.wrapT=THREE.RepeatWrapping;feltMap.repeat.set(6,2);
