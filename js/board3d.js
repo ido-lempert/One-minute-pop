@@ -57,10 +57,13 @@ export function createBoard(container, { onSquare }) {
     detail(roundedSlab(.055,.045,9.18,.02,.01),brass,side*4.64,-.535,0);
   }
   const slotMat=new THREE.MeshStandardMaterial({color:0x39505a,metalness:.4,roughness:.5});
+  // Forged L-shaped corner guards wrap the two perimeter rails, not square coins.
+  const shoeShape=new THREE.Shape();shoeShape.moveTo(-.30,.19);shoeShape.lineTo(.065,.19);shoeShape.quadraticCurveTo(.20,.19,.20,.055);shoeShape.lineTo(.20,-.30);shoeShape.lineTo(.015,-.30);shoeShape.lineTo(.015,-.055);shoeShape.quadraticCurveTo(.015,.005,-.045,.005);shoeShape.lineTo(-.30,.005);shoeShape.closePath();
+  const shoeGeo=new THREE.ExtrudeGeometry(shoeShape,{depth:.075,bevelEnabled:true,bevelSize:.025,bevelThickness:.018,bevelSegments:5,curveSegments:20,steps:1});shoeGeo.rotateX(-Math.PI/2);
   for(const x of [-4.45,4.45])for(const z of [-4.45,4.45]){
-    detail(roundedSlab(.44,.105,.44,.14,.025),brass,x,-.20,z);
-    const screw=detail(new THREE.CylinderGeometry(.065,.065,.026,24),brass,x,-.13,z);
-    const slot=detail(roundedSlab(.078,.008,.014,.006,.002),slotMat,x,-.114,z);slot.rotation.y=Math.PI/4;
+    const shoe=detail(shoeGeo,brass,x,-.245,z);shoe.scale.set(Math.sign(x),1,-Math.sign(z));
+    const screw=detail(new THREE.CylinderGeometry(.065,.065,.026,24),brass,x+Math.sign(x)*.095,-.13,z+Math.sign(z)*.095);
+    const slot=detail(roundedSlab(.078,.008,.014,.006,.002),slotMat,x+Math.sign(x)*.095,-.114,z+Math.sign(z)*.095);slot.rotation.y=Math.PI/4;
   }
   const tileMat=[new THREE.MeshPhysicalMaterial({color:0x8ea9a3,roughness:.36,clearcoat:.65,clearcoatRoughness:.24}),new THREE.MeshPhysicalMaterial({color:0x234a60,roughness:.32,clearcoat:.65,clearcoatRoughness:.24})];
   // Fine kiln glaze: broad roughness variation and tiny ceramic pores, without painted noise.

@@ -289,3 +289,6 @@ The support feet now have a curved narrow-waisted footprint, crowned ceramic top
 
 ## 48. Pierced heraldic king cross
 The square-ended cross becomes a flared heraldic cross with curved shoulders and a real center opening. Small ceramic jewels sit above the opening on both faces. Matched studio before/after and390px selected-pawn board inspected, with clear king silhouette and legal destinations.32 rules/controller tests and local chess capture/reset/AI/undo/mode pass, zero errors/no overflow. Detail is clearest close-up; physical-device FPS unverified.
+
+## 49. Forged board corner guards
+Four L-shaped forged metal guards now wrap both perimeter rails, replacing the square plates. Screws sit on the outer bends, outside coordinates and tiles. Matched local desktop and390px board inspected.32 rules/controller tests plus local chess and checkers lifecycle pass, zero errors/no390px overflow. Physical-device FPS unverified.
