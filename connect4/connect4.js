@@ -75,7 +75,11 @@ const ribGeo=new THREE.CapsuleGeometry(.012,.70,3,6);ribGeo.rotateX(Math.PI/2);c
 // Bevelled ceramic tokens with recessed faces and raised, genuinely lit symbols.
 const tokenMat={1:new THREE.MeshPhysicalMaterial({color:0xe5fff4,roughness:.24,clearcoat:.7}),2:new THREE.MeshPhysicalMaterial({color:0xe96e4b,roughness:.28,clearcoat:.65})};
 const tokenTrim={1:new THREE.MeshStandardMaterial({color:0x20859a,roughness:.3,metalness:.5}),2:new THREE.MeshStandardMaterial({color:0xffd379,roughness:.3,metalness:.5})};
-const tokenGeo=new THREE.LatheGeometry([[0,-.125],[.31,-.125],[.36,-.12],[.39,-.09],[.397,-.045],[.397,.045],[.39,.09],[.36,.12],[.31,.125],[0,.125]].map(([x,y])=>new THREE.Vector2(x,y)),48);tokenGeo.rotateX(Math.PI/2);
+// A softly scalloped ceramic edge gives the disc a tactile minted silhouette.
+const tokenProfile=[[0,-.125],[.31,-.125],[.36,-.12],[.39,-.09],[.397,-.045],[.397,0],[.397,.045],[.39,.09],[.36,.12],[.31,.125],[0,.125]];
+const tokenGeo=new THREE.LatheGeometry(tokenProfile.map(([x,y])=>new THREE.Vector2(x,y)),192),tp=tokenGeo.attributes.position;
+for(let i=0;i<tp.count;i++){const x=tp.getX(i),y=tp.getY(i),z=tp.getZ(i),r=Math.hypot(x,z);if(r>.35){const fade=Math.max(0,1-Math.abs(y)/.125),delta=.019*fade*Math.cos(24*Math.atan2(z,x));tp.setXYZ(i,x*(r+delta)/r,y,z*(r+delta)/r);}}
+tokenGeo.computeVertexNormals();const tn=tokenGeo.attributes.normal;for(let j=0;j<tokenProfile.length;j++){const a=j,b=192*tokenProfile.length+j,n=new THREE.Vector3(tn.getX(a)+tn.getX(b),tn.getY(a)+tn.getY(b),tn.getZ(a)+tn.getZ(b)).normalize();tn.setXYZ(a,n.x,n.y,n.z);tn.setXYZ(b,n.x,n.y,n.z);}tokenGeo.rotateX(Math.PI/2);
 const rimGeo=new THREE.TorusGeometry(.31,.018,10,48);
 const snowPaths=[];for(let i=0;i<3;i++){const a=i*Math.PI/3;snowPaths.push(new THREE.TubeGeometry(new THREE.LineCurve3(new THREE.Vector3(Math.cos(a)*.22,Math.sin(a)*.22,0),new THREE.Vector3(-Math.cos(a)*.22,-Math.sin(a)*.22,0)),1,.014,8,false));}
 // Sculpted forked crystal branches replace the plain six-spoke ivory token emblem.
