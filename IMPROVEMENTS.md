@@ -319,3 +319,6 @@ Shared chess/checker ceramic uses procedural broad glaze roughness and fine pore
 
 ## 58. Scalloped Connect Four token edges
 The plain ceramic token edge becomes a smoothly sampled24-lobed minted edge, with flat recessed faces and raised emblems preserved. Matched token studio before/after and390px played-board pixels inspected.32 rules/controller tests and local C4 win/reset/AI lifecycle pass, zero errors/no overflow. Edge detail is tiny in the rack; physical-device FPS unverified.
+
+## 59. Lobed ceramic loading funnels
+Twelve gentle ceramic lobes run from each C4 funnel throat towards its lip, replacing the smooth conical surface while preserving its open throat and metal lip. Matched desktop before/after and390px played-board inspected.32 rules/controller tests and local C4 win/reset/AI lifecycle pass, zero errors/no overflow. Modest detail; physical-device FPS unverified.

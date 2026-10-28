@@ -61,7 +61,10 @@ const braceGeo=new THREE.ExtrudeGeometry(braceShape,{depth:.18,bevelEnabled:true
 for(const x of [-3.72,3.72])for(const side of [-1,1]){const brace=new THREE.Mesh(braceGeo,blue);brace.position.set(x-.09,0,0);brace.scale.z=side;brace.castShadow=brace.receiveShadow=true;scene.add(brace);}
 // Seven open loading funnels show where each disc enters its column.
 const funnelProfile=[[.27,-.16],[.27,-.015],[.29,.10],[.35,.25],[.38,.29],[.40,.28],[.405,.255],[.38,.22],[.32,.07],[.30,-.015],[.30,-.16],[.27,-.16]];
-const funnelGeo=new THREE.LatheGeometry(funnelProfile.map(([r,y])=>new THREE.Vector2(r,y)),48);
+// Twelve gentle ceramic lobes open out from the throat to the loading lip.
+const funnelGeo=new THREE.LatheGeometry(funnelProfile.map(([r,y])=>new THREE.Vector2(r,y)),96),fpos=funnelGeo.attributes.position;
+for(let i=0;i<fpos.count;i++){const x=fpos.getX(i),y=fpos.getY(i),z=fpos.getZ(i),r=Math.hypot(x,z),u=Math.max(0,Math.min(1,(y+.015)/.305));if(r>0){const dr=.026*Math.sin(u*Math.PI)*Math.cos(12*Math.atan2(z,x));fpos.setX(i,x*(r+dr)/r);fpos.setZ(i,z*(r+dr)/r);}}
+funnelGeo.computeVertexNormals();const fn=funnelGeo.attributes.normal;for(let j=0;j<funnelProfile.length;j++){const a=j,b=96*funnelProfile.length+j,n=new THREE.Vector3(fn.getX(a)+fn.getX(b),fn.getY(a)+fn.getY(b),fn.getZ(a)+fn.getZ(b)).normalize();fn.setXYZ(a,n.x,n.y,n.z);fn.setXYZ(b,n.x,n.y,n.z);}
 for(let c=0;c<7;c++){const funnel=new THREE.Mesh(funnelGeo,blue);funnel.scale.set(1.18,1,.5);funnel.position.set(c-3,5.58,0);funnel.castShadow=funnel.receiveShadow=true;scene.add(funnel);const lip=new THREE.Mesh(new THREE.TorusGeometry(.39,.014,12,48),metal);lip.rotation.x=Math.PI/2;lip.scale.set(1.18,.5,1);lip.position.set(c-3,5.86,0);scene.add(lip);}
 const lavaMat = new THREE.MeshStandardMaterial({ color:0xf5d797,roughness:.4 });
 // Open, recessed ceramic catch tray: floor, rounded perimeter and a dark inset bed.
