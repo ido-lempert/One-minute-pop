@@ -102,14 +102,16 @@ renderer.setAnimationLoop(() => {
  }
  renderer.render(scene,camera);
 });
+// Curved lanceolate victory leaves with a raised midrib and tapered tip.
+const leafPos=[],leafIndices=[];for(let j=0;j<=12;j++){const u=j/12,w=.047*Math.sin(Math.PI*u);for(let i=0;i<=6;i++){const v=i/6*2-1;leafPos.push(v*w,(u-.5)*.19,.027*Math.sin(Math.PI*u)*(1-v*v));}}for(let j=0;j<12;j++)for(let i=0;i<6;i++){const k=j*7+i;leafIndices.push(k,k+1,k+7,k+1,k+8,k+7);}const victoryLeaf=new THREE.BufferGeometry();victoryLeaf.setAttribute('position',new THREE.Float32BufferAttribute(leafPos,3));victoryLeaf.setIndex(leafIndices);victoryLeaf.computeVertexNormals();
 function decorateWin(w){
     const winning=new Set(w.cells.map(([c,r])=>c+','+r));
     for(const disc of discs.children){if(!disc.userData.cell)continue;const won=winning.has(disc.userData.cell);for(const child of disc.children){child.material=child.material.clone();if(won){child.material.emissive=new THREE.Color(w.player===1?0x166e86:0xb54a19);child.material.emissiveIntensity=.24;}else{child.material.color.multiplyScalar(.58);child.material.roughness=.7;child.material.clearcoat=0;}}}
     // Sculpted victory laurels: warm metal leaves surround the actual winning discs.
     for (const [c, r] of w.cells) {
       const laurel=new THREE.Group();laurel.userData.winner=c+','+r;laurel.position.set(c-3,r,.19);
-      const gold=new THREE.MeshStandardMaterial({color:0xffd379,metalness:.75,roughness:.25,emissive:0xa54f0b,emissiveIntensity:.16});
-      for(const side of [-1,1])for(let i=0;i<6;i++){const a=(-.85+i*.34)+(side<0?Math.PI:0),leaf=new THREE.Mesh(new THREE.SphereGeometry(.055,12,8),gold);leaf.scale.set(.55,1.5,.3);leaf.position.set(Math.cos(a)*.32,Math.sin(a)*.32,0);leaf.rotation.z=-a+.6*side;laurel.add(leaf);}
+      const gold=new THREE.MeshStandardMaterial({color:0xffd379,metalness:.75,roughness:.25,emissive:0xa54f0b,emissiveIntensity:.16,side:THREE.DoubleSide});
+      for(const side of [-1,1])for(let i=0;i<6;i++){const a=(-.85+i*.34)+(side<0?Math.PI:0),leaf=new THREE.Mesh(victoryLeaf,gold);leaf.position.set(Math.cos(a)*.32,Math.sin(a)*.32,0);leaf.rotation.z=-a+.6*side;laurel.add(leaf);}
       const ring=new THREE.Mesh(new THREE.TorusGeometry(.327,.009,10,64),gold);laurel.add(ring);discs.add(laurel);
     }
 }

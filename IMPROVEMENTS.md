@@ -292,3 +292,6 @@ The square-ended cross becomes a flared heraldic cross with curved shoulders and
 
 ## 49. Forged board corner guards
 Four L-shaped forged metal guards now wrap both perimeter rails, replacing the square plates. Screws sit on the outer bends, outside coordinates and tiles. Matched local desktop and390px board inspected.32 rules/controller tests plus local chess and checkers lifecycle pass, zero errors/no390px overflow. Physical-device FPS unverified.
+
+## 50. Curved victory laurel leaves
+Connect Four victory laurels now use pointed curved metal leaf surfaces with raised midribs, replacing ellipsoid beads. The wreath remains around actual winning tokens, with center symbols visible. Matched winning-position desktop before/after and390px pixels inspected.32 rules/controller tests and local C4 win/reset/AI lifecycle pass, zero errors/no390px overflow. Physical-device FPS unverified.
