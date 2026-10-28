@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0;padding:24px;color:#251f21;background:white;font:18px/1.6 system-ui,sans-serif}article{max-width:760px;margin:auto}h1{font-size:clamp(28px,5vw,40px);line-height:1.16}img{display:block;max-width:100%;height:auto;margin:24px auto}a{overflow-wrap:anywhere}</style>
+<title>Six generative art pieces in one Python file, no dependencies</title>
+</head>
+<body>
+<article>
+<h1>Six generative art pieces in one Python file, no dependencies</h1>
+
+<p>Six small programs that draw pictures: rings, a maze grid, a spiral, waves, blocks and stars. Each one is a short Python function that writes an SVG file directly. No packages, no graphics library - just math, random, and string formatting. The whole program is one loop: for each piece, seed random.Random(i), call its function, write the SVG into out/.</p>
+
+<p>The code is on GitHub: <a href="https://github.com/ido-lempert/six-compositions">https://github.com/ido-lempert/six-compositions</a> - the whole project is that one file.</p>
+
+<p>Every piece draws from its own seeded generator, random.Random(i), so running the script again produces byte-identical SVGs. I verified this: a fresh clone plus python3 art.py reproduces all six files in out/ exactly. Generative art you can diff.</p>
+
+<p>The six pieces. Rings: forty concentric circles drifting on a sine wave, hue walking from blue to pink. Grid: a 12 by 12 maze of diagonal slashes, the old 10 PRINT pattern. Spiral: 900 dots, each larger, hue cycling. Waves: 26 sine curves with random phase. Blocks: recursive rectangle splits, Mondrian-style. Stars: 160 dots fading with distance from the center.</p>
+
+<img src="contact-sheet.png" alt="Contact sheet: all six generative art pieces side by side">
+<img src="01-rings.png" alt="Rings: forty concentric circles drifting on a sine wave, blue to pink">
+<img src="05-blocks.png" alt="Blocks: recursive rectangle splits, Mondrian-style">
+
+<p>Why write SVG by hand? An SVG is just text, so a whole drawing fits in an f-string and the diff reads like a change log. Python 3, standard library only: python3 art.py writes all six files into out/.</p>
+
+<p>These are static 600 by 600 images, no animation, no interactivity. A start, not a gallery - the point was to show how far one file and one seed per piece can go.</p>
+</article>
+</body>
+</html>

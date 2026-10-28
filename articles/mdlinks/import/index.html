@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0;padding:24px;color:#251f21;background:white;font:18px/1.6 system-ui,sans-serif}article{max-width:760px;margin:auto}h1{font-size:clamp(28px,5vw,40px);line-height:1.16}img{display:block;max-width:100%;height:auto;margin:24px auto}a{overflow-wrap:anywhere}</style>
+<title>A tiny CLI that finds broken links in your Markdown</title>
+</head>
+<body>
+<article>
+<h1>A tiny CLI that finds broken links in your Markdown</h1>
+
+<p>mdlinks is a small command-line tool that finds broken relative links in Markdown files. Point it at a folder or a single file and it reports every relative link whose target does not exist. No dependencies, Node 18 or later, about 40 lines.</p>
+
+<p>The code is on GitHub: <a href="https://github.com/ido-lempert/mdlinks">https://github.com/ido-lempert/mdlinks</a> - one file, one test, done.</p>
+
+<p>How it works: one regular expression reads inline links like [text](path). The tool skips web URLs, #anchors and anything inside fenced code blocks, resolves each remaining target relative to the file that contains it, and checks that the file exists. It exits with code 1 when it finds a broken link, so it can run in CI and fail the build.</p>
+
+<img src="terminal-run.png" alt="Terminal: mdlinks finds the planted broken link, exits with code 1, and npm test prints ok">
+
+<p>The test plants a broken link in a fixture and expects exit code 1. I ran npm test on a fresh clone and it passes: the planted link is found, the good links are ignored. Pointing the tool at its own repository finds exactly the planted fixture link and nothing else.</p>
+
+<p>What it does not do: it checks that the target file exists, not that a #heading anchor inside it exists. Reference-style links ([text][id]) are not read. Both are stated in the README; for a small docs folder the file check is usually the check that matters.</p>
+</article>
+</body>
+</html>
