@@ -322,3 +322,6 @@ The plain ceramic token edge becomes a smoothly sampled24-lobed minted edge, wit
 
 ## 59. Lobed ceramic loading funnels
 Twelve gentle ceramic lobes run from each C4 funnel throat towards its lip, replacing the smooth conical surface while preserving its open throat and metal lip. Matched desktop before/after and390px played-board inspected.32 rules/controller tests and local C4 win/reset/AI lifecycle pass, zero errors/no overflow. Modest detail; physical-device FPS unverified.
+
+## 60. Fluted rook tower shafts
+Twelve gentle ceramic flutes sculpt the rook shaft between foot and crown. Shield insets are raised to clear the new surface. Matched rook studio before/after and390px board inspected.32 rules/controller tests and local chess capture/reset/AI/undo/mode pass, zero errors/no overflow. Detail subtle at board scale; physical-device FPS unverified.

@@ -8,7 +8,10 @@ const glazeCanvas=document.createElement('canvas');glazeCanvas.width=glazeCanvas
 for(let y=0;y<256;y++)for(let x=0;x<256;x++){glazeSeed=(glazeSeed*1664525+1013904223)>>>0;const noise=(glazeSeed>>>24)/255,cloud=Math.sin(x*.055+Math.sin(y*.033)*1.4)*Math.cos(y*.047),v=Math.round(178+cloud*31+(noise-.5)*18),i=(y*256+x)*4;glazePixels.data[i]=glazePixels.data[i+1]=glazePixels.data[i+2]=v;glazePixels.data[i+3]=255;}glazeCtx.putImageData(glazePixels,0,0);const ceramicGlaze=new THREE.CanvasTexture(glazeCanvas);ceramicGlaze.wrapS=ceramicGlaze.wrapT=THREE.RepeatWrapping;
 for(const m of Object.values(mats)){m.roughness=.78;m.roughnessMap=ceramicGlaze;m.bumpMap=ceramicGlaze;m.bumpScale=.006;m.clearcoat=.28;m.clearcoatRoughness=.48;}
 
-const geo={};const lathe=(key,points)=>{if(geo[key])return geo[key];const shape=new THREE.LatheGeometry(points.map(([x,y])=>new THREE.Vector2(x,y)),key==='body'?64:48);
+const geo={};const lathe=(key,points)=>{if(geo[key])return geo[key];if(key==='rookBody'){points=[...points.slice(0,7),...Array.from({length:25},(_,i)=>[.25-.02*i/24,.29+i*.45/24]),...points.slice(7)];}
+ const segments=key==='body'||key==='rookBody'?64:48,shape=new THREE.LatheGeometry(points.map(([x,y])=>new THREE.Vector2(x,y)),segments);
+ if(key==='rookBody'){const p=shape.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i),r=Math.hypot(x,z);if(y>.27&&y<.76&&r>0){const u=(y-.27)/.49,dr=.016*Math.sin(u*Math.PI)*Math.cos(12*Math.atan2(z,x));p.setXYZ(i,x*(r+dr)/r,y,z*(r+dr)/r);}}shape.computeVertexNormals();const n=shape.attributes.normal;for(let j=0;j<points.length;j++){const a=j,b=segments*points.length+j,v=new THREE.Vector3(n.getX(a)+n.getX(b),n.getY(a)+n.getY(b),n.getZ(a)+n.getZ(b)).normalize();n.setXYZ(a,v.x,v.y,v.z);n.setXYZ(b,v.x,v.y,v.z);}}
+
  // Broad ceramic flutes are sculpted into the shared chess stem, tapering out before collars.
  if(key==='body'){const p=shape.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i),r=Math.hypot(x,z);if(y>.24&&y<.70&&r>0){const envelope=Math.sin((y-.24)/.46*Math.PI),delta=.018*envelope*Math.cos(8*Math.atan2(z,x));p.setXYZ(i,x*(r+delta)/r,y,z*(r+delta)/r);}}shape.computeVertexNormals();const n=shape.attributes.normal;for(let j=0;j<points.length;j++){const a=j,b=64*points.length+j,v=new THREE.Vector3(n.getX(a)+n.getX(b),n.getY(a)+n.getY(b),n.getZ(a)+n.getZ(b)).normalize();n.setXYZ(a,v.x,v.y,v.z);n.setXYZ(b,v.x,v.y,v.z);}}return geo[key]=shape;};
 function mesh(g,geometry,material,x=0,y=0,z=0){const m=new THREE.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;g.add(m);return m;}
@@ -43,7 +46,7 @@ export function chessMesh(type,color){
   for(let i=0;i<4;i++){const rib=mesh(g,geo.rookButtress,m);rib.rotation.y=Math.PI/4+i*Math.PI/2;}
   // Raised heraldic shields have a curved shoulder, pointed foot and ceramic inset.
   if(!geo.rookShield){const s=new THREE.Shape();s.moveTo(-.062,.067);s.quadraticCurveTo(0,.040,.062,.067);s.lineTo(.058,-.005);s.quadraticCurveTo(.045,-.065,0,-.10);s.quadraticCurveTo(-.045,-.065,-.058,-.005);s.closePath();geo.rookShield=new THREE.ExtrudeGeometry(s,{depth:.012,bevelEnabled:true,bevelSize:.007,bevelThickness:.007,bevelSegments:4,curveSegments:16,steps:1});}
-  for(let i=0;i<4;i++){const a=i*Math.PI/2,shield=mesh(g,geo.rookShield,t,Math.cos(a)*.238,.55,Math.sin(a)*.238);shield.rotation.y=Math.PI/2-a;const inset=mesh(g,geo.rookShield,m,Math.cos(a)*.257,.55,Math.sin(a)*.257);inset.rotation.y=Math.PI/2-a;inset.scale.set(.64,.64,.3);}
+  for(let i=0;i<4;i++){const a=i*Math.PI/2,shield=mesh(g,geo.rookShield,t,Math.cos(a)*.269,.55,Math.sin(a)*.269);shield.rotation.y=Math.PI/2-a;const inset=mesh(g,geo.rookShield,m,Math.cos(a)*.288,.55,Math.sin(a)*.288);inset.rotation.y=Math.PI/2-a;inset.scale.set(.64,.64,.3);}
  }
  if(type==='b'){
   // Bevelled mitre with a genuine diagonal opening, visible from either side.
