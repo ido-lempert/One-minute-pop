@@ -82,9 +82,10 @@ export function chessMesh(type,color){
   const crossSeat=mesh(g,new THREE.TorusGeometry(.050,.013,10,32),t,0,1.241);crossSeat.rotation.x=Math.PI/2;
 
   for(let i=0;i<8;i++){const a=i*Math.PI/4;const flute=mesh(g,new THREE.SphereGeometry(.032,16,12),t,Math.cos(a)*.223,.96,Math.sin(a)*.223);flute.scale.set(.65,2.5,.65);}
-  if(!geo.kingCross){const s=new THREE.Shape();const pts=[[-.045,1.20],[.045,1.20],[.045,1.37],[.15,1.37],[.15,1.45],[.045,1.45],[.045,1.57],[-.045,1.57],[-.045,1.45],[-.15,1.45],[-.15,1.37],[-.045,1.37]];pts.forEach(([x,y],i)=>i?s.lineTo(x,y):s.moveTo(x,y));s.closePath();geo.kingCross=new THREE.ExtrudeGeometry(s,{depth:.065,bevelEnabled:true,bevelSize:.018,bevelThickness:.018,bevelSegments:4,steps:1});}
+  // Heraldic flared cross arms and a pierced center replace the square-ended block.
+  if(!geo.kingCross){const s=new THREE.Shape();s.moveTo(-.036,1.20);s.lineTo(.036,1.20);s.lineTo(.036,1.365);s.quadraticCurveTo(.09,1.375,.16,1.35);s.lineTo(.16,1.47);s.quadraticCurveTo(.09,1.445,.036,1.455);s.quadraticCurveTo(.033,1.51,.062,1.58);s.lineTo(-.062,1.58);s.quadraticCurveTo(-.033,1.51,-.036,1.455);s.quadraticCurveTo(-.09,1.445,-.16,1.47);s.lineTo(-.16,1.35);s.quadraticCurveTo(-.09,1.375,-.036,1.365);s.closePath();const eye=new THREE.Path();eye.absellipse(0,1.412,.021,.030,0,Math.PI*2,true);s.holes.push(eye);geo.kingCross=new THREE.ExtrudeGeometry(s,{depth:.065,bevelEnabled:true,bevelSize:.010,bevelThickness:.012,bevelSegments:5,curveSegments:24,steps:1});}
   mesh(g,geo.kingCross,t,0,0,-.0325);
-  for(const z of [-.06,.06]){const gem=mesh(g,new THREE.OctahedronGeometry(.037),m,0,1.41,z);gem.scale.set(.85,1.2,.5);}
+  for(const z of [-.053,.053]){const gem=mesh(g,new THREE.OctahedronGeometry(.024),m,0,1.525,z);gem.scale.set(.85,1.2,.5);}
  }
  if(type==='n'){
   // Sculpted horse profile, bevelled for a soft, recognisable silhouette.

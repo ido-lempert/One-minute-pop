@@ -286,3 +286,6 @@ Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode 
 
 ## 47. Sculpted Connect Four sled feet
 The support feet now have a curved narrow-waisted footprint, crowned ceramic tops and thin metal soles rather than flat rounded rectangular slabs. Matched local before/after and390px played screenshots inspected.32 local tests and Connect Four win/reset/AI lifecycle pass; live verification follows publication. Phone-scale difference is modest; physical-device FPS unverified.
+
+## 48. Pierced heraldic king cross
+The square-ended cross becomes a flared heraldic cross with curved shoulders and a real center opening. Small ceramic jewels sit above the opening on both faces. Matched studio before/after and390px selected-pawn board inspected, with clear king silhouette and legal destinations.32 rules/controller tests and local chess capture/reset/AI/undo/mode pass, zero errors/no overflow. Detail is clearest close-up; physical-device FPS unverified.
