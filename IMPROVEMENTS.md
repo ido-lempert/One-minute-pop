@@ -325,3 +325,6 @@ Twelve gentle ceramic lobes run from each C4 funnel throat towards its lip, repl
 
 ## 60. Fluted rook tower shafts
 Twelve gentle ceramic flutes sculpt the rook shaft between foot and crown. Shield insets are raised to clear the new surface. Matched rook studio before/after and390px board inspected.32 rules/controller tests and local chess capture/reset/AI/undo/mode pass, zero errors/no overflow. Detail subtle at board scale; physical-device FPS unverified.
+
+## 61. Fluted royal dome
+The chess king ceramic dome has eight recessed curved flutes between its metal arches instead of a plain hemisphere. Matched studio before/after and390px board inspected.32 rules/controller tests and local chess capture/reset/AI/undo/mode pass, zero errors/no overflow. Very subtle at board scale; physical-device FPS unverified.
