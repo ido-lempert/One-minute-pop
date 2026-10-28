@@ -331,3 +331,6 @@ The chess king ceramic dome has eight recessed curved flutes between its metal a
 
 ## 62. Bevelled checker inlays
 The ordinary checker rosette and eight surrounding beads now use bevelled octagonal metal settings rather than flattened spheres. Matched studio before/after and390px/desktop board inspected.32 rules/controller tests and local checkers move/reset lifecycle pass, zero errors/no overflow. Tiny at board scale; physical-device FPS unverified.
+
+## 63. Sculpted knight mouth
+A rounded lower lip and shallow wraparound mouth complete the knight's ceramic muzzle. Matched studio before/after and390px board inspected.32 rules/controller tests plus split local chess capture and reset/AI/undo/mode pass, zero errors/no overflow. Mouth is tiny at board scale; physical-device FPS unverified.

@@ -117,6 +117,10 @@ export function chessMesh(type,color){
   if(!geo.knightEar){const ear=new THREE.Shape();ear.moveTo(-.065,0);ear.quadraticCurveTo(-.09,.13,-.032,.255);ear.quadraticCurveTo(.025,.16,.06,.035);ear.closePath();geo.knightEar=new THREE.ExtrudeGeometry(ear,{depth:.035,bevelEnabled:true,bevelSize:.014,bevelThickness:.014,bevelSegments:4,curveSegments:16,steps:1});}
   for(const z of [-.13,.13]){const ear=mesh(g,geo.knightEar,m,-.09,1.37,z-.018);ear.rotation.z=-.12;const inset=mesh(g,new THREE.SphereGeometry(.042,16,12),t,-.12,1.49,z+Math.sign(z)*.038);inset.scale.set(.36,1.35,.22);}
   const muzzle=mesh(g,new THREE.SphereGeometry(.13,32,20),m,.27,1.15,0);muzzle.scale.set(1.05,.72,1.35);
+  // A rounded lower lip and shallow wraparound mouth give the muzzle a soft expression.
+  const jaw=mesh(g,new THREE.SphereGeometry(.085,32,20),m,.305,1.082,0);jaw.scale.set(1.05,.36,1.68);
+  if(!geo.knightMouth){const pts=[];for(let i=0;i<=24;i++){const z=(i/24-.5)*.350,x=.27+.142*Math.sqrt(Math.max(0,1-(z/.193)**2)),y=1.112-.008*Math.cos(z/.175*Math.PI/2);pts.push(new THREE.Vector3(x,y,z));}geo.knightMouth=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),36,.007,8,false);}
+  mesh(g,geo.knightMouth,dark);
   // Swept mane follows the neck instead of a floating rectangular block.
   if(!geo.knightMane){const s=new THREE.Shape();s.moveTo(-.24,.78);s.quadraticCurveTo(-.31,.99,-.28,1.20);s.quadraticCurveTo(-.23,1.36,-.13,1.42);s.lineTo(-.08,1.36);s.quadraticCurveTo(-.20,1.22,-.19,1.06);s.quadraticCurveTo(-.19,.91,-.16,.79);s.closePath();geo.knightMane=new THREE.ExtrudeGeometry(s,{depth:.235,bevelEnabled:true,bevelSize:.018,bevelThickness:.015,bevelSegments:3,curveSegments:16,steps:1});}
   mesh(g,geo.knightMane,t,0,0,-.1175);
