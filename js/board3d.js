@@ -42,7 +42,12 @@ export function createBoard(container, { onSquare }) {
   const stitchInstances=new THREE.InstancedMesh(stitchGeo,thread,192);const transform=new THREE.Object3D();let stitch=0;
   for(let side=0;side<4;side++)for(let i=0;i<48;i++){const along=-4.85+i*9.7/47;transform.position.set(side<2?along:(side===2?-5.13:5.13),-.928,side<2?(side===0?-5.13:5.13):along);transform.rotation.y=side<2?0:Math.PI/2;transform.updateMatrix();stitchInstances.setMatrixAt(stitch++,transform.matrix);}scene.add(stitchInstances);
   // Layered collectible-tabletop arena, not noisy texture maps.
-  block(9.5,.26,9.5,0x173b55,0,-.44,0);block(9.3,.18,9.3,0x51b8bb,0,-.65,0);block(8.8,.25,8.8,0x245574,0,-.85,0);
+  block(9.5,.26,9.5,0x173b55,0,-.44,0);
+  // Swept ogee apron: a continuous curved edge, rather than two flat stacked slabs.
+  const apronProfile=[[4.74,-.50],[4.83,-.55],[4.85,-.60],[4.81,-.64],[4.73,-.69],[4.66,-.75],[4.65,-.80],[4.70,-.85],[4.69,-.89],[4.62,-.92]],apronPos=[],apronIndices=[],apronN=96;
+  for(const [half,y] of apronProfile){const corner=.25,center=half-corner;for(let i=0;i<=apronN;i++){const side=Math.floor(i/(apronN/4))%4,a=(i%(apronN/4))/(apronN/4)*Math.PI/2+side*Math.PI/2;apronPos.push(Math.cos(a)*corner+(side===0||side===3?center:-center),y,Math.sin(a)*corner+(side<2?center:-center));}}
+  for(let j=0;j<apronProfile.length-1;j++)for(let i=0;i<apronN;i++){const k=j*(apronN+1)+i;apronIndices.push(k,k+1,k+apronN+1,k+1,k+apronN+2,k+apronN+1);}const apronGeo=new THREE.BufferGeometry();apronGeo.setAttribute('position',new THREE.Float32BufferAttribute(apronPos,3));apronGeo.setIndex(apronIndices);apronGeo.computeVertexNormals();detailApron();
+  function detailApron(){const apron=new THREE.Mesh(apronGeo,new THREE.MeshPhysicalMaterial({color:0x32949e,roughness:.32,clearcoat:.6,side:THREE.DoubleSide}));apron.castShadow=apron.receiveShadow=true;scene.add(apron);}
   // Satin ash veneer brings fine natural grain beneath the metal perimeter inlay.
   const veneer=woodMaterial({base:'#d6c19a',dark:'#9e8462',seed:33,size:512,rings:14},{repeat:[.115,.115],rough:.48,clearcoat:.24});veneer.bumpScale=.008;veneer.clearcoatRoughness=.4;
   block(8.9,.14,8.9,veneer,0,-.24,0);

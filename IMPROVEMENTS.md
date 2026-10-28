@@ -301,3 +301,6 @@ The open queen crown has eight turned ceramic teardrop finials, slightly splayed
 
 ## 52. Heraldic rook shields
 Four oval shaft beads become raised metal shields with curved shoulders, pointed bases and recessed ceramic centers. Matched studio before/after and390px board inspected.32 rules/controller tests and local chess capture/reset/AI/undo/mode lifecycle pass, zero errors/no overflow. Tiny at board scale; physical-device FPS unverified.
+
+## 53. Swept lacquer board apron
+The two flat under-board slabs become one continuous sculpted ogee apron with a rounded outward lip and inward waist. The turquoise lacquer edge is visible outside the dark upper plinth. Matched desktop before/after and390px board inspected.32 rules/controller tests and local chess/checkers lifecycle pass, zero errors/no overflow. Physical-device FPS unverified.
