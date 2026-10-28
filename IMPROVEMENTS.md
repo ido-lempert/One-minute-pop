@@ -313,3 +313,6 @@ The horse's flat extruded side becomes a subdivided curved ceramic neck and chee
 
 ## 56. Turned checker crown finials
 The promoted checker crown's round beads become turned ceramic teardrop finials, tilted slightly outward. Matched studio before/after and390px crowned-position board inspected.32 rules/controller tests and local checkers move/reset lifecycle pass, zero errors/no overflow. Detail tiny at board scale; physical-device FPS unverified.
+
+## 57. Soft kiln glaze
+Shared chess/checker ceramic uses procedural broad glaze roughness and fine pores, reducing hard plastic hotspots while leaving metal trim intact. Matched studio before/after and390px chess/crowned-checker pixels inspected.32 rules/controller tests and separate local chess/checker lifecycles pass, zero errors/no overflow. Physical-device FPS unverified.

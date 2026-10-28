@@ -3,6 +3,11 @@ import * as THREE from '../lib/three.module.js';
 const mats={w:new THREE.MeshPhysicalMaterial({color:0xe2f2df,roughness:.22,metalness:.05,clearcoat:1}),b:new THREE.MeshPhysicalMaterial({color:0xc95038,roughness:.25,metalness:.05,clearcoat:1})};
 const trim={w:new THREE.MeshStandardMaterial({color:0x19adc2,metalness:.45,roughness:.25}),b:new THREE.MeshStandardMaterial({color:0xffd16e,metalness:.55,roughness:.25})};
 const dark=new THREE.MeshStandardMaterial({color:0x193b52,roughness:.3});
+// Broad kiln-glaze roughness and fine pores break the uniform plastic sheen.
+const glazeCanvas=document.createElement('canvas');glazeCanvas.width=glazeCanvas.height=256;const glazeCtx=glazeCanvas.getContext('2d'),glazePixels=glazeCtx.createImageData(256,256);let glazeSeed=91;
+for(let y=0;y<256;y++)for(let x=0;x<256;x++){glazeSeed=(glazeSeed*1664525+1013904223)>>>0;const noise=(glazeSeed>>>24)/255,cloud=Math.sin(x*.055+Math.sin(y*.033)*1.4)*Math.cos(y*.047),v=Math.round(178+cloud*31+(noise-.5)*18),i=(y*256+x)*4;glazePixels.data[i]=glazePixels.data[i+1]=glazePixels.data[i+2]=v;glazePixels.data[i+3]=255;}glazeCtx.putImageData(glazePixels,0,0);const ceramicGlaze=new THREE.CanvasTexture(glazeCanvas);ceramicGlaze.wrapS=ceramicGlaze.wrapT=THREE.RepeatWrapping;
+for(const m of Object.values(mats)){m.roughness=.78;m.roughnessMap=ceramicGlaze;m.bumpMap=ceramicGlaze;m.bumpScale=.006;m.clearcoat=.28;m.clearcoatRoughness=.48;}
+
 const geo={};const lathe=(key,points)=>{if(geo[key])return geo[key];const shape=new THREE.LatheGeometry(points.map(([x,y])=>new THREE.Vector2(x,y)),key==='body'?64:48);
  // Broad ceramic flutes are sculpted into the shared chess stem, tapering out before collars.
  if(key==='body'){const p=shape.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i),r=Math.hypot(x,z);if(y>.24&&y<.70&&r>0){const envelope=Math.sin((y-.24)/.46*Math.PI),delta=.018*envelope*Math.cos(8*Math.atan2(z,x));p.setXYZ(i,x*(r+delta)/r,y,z*(r+delta)/r);}}shape.computeVertexNormals();const n=shape.attributes.normal;for(let j=0;j<points.length;j++){const a=j,b=64*points.length+j,v=new THREE.Vector3(n.getX(a)+n.getX(b),n.getY(a)+n.getY(b),n.getZ(a)+n.getZ(b)).normalize();n.setXYZ(a,v.x,v.y,v.z);n.setXYZ(b,v.x,v.y,v.z);}}return geo[key]=shape;};
