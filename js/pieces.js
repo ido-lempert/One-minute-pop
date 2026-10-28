@@ -91,10 +91,17 @@ export function chessMesh(type,color){
  if(type==='n'){
   // Sculpted horse profile, bevelled for a soft, recognisable silhouette.
   const s=new THREE.Shape();s.moveTo(-.26,.73);s.lineTo(-.23,1.04);s.quadraticCurveTo(-.27,1.23,-.13,1.4);s.quadraticCurveTo(-.1,1.47,.02,1.43);s.lineTo(.15,1.4);s.lineTo(.35,1.2);s.quadraticCurveTo(.43,1.1,.29,1.04);s.lineTo(.1,1.1);s.quadraticCurveTo(.04,.86,.2,.73);s.closePath();
-  const h=mesh(g,new THREE.ExtrudeGeometry(s,{depth:.22,bevelEnabled:true,bevelSize:.045,bevelThickness:.04,bevelSegments:3,steps:1}),m,0,0,-.11);
+  // Subdivided curved cheek and neck surfaces replace the flat extruded horse plate.
+  if(!geo.knightBody){const base=new THREE.ExtrudeGeometry(s,{depth:.22,bevelEnabled:true,bevelSize:.045,bevelThickness:.04,bevelSegments:4,curveSegments:20,steps:3}).toNonIndexed(),p=base.attributes.position,verts=[];
+   const mid=(a,b)=>a.map((x,i)=>(x+b[i])/2);function subdivide(a,b,c,n){if(!n){verts.push(...a,...b,...c);return;}const ab=mid(a,b),bc=mid(b,c),ca=mid(c,a);subdivide(a,ab,ca,n-1);subdivide(ab,b,bc,n-1);subdivide(ca,bc,c,n-1);subdivide(ab,bc,ca,n-1);}
+   for(let i=0;i<p.count;i+=3)subdivide([p.getX(i),p.getY(i),p.getZ(i)],[p.getX(i+1),p.getY(i+1),p.getZ(i+1)],[p.getX(i+2),p.getY(i+2),p.getZ(i+2)],3);
+   geo.knightBody=new THREE.BufferGeometry();geo.knightBody.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));const v=geo.knightBody.attributes.position;
+   for(let i=0;i<v.count;i++){const x=v.getX(i),y=v.getY(i),z=v.getZ(i),neck=Math.max(0,1-((x+.04)/.28)**2)*Math.max(0,Math.sin((y-.73)/.72*Math.PI)),cheek=Math.exp(-(((x-.06)/.20)**2+((y-1.20)/.17)**2)),bulge=.035*neck+.020*cheek;v.setZ(i,z+(z-.11)/.15*bulge);}
+   geo.knightBody.computeVertexNormals();const normal=geo.knightBody.attributes.normal,shared=new Map(),key=i=>[v.getX(i),v.getY(i),v.getZ(i)].map(x=>x.toFixed(5)).join(',');for(let i=0;i<v.count;i++){const k=key(i),n=shared.get(k)||new THREE.Vector3();n.add(new THREE.Vector3(normal.getX(i),normal.getY(i),normal.getZ(i)));shared.set(k,n);}for(let i=0;i<v.count;i++){const n=shared.get(key(i)).normalize();normal.setXYZ(i,n.x,n.y,n.z);}base.dispose();}
+  mesh(g,geo.knightBody,m,0,0,-.11);
   // Inset almond eyes with a raised ceramic lid replace featureless black beads.
   if(!geo.knightEye){const eye=new THREE.Shape();eye.moveTo(-.065,0);eye.quadraticCurveTo(0,.052,.065,0);eye.quadraticCurveTo(0,-.040,-.065,0);eye.closePath();geo.knightEye=new THREE.ExtrudeGeometry(eye,{depth:.010,bevelEnabled:true,bevelSize:.008,bevelThickness:.008,bevelSegments:3,curveSegments:16,steps:1});}
-  for(const sign of [-1,1]){const eye=mesh(g,geo.knightEye,dark,.065,1.30,sign*.166);if(sign<0)eye.rotation.y=Math.PI;const iris=mesh(g,new THREE.SphereGeometry(.025,20,12),t,.078,1.30,sign*.185);iris.scale.set(.60,1,.30);const pupil=mesh(g,new THREE.SphereGeometry(.014,16,10),dark,.080,1.30,sign*.194);pupil.scale.set(.65,1,.25);const glint=mesh(g,new THREE.SphereGeometry(.005,10,8),m,.084,1.31,sign*.199);const lid=new THREE.CatmullRomCurve3([new THREE.Vector3(-.002,1.303,sign*.174),new THREE.Vector3(.058,1.35,sign*.181),new THREE.Vector3(.13,1.305,sign*.174)]);mesh(g,new THREE.TubeGeometry(lid,20,.012,8,false),m);}
+  for(const sign of [-1,1]){const eye=mesh(g,geo.knightEye,dark,.065,1.30,sign*.221);if(sign<0)eye.rotation.y=Math.PI;const iris=mesh(g,new THREE.SphereGeometry(.025,20,12),t,.078,1.30,sign*.240);iris.scale.set(.60,1,.30);const pupil=mesh(g,new THREE.SphereGeometry(.014,16,10),dark,.080,1.30,sign*.249);pupil.scale.set(.65,1,.25);const glint=mesh(g,new THREE.SphereGeometry(.005,10,8),m,.084,1.31,sign*.254);const lid=new THREE.CatmullRomCurve3([new THREE.Vector3(-.002,1.303,sign*.229),new THREE.Vector3(.058,1.35,sign*.236),new THREE.Vector3(.13,1.305,sign*.229)]);mesh(g,new THREE.TubeGeometry(lid,20,.012,8,false),m);}
 
   // Paired, separated sculpted ears and a rounded muzzle replace the single flat spike.
   if(!geo.knightEar){const ear=new THREE.Shape();ear.moveTo(-.065,0);ear.quadraticCurveTo(-.09,.13,-.032,.255);ear.quadraticCurveTo(.025,.16,.06,.035);ear.closePath();geo.knightEar=new THREE.ExtrudeGeometry(ear,{depth:.035,bevelEnabled:true,bevelSize:.014,bevelThickness:.014,bevelSegments:4,curveSegments:16,steps:1});}
@@ -107,15 +114,15 @@ export function chessMesh(type,color){
   if(!geo.knightLocks){geo.knightLocks=[];for(let i=0;i<7;i++){const u=i/6,y=.84+u*.47,x=-.265+.09*u*u,lock=new THREE.Shape();lock.moveTo(x+.025,y+.085);lock.quadraticCurveTo(x-.065,y+.055,x-.095,y-.025);lock.quadraticCurveTo(x-.025,y-.012,x+.035,y+.015);lock.closePath();const geometry=new THREE.ExtrudeGeometry(lock,{depth:.245,bevelEnabled:true,bevelSize:.012,bevelThickness:.012,bevelSegments:3,curveSegments:14,steps:1});geo.knightLocks.push(geometry);}}
   for(const lock of geo.knightLocks)mesh(g,lock,t,0,0,-.1225);
   // Paired nostrils, rounded cheeks and bridle straps give the horse a real face.
-  for(const z of [-.163,.163]){
+  for(const z of [-.213,.213]){
    const cheek=mesh(g,new THREE.SphereGeometry(.075,24,16),m,-.005,1.205,z);cheek.scale.set(.9,1.2,.35);
    const nostril=mesh(g,new THREE.SphereGeometry(.023,16,10),dark,.29,1.14,z);nostril.scale.set(1,.65,.45);
-   const strap=new THREE.CatmullRomCurve3([new THREE.Vector3(-.06,1.38,z),new THREE.Vector3(-.04,1.23,z+.008*Math.sign(z)),new THREE.Vector3(.08,1.12,z)]);
+   const strap=new THREE.CatmullRomCurve3([new THREE.Vector3(-.06,1.38,z),new THREE.Vector3(-.04,1.23,z+.036*Math.sign(z)),new THREE.Vector3(.08,1.12,z+.016*Math.sign(z))]);
    mesh(g,new THREE.TubeGeometry(strap,20,.012,8,false),t);
    const buckle=mesh(g,new THREE.TorusGeometry(.034,.009,8,20),t,-.025,1.225,z+.018*Math.sign(z));buckle.scale.y=1.15;
   }
   // Rounded nose band wraps the bevelled muzzle on both sides.
-  const nose=new THREE.CatmullRomCurve3([new THREE.Vector3(.24,1.235,-.16),new THREE.Vector3(.30,1.20,-.17),new THREE.Vector3(.35,1.14,0),new THREE.Vector3(.30,1.20,.17),new THREE.Vector3(.24,1.235,.16)]);
+  const nose=new THREE.CatmullRomCurve3([new THREE.Vector3(.24,1.235,-.195),new THREE.Vector3(.30,1.20,-.205),new THREE.Vector3(.35,1.14,0),new THREE.Vector3(.30,1.20,.205),new THREE.Vector3(.24,1.235,.195)]);
   mesh(g,new THREE.TubeGeometry(nose,32,.012,8,false),t);
   g.rotation.y=color==='w'?.25:Math.PI-.25;
  }

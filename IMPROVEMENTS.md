@@ -307,3 +307,6 @@ The two flat under-board slabs become one continuous sculpted ogee apron with a 
 
 ## 54. Fluted rack columns
 Connect Four support columns now have eight ceramic flutes, gently swept along the long shaft and fading into the foot and capital. Matched desktop before/after and390px played board inspected.32 rules/controller tests and local C4 win/reset/AI lifecycle pass, zero errors/no overflow. Physical-device FPS unverified.
+
+## 55. Rounded knight neck and cheeks
+The horse's flat extruded side becomes a subdivided curved ceramic neck and cheek. Eyes, bridle and buckles sit outside the new surface rather than sinking into it. Matched studio before/after and390px board inspected.32 rules/controller tests and local chess capture/reset/AI/undo/mode lifecycle pass, zero errors/no overflow. Detail clearest in studio; physical-device FPS unverified.
