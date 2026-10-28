@@ -90,7 +90,10 @@ export function chessMesh(type,color){
   // Sculpted horse profile, bevelled for a soft, recognisable silhouette.
   const s=new THREE.Shape();s.moveTo(-.26,.73);s.lineTo(-.23,1.04);s.quadraticCurveTo(-.27,1.23,-.13,1.4);s.quadraticCurveTo(-.1,1.47,.02,1.43);s.lineTo(.15,1.4);s.lineTo(.35,1.2);s.quadraticCurveTo(.43,1.1,.29,1.04);s.lineTo(.1,1.1);s.quadraticCurveTo(.04,.86,.2,.73);s.closePath();
   const h=mesh(g,new THREE.ExtrudeGeometry(s,{depth:.22,bevelEnabled:true,bevelSize:.045,bevelThickness:.04,bevelSegments:3,steps:1}),m,0,0,-.11);
-  for(const z of [-.165,.165])mesh(g,new THREE.SphereGeometry(.035,12,8),dark,.06,1.30,z);
+  // Inset almond eyes with a raised ceramic lid replace featureless black beads.
+  if(!geo.knightEye){const eye=new THREE.Shape();eye.moveTo(-.065,0);eye.quadraticCurveTo(0,.052,.065,0);eye.quadraticCurveTo(0,-.040,-.065,0);eye.closePath();geo.knightEye=new THREE.ExtrudeGeometry(eye,{depth:.010,bevelEnabled:true,bevelSize:.008,bevelThickness:.008,bevelSegments:3,curveSegments:16,steps:1});}
+  for(const sign of [-1,1]){const eye=mesh(g,geo.knightEye,dark,.065,1.30,sign*.166);if(sign<0)eye.rotation.y=Math.PI;const iris=mesh(g,new THREE.SphereGeometry(.025,20,12),t,.078,1.30,sign*.185);iris.scale.set(.60,1,.30);const pupil=mesh(g,new THREE.SphereGeometry(.014,16,10),dark,.080,1.30,sign*.194);pupil.scale.set(.65,1,.25);const glint=mesh(g,new THREE.SphereGeometry(.005,10,8),m,.084,1.31,sign*.199);const lid=new THREE.CatmullRomCurve3([new THREE.Vector3(-.002,1.303,sign*.174),new THREE.Vector3(.058,1.35,sign*.181),new THREE.Vector3(.13,1.305,sign*.174)]);mesh(g,new THREE.TubeGeometry(lid,20,.012,8,false),m);}
+
   // Paired, separated sculpted ears and a rounded muzzle replace the single flat spike.
   if(!geo.knightEar){const ear=new THREE.Shape();ear.moveTo(-.065,0);ear.quadraticCurveTo(-.09,.13,-.032,.255);ear.quadraticCurveTo(.025,.16,.06,.035);ear.closePath();geo.knightEar=new THREE.ExtrudeGeometry(ear,{depth:.035,bevelEnabled:true,bevelSize:.014,bevelThickness:.014,bevelSegments:4,curveSegments:16,steps:1});}
   for(const z of [-.13,.13]){const ear=mesh(g,geo.knightEar,m,-.09,1.37,z-.018);ear.rotation.z=-.12;const inset=mesh(g,new THREE.SphereGeometry(.042,16,12),t,-.12,1.49,z+Math.sign(z)*.038);inset.scale.set(.36,1.35,.22);}

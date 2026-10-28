@@ -277,3 +277,9 @@ Checks:32 rules/controller tests exit0. Chrome Connect Four win/reset-cancellati
 Checker king crown points now have curved heraldic shoulders and genuine cut-through oval centers instead of plain tapered posts. Raised ceramic tips follow the taller silhouette. Ordinary discs are unchanged. Detail is clearest in studio; promoted silhouette remains clear at board scale.
 
 Checks:32 rules/controller tests exit0. Chrome checkers move/reset-cancellation lifecycle exit0, zero page errors/no390px overflow. Matched studio before/after and390px/desktop all-kings fixture pixels inspected (fixture, not opening position). Physical-device FPS remains unverified.
+
+## 46. Sculpted knight eyes
+
+The knight's plain black beads become inset almond-shaped eyes with metal irises, dark pupils, tiny ceramic highlights and raised ceramic upper lids. Both sides are modelled. The change is clearest in studio close-ups and subtle at normal phone board scale; the horse silhouette is unchanged.
+
+Checks:32 rules/controller tests exit0. Chrome chess capture/reset/AI/undo/mode lifecycle exit0, zero page errors/no390px overflow. Matched studio before/after and390px/desktop board pixels inspected. Physical-device FPS remains unverified.
