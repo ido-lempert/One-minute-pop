@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0;padding:24px;color:#251f21;background:white;font:18px/1.6 system-ui,sans-serif}article{max-width:760px;margin:auto}h1{font-size:clamp(28px,5vw,40px);line-height:1.16}img{display:block;max-width:100%;height:auto;margin:24px auto}a{overflow-wrap:anywhere}</style>
+<title>Classic board games in 3D, about 1,000 lines of JavaScript</title>
+</head>
+<body>
+<article>
+<h1>Classic board games in 3D, about 1,000 lines of JavaScript</h1>
+
+<p>Chess, checkers and Connect Four, each with a 3D board you can tilt, running in the browser as one installable web app. No build step or server code, and no image assets needed to render the 3D boards: their pieces, textures and sounds are generated in code. The menu also has One Minute Pop, a small 2D tap game.</p>
+
+<img src="menu-phone.png" alt="Phone screenshot of the game menu: Classic games in 3D - Chess, Checkers, Connect Four - plus One Minute Pop">
+
+<p>The code is on GitHub: <a href="https://github.com/ido-lempert/One-minute-pop">https://github.com/ido-lempert/One-minute-pop</a> - the three 3D games and their shared board code come to about 975 lines of JavaScript. The only libraries are three.js for rendering and chess.js for chess rules, both vendored.</p>
+
+<p>Chess plays full rules through chess.js - legal moves, check, castling, en passant - verified against the standard perft counts (start position depth 3 = 8902; "Kiwipete" depth 2 = 2039). The computer opponent is a small alpha-beta search over material values, and it is weak. This is a toy you can beat, not an engine. Promotion always picks a queen.</p>
+
+<img src="studio-chess.jpg" alt="3D chess board with ceramic pieces in teal and ivory on a coral tabletop">
+
+<p>Checkers follows American rules: forced captures, multi-jumps, kings, and promotion ends the move. The rules module survived 300 plies of computer self-play with every generated move legal. There is no draw rule yet.</p>
+
+<img src="studio-checkers.jpg" alt="3D checkers board with ceramic checkers pieces in teal and ivory">
+
+<p>Connect Four drops discs into a 7x6 frame. Its computer searches five plies deep and is tested to take an immediate win and to block one. The rules tests cover horizontal, vertical and diagonal wins, full columns and a full board.</p>
+
+<img src="studio-connect4.jpg" alt="3D Connect Four board with red and yellow discs mid-game">
+
+<p>All three games share one 3D board module: ceramic-style pieces with a procedural kiln glaze, soft shadows, hop animations, and sounds synthesised with Web Audio (mutable, and the setting is remembered). Drag to tilt the board, tap a piece and then a square. The site is set up as a PWA with a web manifest and a service worker that precaches the game files for offline use after the first visit. Actual home-screen installation and offline play after install have not been verified.</p>
+
+<p>What this does not do: the computer play is basic in all three games and will not trouble a serious player. Chess promotion is always a queen. Testing is 32 node-based rules and controller regressions plus a scripted headless-Chrome pass at two window sizes; a real phone, an actual install, and offline play after install have not been verified.</p>
+</article>
+</body>
+</html>
