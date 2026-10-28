@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0;padding:24px;color:#251f21;background:white;font:18px/1.6 system-ui,sans-serif}article{max-width:760px;margin:auto}h1{font-size:clamp(28px,5vw,40px);line-height:1.16}img{display:block;max-width:100%;height:auto;margin:24px auto}a{overflow-wrap:anywhere}</style>
+<title>Does more context always help? A 31-line experiment</title>
+</head>
+<body>
+<article>
+<h1>Does more context always help? A 31-line experiment</h1>
+
+<p>A small experiment with character n-gram models: predict the next character from the previous n-1 characters, with add-one smoothing. Train on 80% of a text, measure bits per character on the held-out 20%. Lower is better. The whole thing is 31 lines of Python, standard library only, and the run is deterministic.</p>
+
+<p>The code is on GitHub: <a href="https://github.com/ido-lempert/ngram-context-lab">https://github.com/ido-lempert/ngram-context-lab</a> - one file plus the corpus and the saved results.</p>
+
+<p>The result is a curve that dips. With no preceding characters of context (n=1), the model needs 4.818 bits per character. The best is n=3 at 3.406. By n=7 it is at 4.604, worse than n=2. More context helps, then it hurts.</p>
+
+<img src="bpc-curve.png" alt="Line chart: bits per character versus n, dipping to 3.406 at n=3 and rising again">
+
+<p>Why it turns: longer contexts are rarely seen in the training text, and add-one smoothing hands too much probability to combinations that never appear. Past a point, each extra character of context adds sparsity faster than it adds signal.</p>
+
+<p>What this does not show: one corpus (about 320,000 characters of Python standard-library documentation), one 80/20 split, no repeats, so the turning point may move with other text. Add-one smoothing is crude; better smoothing, for example interpolation, would very likely move the curve. I did not try it. This is a toy, not a claim about large language models.</p>
+</article>
+</body>
+</html>
