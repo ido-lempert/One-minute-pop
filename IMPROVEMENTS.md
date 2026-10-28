@@ -337,3 +337,7 @@ A rounded lower lip and shallow wraparound mouth complete the knight's ceramic m
 
 ## 64. Kiln-glazed Connect Four rack
 Broad procedural glaze roughness and fine pores soften the teal rack's uniform highlights, while leaving token faces and metal trim unchanged. Matched desktop before/after and390px played-board inspected.32 rules/controller tests and local C4 win/reset/AI pass, zero errors/no overflow. Subtle material change; physical-device FPS unverified.
+
+## Collection expansion: Reversi (2026-10-28)
+
+A new playable classic, separate from the completed 64 tabletop improvements and jet-ski retentions. Original two-sided discs, animated flips, legal markers, live scores, basic computer, two players, Undo and automatic pass/endgame. Rules: 10 checks plus 200 complete self-play games. Browser: 390px 3D click/flip, computer turn, Undo, reset/mode cancellation. No real-phone FPS/audio/install claim.

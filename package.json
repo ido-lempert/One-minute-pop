@@ -1,1 +1,1 @@
-{"private":true,"type":"module","scripts":{"test":"node tests/test.mjs && node tests/c4-controller.mjs"}}
+{"private":true,"type":"module","scripts":{"test":"node tests/test.mjs && node tests/c4-controller.mjs && node tests/reversi.mjs"}}

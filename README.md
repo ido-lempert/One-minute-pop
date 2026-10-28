@@ -36,3 +36,7 @@ The 3D chess and checkers sets use original smooth ceramic-style models, a teal 
 Run `npm test` for 32 local controller/rules regressions. The tests stub rendering and audio; browser checks are separate. Computer callbacks are cancelled on reset, Undo and mode changes, and enabling the computer on its turn schedules its move.
 
 Limitations: computer play is basic, chess promotion currently chooses a queen, and real-phone frame rate, heard audio and home-screen installation have not been verified.
+
+## Reversi
+
+New 3D tabletop game: eight-direction flips, automatic pass, final score, basic positional computer or two players, Undo, animated flips and an optional keyboard-accessible text board. Coral opens. The computer is one-ply, not an expert opponent. Ten rules checks include 200 deterministic full self-play games; browser interaction checks are separate.
