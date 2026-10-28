@@ -151,8 +151,10 @@ export function checkerMesh(color,king){
  // Eight open teardrop petals form a raised metal rosette with real cut-through centers.
  if(!geo.checkerPetal){const petal=new THREE.Shape();petal.moveTo(0,.032);petal.bezierCurveTo(-.075,.085,-.060,.16,0,.183);petal.bezierCurveTo(.060,.16,.075,.085,0,.032);const opening=new THREE.Path();opening.moveTo(0,.075);opening.bezierCurveTo(.028,.102,.025,.135,0,.151);opening.bezierCurveTo(-.025,.135,-.028,.102,0,.075);petal.holes.push(opening);geo.checkerPetal=new THREE.ExtrudeGeometry(petal,{depth:.018,bevelEnabled:true,bevelSize:.006,bevelThickness:.006,bevelSegments:3,curveSegments:16,steps:1});geo.checkerPetal.rotateX(-Math.PI/2);}
  for(let i=0;i<8;i++){const petal=mesh(g,geo.checkerPetal,t,0,.268);petal.rotation.y=i*Math.PI/4;}
- const heart=mesh(g,new THREE.SphereGeometry(.042,20,12),t,0,.286);heart.scale.y=.45;
- for(let i=0;i<8;i++){const a=i*Math.PI/4;const stud=mesh(g,new THREE.SphereGeometry(.022,12,8),t,Math.cos(a)*.22,.271,Math.sin(a)*.22);stud.scale.y=.45;}
+ // Bevelled octagonal gem settings replace the flattened bead inlays.
+ if(!geo.checkerGem){const s=new THREE.Shape();for(let i=0;i<8;i++){const a=i*Math.PI/4+Math.PI/8,x=Math.cos(a),y=Math.sin(a);if(i)s.lineTo(x,y);else s.moveTo(x,y);}s.closePath();geo.checkerGem=new THREE.ExtrudeGeometry(s,{depth:.20,bevelEnabled:true,bevelSize:.20,bevelThickness:.16,bevelSegments:2,steps:1});geo.checkerGem.rotateX(-Math.PI/2);}
+ const heart=mesh(g,geo.checkerGem,t,0,.279);heart.scale.set(.050,.060,.050);
+ for(let i=0;i<8;i++){const a=i*Math.PI/4,stud=mesh(g,geo.checkerGem,t,Math.cos(a)*.22,.267,Math.sin(a)*.22);stud.scale.set(.028,.044,.028);stud.rotation.y=a;}
  if(king){
   // A second sculpted disc and an open five-point crown make promotion readable by silhouette.
   mesh(g,lathe('kingDisc',[[0,0],[.30,0],[.35,.03],[.36,.08],[.34,.14],[.29,.18],[0,.18]]),m,0,.27);

@@ -328,3 +328,6 @@ Twelve gentle ceramic flutes sculpt the rook shaft between foot and crown. Shiel
 
 ## 61. Fluted royal dome
 The chess king ceramic dome has eight recessed curved flutes between its metal arches instead of a plain hemisphere. Matched studio before/after and390px board inspected.32 rules/controller tests and local chess capture/reset/AI/undo/mode pass, zero errors/no overflow. Very subtle at board scale; physical-device FPS unverified.
+
+## 62. Bevelled checker inlays
+The ordinary checker rosette and eight surrounding beads now use bevelled octagonal metal settings rather than flattened spheres. Matched studio before/after and390px/desktop board inspected.32 rules/controller tests and local checkers move/reset lifecycle pass, zero errors/no overflow. Tiny at board scale; physical-device FPS unverified.
