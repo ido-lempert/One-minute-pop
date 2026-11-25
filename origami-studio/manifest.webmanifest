@@ -1,0 +1,16 @@
+{
+  "name": "Origami Studio - Daily 3D Paper Folding",
+  "short_name": "Origami",
+  "description": "Learn origami one fold at a time: daily challenges, step-by-step 3D folds, and models that move.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#312e81",
+  "theme_color": "#7c3aed",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
