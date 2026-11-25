@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Origami Studio - Daily 3D Paper Folding</title>
+  <meta name="description" content="Learn origami one fold at a time: daily challenges, step-by-step 3D folds, and models that move.">
+  <meta name="theme-color" content="#7c3aed">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.js", "three/addons/controls/OrbitControls.js": "./vendor/OrbitControls.js" } }
+  </script>
+</head>
+<body>
+  <div id="splash" aria-hidden="true"><div class="splash-inner"><span class="splash-logo">Origami<span>Studio</span></span><div class="splash-bar"><i></i></div></div></div>
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+  <div class="blob blob-c"></div>
+
+  <!-- HOME -->
+  <main id="screen-home" class="screen">
+    <header class="home-header">
+      <div>
+        <h1 class="logo">Origami<span>Studio</span></h1>
+        <p class="tagline">One sheet. A few folds. A little magic.</p>
+      </div>
+      <div class="streak-chip" title="Daily challenge streak">🔥 <b id="streak">0</b></div>
+    </header>
+
+    <button id="daily-card" class="daily-card">
+      <div class="daily-text">
+        <span class="daily-kicker" id="daily-status">Today's challenge</span>
+        <h2 id="daily-title">Model</h2>
+        <p id="daily-blurb"></p>
+        <span class="badge lvl-1" id="daily-level">Level 1</span>
+        <span class="daily-cta">Start folding →</span>
+      </div>
+      <img id="daily-img" alt="Today's origami model">
+    </button>
+
+    <div id="catalog"></div>
+  </main>
+
+  <!-- INTRO -->
+  <main id="screen-intro" class="screen">
+    <nav class="topbar">
+      <button id="intro-back" class="ghost-btn">← Back</button>
+    </nav>
+    <div id="intro-canvas" class="canvas-host big"></div>
+    <div class="panel">
+      <h2 id="intro-name"></h2>
+      <p class="muted" id="intro-meta"></p>
+      <p id="intro-blurb"></p>
+      <button id="intro-start" class="primary-btn">Start folding</button>
+    </div>
+  </main>
+
+  <!-- PLAYER -->
+  <main id="screen-play" class="screen">
+    <nav class="topbar">
+      <button id="play-back" class="ghost-btn">← Back</button>
+      <span id="play-name" class="play-name"></span>
+    </nav>
+    <div id="play-canvas" class="canvas-host"></div>
+    <div class="hint">drag to spin the paper · pinch to zoom</div>
+    <div class="panel">
+      <div class="progress-track"><div id="play-progress" class="progress-fill"></div></div>
+      <div class="step-head">
+        <span id="step-count" class="muted"></span>
+        <span id="step-dots" class="dots"></span>
+      </div>
+      <h2 id="step-title"></h2>
+      <p id="step-text"></p>
+      <div class="controls">
+        <button id="btn-prev" class="ghost-btn">← Back a fold</button>
+        <button id="btn-replay" class="ghost-btn">↻ Replay</button>
+        <button id="btn-next" class="primary-btn">Fold it →</button>
+      </div>
+    </div>
+    <div id="finish-bar" class="finish-bar">
+      <span>🎉 Finished!</span>
+      <button id="finish-next" class="primary-btn small">Fold another at this level</button>
+      <button id="finish-home" class="ghost-btn small">Home</button>
+    </div>
+  </main>
+
+  <canvas id="confetti"></canvas>
+  <script type="module" src="src/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+  </script>
+</body>
+</html>
